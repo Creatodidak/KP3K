@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="id.creatodidak.kp3k.dashboard.ui.home.HomeFragment"
+        android:label="Beranda"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_lahantugas"
+        android:name="id.creatodidak.kp3k.dashboard.ui.lahantugas.LahanTugasFragment"
+        android:label="Lahan Tugas Saya"
+        tools:layout="@layout/fragment_lahan_tugas" >
+    <action
+        android:id="@+id/showlahanonmap"
+        app:destination="@+id/nav_show_lahan_on_map"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_show_lahan_on_map"
+        android:name="id.creatodidak.kp3k.dashboard.ui.lahantugas.ShowLahanOnMapFragment"
+        android:label="RINCIAN PETA LAHAN"
+        tools:layout="@layout/fragment_show_lahan_on_map" >
+        <argument
+            android:name="koordinat"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_laporansaya"
+        android:name="id.creatodidak.kp3k.dashboard.ui.laporansaya.LaporansayaFragment"
+        android:label="Laporan Saya"
+        tools:layout="@layout/fragment_laporansaya" />
+
+    <fragment
+        android:id="@+id/nav_koordinat_finder"
+        android:name="id.creatodidak.kp3k.dashboard.ui.koordinat.KoordinatFinderFragment"
+        android:label="Coordinate Finder"
+        tools:layout="@layout/fragment_koordinat_finder" />
+
+    <fragment
+        android:id="@+id/pilihProgramLaporan"
+        android:name="id.creatodidak.kp3k.dashboard.ui.laporansaya.PilihProgramLaporan"
+        android:label="Pilih Program"
+        tools:layout="@layout/fragment_pilih_program_laporan" />
+
+    <fragment
+        android:id="@+id/nav_list_lahan_program2a"
+        android:name="id.creatodidak.kp3k.dashboard.ui.laporansaya.prog2a.ListLahanProg2aFragment"
+        android:label="List Lahan Monokultur"
+        tools:layout="@layout/fragment_list_lahan_prog2a" >
+    <action
+        android:id="@+id/action_listLahanProg2aFragment_to_listProgram2aFragment"
+        app:destination="@id/nav_list_program2a"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_list_program2a"
+        android:name="id.creatodidak.kp3k.dashboard.ui.laporansaya.prog2a.ListLaporanProg2aFragment"
+        android:label="Lahan Monokultur"
+        tools:layout="@layout/fragment_list_laporan_prog2a">
+        <argument
+            android:name="namaLahan"
+            app:argType="string" />
+        <argument
+            android:name="lastprogress"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_peta_lahan"
+        android:name="id.creatodidak.kp3k.dashboard.ui.petalahan.PetaLahanFragment"
+        android:label="Peta Lahan"
+        tools:layout="@layout/fragment_peta_lahan" />
+
+</navigation>

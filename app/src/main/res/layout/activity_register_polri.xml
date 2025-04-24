@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:descendantFocusability="beforeDescendants"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".RegisterPolri">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="25dp">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pendaftaran Akun Personil Polri"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Silahkan isikan data diri anda!" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="5dp"
+                android:background="?android:attr/listDivider" />
+
+            <EditText
+                android:id="@+id/nama"
+                style="@style/CustomEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:ems="10"
+                android:hint="Nama Lengkap"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/nrp"
+                style="@style/CustomEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:ems="10"
+                android:hint="NRP"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/tanggallahir"
+                style="@style/CustomEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:ems="10"
+                android:hint="Tanggal Lahir"/>  <!-- Pastikan inputType bukan "datetime|date" -->
+
+
+            <EditText
+                android:id="@+id/email"
+                style="@style/CustomEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:ems="10"
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/handphone"
+                style="@style/CustomEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:ems="10"
+                android:hint="Nomor Whatsapp Aktif"
+                android:inputType="phone" />
+
+            <Spinner
+                android:id="@+id/spPolres"
+                style="@style/CustomEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp" />
+
+            <EditText
+                android:id="@+id/jabatan"
+                style="@style/CustomEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="5"
+                android:gravity="top|start"
+                android:layout_marginVertical="2dp"
+                android:ems="10"
+                android:hint="Jabatan"
+                android:inputType="textMultiLine" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="2dp"
+                app:boxBackgroundColor="@android:color/white"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxStrokeColor="#4CAF50"
+                app:endIconMode="password_toggle"
+                app:hintEnabled="false"> <!-- Ini penting -->
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password"
+                    style="@style/CustomEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:padding="12dp"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="#888888" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btnDaftar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#4CAF50"
+                android:text="DAFTAR" />
+
+        </LinearLayout>
+    </ScrollView>

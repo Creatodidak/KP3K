@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/beranda"
+            android:title="Beranda" />
+        <item
+            android:id="@+id/nav_lahantugas"
+            android:icon="@drawable/baseline_checklist_24"
+            android:title="Lahan Tugas Saya" />
+        <item
+            android:id="@+id/nav_laporansaya"
+            android:icon="@drawable/baseline_menu_book_24"
+            android:title="Laporan Saya" />
+        <item
+            android:id="@+id/nav_peta_lahan"
+            android:icon="@drawable/baseline_map_24"
+            android:title="Peta Lahan" />
+        <item
+            android:id="@+id/nav_koordinat_finder"
+            android:icon="@drawable/baseline_share_location_24"
+            android:title="Coordinate Finder" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/baseline_logout_24"
+            android:title="Logout" />
+    </group>
+</menu>
