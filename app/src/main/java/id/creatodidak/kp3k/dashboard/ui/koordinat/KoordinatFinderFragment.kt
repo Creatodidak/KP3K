@@ -67,7 +67,6 @@ class KoordinatFinderFragment : Fragment(), OnMapReadyCallback {
             viewLifecycleOwner
         ) { location ->
             if (location != null) {
-                // Menampilkan Latitude, Longitude, dan Akurasi
                 binding.tvLatitude.text = "${location.latitude}"
                 binding.tvLongitude.text = "${location.longitude}"
                 binding.tvAkurasi.text = "${location.accuracy} m"

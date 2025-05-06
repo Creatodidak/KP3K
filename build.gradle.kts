@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.androidx.navigation.safe.args) apply false
+    alias(libs.plugins.google.gms.google.services) apply false
 }
 
 buildscript {
@@ -13,3 +14,4 @@ buildscript {
         classpath (libs.kotlin.gradle.plugin)
     }
 }
+

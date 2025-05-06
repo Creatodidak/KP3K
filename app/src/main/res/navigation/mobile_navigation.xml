@@ -12,13 +12,65 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/nav_pemiliklahan_ok"
+        android:name="id.creatodidak.kp3k.dashboard.ui.pemiliklahan.PemilikLahanFragment"
+        android:label="Mitra / Pemilik Lahan"
+        tools:layout="@layout/fragment_pemilik_lahan" >
+        <action
+            android:id="@+id/nav_add_pemiliklahanact"
+            app:destination="@+id/nav_add_pemiliklahan"/>
+
+        <action
+            android:id="@+id/nav_laham_pemilik_lahanact"
+            app:destination="@+id/nav_laham_pemilik_lahan"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_add_pemiliklahan"
+        android:name="id.creatodidak.kp3k.dashboard.ui.pemiliklahan.AddPemilikLahanFragment"
+        android:label="Tambah Mitra/Pemilik Lahan"
+        tools:layout="@layout/fragment_add_pemilik_lahan" />
+
+    <fragment
+        android:id="@+id/nav_laham_pemilik_lahan"
+        android:name="id.creatodidak.kp3k.dashboard.ui.pemiliklahan.ListLahanPemilikLahanFragment"
+        android:label="Daftar Lahan"
+        tools:layout="@layout/fragment_list_lahan_pemilik_lahan" >
+        <argument
+            android:name="ownerid"
+            app:argType="string" />
+        <argument
+            android:name="pemiliklahan"
+            app:argType="string" />
+        <action
+            android:id="@+id/showlahanonmap"
+            app:destination="@+id/nav_show_lahan_on_map"/>
+        <action
+            android:id="@+id/gotodatatanamfrompemiliklahan"
+            app:destination="@+id/nav_show_data_tanam"/>
+        <action
+            android:id="@+id/action_nav_laham_pemilik_lahan_to_nav_add_lahan"
+            app:destination="@id/nav_add_lahan" />
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_lahantugas"
         android:name="id.creatodidak.kp3k.dashboard.ui.lahantugas.LahanTugasFragment"
         android:label="Lahan Tugas Saya"
         tools:layout="@layout/fragment_lahan_tugas" >
-    <action
-        android:id="@+id/showlahanonmap"
-        app:destination="@+id/nav_show_lahan_on_map"/>
+        <action
+            android:id="@+id/showlahanonmap"
+            app:destination="@+id/nav_show_lahan_on_map"/>
+        <action
+            android:id="@+id/showlahanDetails"
+            app:destination="@+id/nav_rincian_lahan"/>
+        <action
+            android:id="@+id/addLahanBaru"
+            app:destination="@id/nav_add_lahan"/>
+        <action
+            android:id="@+id/gotodatatanamfromplahantugas"
+            app:destination="@+id/nav_show_data_tanam"/>
     </fragment>
 
     <fragment
@@ -30,6 +82,90 @@
             android:name="koordinat"
             app:argType="string" />
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_show_data_tanam"
+        android:name="id.creatodidak.kp3k.dashboard.ui.datatanam.DataTanamFragment"
+        android:label="DATA REALISASI TANAM"
+        tools:layout="@layout/fragment_data_tanam" >
+        <argument
+            android:name="lahan_id"
+            app:argType="string" />
+        <argument
+            android:name="pemilik"
+            app:argType="string" />
+        <argument
+            android:name="luastotal"
+            app:argType="string" />
+        <argument
+            android:name="tertanam"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_dataTanamFragment_to_tambahDataTanamFragment"
+            app:destination="@id/nav_tambah_data_tanam"/>
+        <action
+            android:id="@+id/action_dataTanamFragment_to_dataPerkembanganTanamanFragment"
+            app:destination="@id/nav_data_perkembangan_tanaman"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_data_perkembangan_tanaman"
+        android:name="id.creatodidak.kp3k.dashboard.ui.dataperkembangan.DataPerkembanganTanamanFragment"
+        android:label="DATA PERKEMBANGAN TANAMAN"
+        tools:layout="@layout/fragment_data_perkembangan_tanaman" >
+        <argument
+            android:name="tanaman_id"
+            app:argType="string" />
+        <argument
+            android:name="urutan"
+            app:argType="string" />
+        <argument
+            android:name="pemilik"
+            app:argType="string" />
+        <argument
+            android:name="tanggaltanam"
+            app:argType="string" />
+        <argument
+            android:name="kodelahan"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_dataPerkembanganTanamanFragment_to_addDataPerkembanganTanamanFragment"
+            app:destination="@id/nav_add_data_perkembangan_tanaman"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_add_data_perkembangan_tanaman"
+        android:name="id.creatodidak.kp3k.dashboard.ui.dataperkembangan.AddDataPerkembanganTanamanFragment"
+        android:label="TAMBAH DATA PERKEMBANGAN TANAMAN"
+        tools:layout="@layout/fragment_add_data_perkembangan_tanaman" >
+        <argument
+            android:name="tanaman_id"
+            app:argType="string" />
+        <argument
+            android:name="urutan"
+            app:argType="string" />
+        <argument
+            android:name="pemilik"
+            app:argType="string" />
+        <argument
+            android:name="tanggaltanam"
+            app:argType="string" />
+        <argument
+            android:name="kodelahan"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_tambah_data_tanam"
+        android:name="id.creatodidak.kp3k.dashboard.ui.datatanam.TambahDataTanamFragment"
+        android:label="TAMBAH DATA TANAM"
+        tools:layout="@layout/fragment_tambah_data_tanam" >
+        <argument
+            android:name="lahan_id"
+            app:argType="string" />
+    </fragment>
+
+
 
     <fragment
         android:id="@+id/nav_laporansaya"
@@ -77,5 +213,24 @@
         android:name="id.creatodidak.kp3k.dashboard.ui.petalahan.PetaLahanFragment"
         android:label="Peta Lahan"
         tools:layout="@layout/fragment_peta_lahan" />
+
+    <fragment
+        android:id="@+id/nav_add_lahan"
+        android:name="id.creatodidak.kp3k.dashboard.ui.lahantugas.AddLahan"
+        android:label="Ajukan Lahan Baru"
+        tools:layout="@layout/fragment_add_lahan" />
+
+    <fragment
+        android:id="@+id/nav_rincian_lahan"
+        android:name="id.creatodidak.kp3k.dashboard.ui.lahantugas.RincianLahanFragment"
+        android:label="Rincian Lahan"
+        tools:layout="@layout/fragment_rincian_lahan" >
+        <argument
+            android:name="type"
+            app:argType="string" />
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

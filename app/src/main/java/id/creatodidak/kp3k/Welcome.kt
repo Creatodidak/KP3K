@@ -36,29 +36,35 @@ class Welcome : AppCompatActivity() {
         }
 
         val masukBtn = findViewById<Button>(R.id.btMasuk)
-        val daftarBtn = findViewById<Button>(R.id.btDaftar)
+//        val daftarBtn = findViewById<Button>(R.id.btDaftar)
         val versi = findViewById<TextView>(R.id.versi)
 
         versi.text = "Versi $versionName"
-
-        val logoImage = findViewById<ImageView>(R.id.logoKp3k)
-        Glide.with(this)
-            .load(R.drawable.logo)
-            .circleCrop()
-            .into(logoImage)
+//
+//        val logoImage = findViewById<ImageView>(R.id.logoKp3k)
+//        Glide.with(this)
+//            .load(R.drawable.logo)
+//            .circleCrop()
+//            .into(logoImage)
 
         masukBtn.setOnClickListener {
             val i = Intent(this, Login::class.java)
             startActivity(i)
         }
 
-        daftarBtn.setOnClickListener {
-            val i = Intent(this, Register::class.java)
-            startActivity(i)
-        }
+//        daftarBtn.setOnClickListener {
+//            val i = Intent(this, VideoCallActivity::class.java)
+//            startActivity(i)
+//        }
 
         // Check permissions when the activity is created
         checkPermissionsWithPermissionCheck()
+        val sh = getSharedPreferences("session", MODE_PRIVATE)
+        if(sh.getBoolean("isLoggedIn", false)){
+            val i = Intent(this, SetPin::class.java)
+            startActivity(i)
+            finish()
+        }
     }
 
     @NeedsPermission(
@@ -68,8 +74,13 @@ class Welcome : AppCompatActivity() {
         Manifest.permission.USE_BIOMETRIC,
         Manifest.permission.USE_FINGERPRINT,
         Manifest.permission.POST_NOTIFICATIONS,
-        Manifest.permission.READ_EXTERNAL_STORAGE,  // For devices before TIRAMISU
-        Manifest.permission.READ_MEDIA_IMAGES       // For TIRAMISU and later
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.READ_MEDIA_IMAGES,
+        Manifest.permission.ACCESS_NETWORK_STATE,
+        Manifest.permission.MODIFY_AUDIO_SETTINGS,
+        Manifest.permission.BLUETOOTH,
+        Manifest.permission.BLUETOOTH_CONNECT,
+        Manifest.permission.RECORD_AUDIO
     )
     fun checkPermissions() {
         // All required permissions are granted
@@ -84,7 +95,12 @@ class Welcome : AppCompatActivity() {
         Manifest.permission.USE_FINGERPRINT,
         Manifest.permission.POST_NOTIFICATIONS,
         Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.READ_MEDIA_IMAGES
+        Manifest.permission.READ_MEDIA_IMAGES,
+        Manifest.permission.ACCESS_NETWORK_STATE,
+        Manifest.permission.MODIFY_AUDIO_SETTINGS,
+        Manifest.permission.BLUETOOTH,
+        Manifest.permission.BLUETOOTH_CONNECT,
+        Manifest.permission.RECORD_AUDIO
     )
     fun onPermissionsDenied() {
         // Handle the case where permissions are denied
@@ -99,7 +115,12 @@ class Welcome : AppCompatActivity() {
         Manifest.permission.USE_FINGERPRINT,
         Manifest.permission.POST_NOTIFICATIONS,
         Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.READ_MEDIA_IMAGES
+        Manifest.permission.READ_MEDIA_IMAGES,
+        Manifest.permission.ACCESS_NETWORK_STATE,
+        Manifest.permission.MODIFY_AUDIO_SETTINGS,
+        Manifest.permission.BLUETOOTH,
+        Manifest.permission.BLUETOOTH_CONNECT,
+        Manifest.permission.RECORD_AUDIO
     )
     fun showRationaleForPermissions(request: PermissionRequest) {
         // Show rationale dialog to explain why the permissions are needed
@@ -118,7 +139,12 @@ class Welcome : AppCompatActivity() {
         Manifest.permission.USE_FINGERPRINT,
         Manifest.permission.POST_NOTIFICATIONS,
         Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.READ_MEDIA_IMAGES
+        Manifest.permission.READ_MEDIA_IMAGES,
+        Manifest.permission.ACCESS_NETWORK_STATE,
+        Manifest.permission.MODIFY_AUDIO_SETTINGS,
+        Manifest.permission.BLUETOOTH,
+        Manifest.permission.BLUETOOTH_CONNECT,
+        Manifest.permission.RECORD_AUDIO
     )
     fun onNeverAskAgain() {
         // Handle case when the user selects "Don't ask again" for permissions

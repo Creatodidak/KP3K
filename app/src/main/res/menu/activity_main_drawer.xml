@@ -9,13 +9,17 @@
             android:icon="@drawable/beranda"
             android:title="Beranda" />
         <item
+            android:id="@+id/nav_pemiliklahan_ok"
+            android:icon="@drawable/baseline_emoji_people_24"
+            android:title="Mitra / Pemilik Lahan" />
+        <item
             android:id="@+id/nav_lahantugas"
             android:icon="@drawable/baseline_checklist_24"
             android:title="Lahan Tugas Saya" />
-        <item
-            android:id="@+id/nav_laporansaya"
-            android:icon="@drawable/baseline_menu_book_24"
-            android:title="Laporan Saya" />
+<!--        <item-->
+<!--            android:id="@+id/nav_laporansaya"-->
+<!--            android:icon="@drawable/baseline_menu_book_24"-->
+<!--            android:title="Laporan Saya" />-->
         <item
             android:id="@+id/nav_peta_lahan"
             android:icon="@drawable/baseline_map_24"

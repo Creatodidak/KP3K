@@ -57,7 +57,7 @@
                             app:cardCornerRadius="10dp">
 
                             <ImageView
-                                android:id="@+id/imageView6"
+                                android:id="@+id/ivJenisLahan"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
@@ -71,21 +71,21 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/textView25"
+                                android:id="@+id/tvNamaPemilik"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Lahan ---"
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/textView26"
+                                android:id="@+id/tvLuasLahan"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Luas Lahan -- Ha"
                                 android:textSize="10sp" />
 
                             <TextView
-                                android:id="@+id/textView27"
+                                android:id="@+id/tvProgressTanam"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Progress Tanam --%"
@@ -104,7 +104,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/textView29"
+                        android:id="@+id/tvAlamatLahan"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Dusun Abc, Desa  Def, Kab. Ghi, Kalimantan Barat"

@@ -11,108 +11,113 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bggreenrounded"
-            android:orientation="vertical"
-            android:paddingVertical="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="200dp"
-                    android:layout_height="0dp"
-                    android:scaleType="fitStart"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/polisi" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="end"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/fotoProfil"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@drawable/logo" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView4"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Halo"
-                                android:textColor="@color/white" />
-
-                            <TextView
-                                android:id="@+id/textView5"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="TextView"
-                                android:textColor="@color/white"
-                                android:textSize="24sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
-
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@id/tvIsOffline"
             tools:ignore="SpeakableTextPresentCheck">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
+                <LinearLayout
+                    android:id="@+id/linearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="10dp">
+                    android:background="@drawable/bggreenrounded"
+                    android:orientation="vertical"
+                    android:paddingVertical="10dp">
 
-                    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-                        android:id="@+id/youtube_player_view"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="wrap_content">
 
-                        app:videoId="ocEijFZJKy4"
-                        app:autoPlay="true"/>
-                </androidx.cardview.widget.CardView>
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="200dp"
+                            android:layout_height="0dp"
+                            android:scaleType="fitStart"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/polisi" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="end"
+                            android:orientation="vertical"
+                            android:padding="10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/fotoProfil"
+                                    android:layout_width="100dp"
+                                    android:layout_height="100dp"
+                                    app:srcCompat="@drawable/logo" />
+
+                                <TextView
+                                    android:id="@+id/tvGantiFoto"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:padding="4dp"
+                                    android:text="Ganti Foto"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/white"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/textView4"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Halo"
+                                        android:textColor="@color/white" />
+
+                                    <TextView
+                                        android:id="@+id/nama"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/white"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvBPKP"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/white"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
 
                 <androidx.gridlayout.widget.GridLayout
@@ -154,7 +159,6 @@
                                 android:id="@+id/textView7"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="-- Ha"
                                 android:textAlignment="textStart"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -193,7 +197,6 @@
                                 android:id="@+id/textView9"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="-- Bidang"
                                 android:textAlignment="textStart"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -229,10 +232,9 @@
                                 android:textSize="10sp" />
 
                             <TextView
-                                android:id="@+id/textView11"
+                                android:id="@+id/jPetaniTerdaftar"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="-- Orang"
                                 android:textAlignment="textStart"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -260,7 +262,7 @@
                                 app:srcCompat="@drawable/polisi" />
 
                             <TextView
-                                android:id="@+id/textView13"
+                                android:id="@+id/textView12"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="BPKP Terdaftar"
@@ -268,10 +270,9 @@
                                 android:textSize="10sp" />
 
                             <TextView
-                                android:id="@+id/textView12"
+                                android:id="@+id/jBpkp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="-- Pers"
                                 android:textAlignment="textStart"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -282,6 +283,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="8dp"
+                    android:visibility="gone"
                     app:cardCornerRadius="10dp">
 
                     <LinearLayout
@@ -327,7 +329,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:padding="5dp">
+                    android:padding="5dp"
+                    android:visibility="gone">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
@@ -430,13 +433,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="Target Penanaman" />
+                    android:text="Target Dan Capaian Polda Kalbar" />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:cardCornerRadius="10dp">
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -445,299 +456,222 @@
                         android:padding="10dp">
 
                         <TextView
-                            android:id="@+id/textView22"
+                            android:id="@+id/kalbarkabupatenTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="KAB. ABC" />
+                            android:text="PROVINSI KALIMANTAN BARAT"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="fill_horizontal"
-                            android:orientation="horizontal">
+                            android:orientation="vertical"
+                            android:paddingHorizontal="10dp">
 
                             <TextView
-                                android:id="@+id/textView23"
-                                android:layout_width="wrap_content"
+                                android:id="@+id/kalbartextView5sss"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Tertanaman -- Ha dari -- Ha"
+                                android:text="Monokultur"
+                                android:textFontWeight="900"
                                 android:textSize="10sp" />
 
-                            <TextView
-                                android:id="@+id/textView24"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Aktualisasi -- %"
-                                android:textAlignment="textEnd"
-                                android:textSize="10sp" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:paddingStart="10dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="fill_horizontal"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/kalbarcapaianTanamMonokultur"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Capaian Tanam --Ha/--Ha"
+                                        android:textSize="10sp" />
+
+                                    <TextView
+                                        android:id="@+id/kalbarpersenCapaianTanamMonokultur"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Aktualisasi -- %"
+                                        android:textAlignment="textEnd"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+
+                                <ProgressBar
+                                    android:id="@+id/kalbarpbCapaianTanamMonokultur"
+                                    style="?android:attr/progressBarStyleHorizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="100" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:paddingStart="10dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="fill_horizontal"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/kalbarcapaianPanenMonokultur"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Capaian Panen --Ton/--Ton"
+                                        android:textSize="10sp" />
+
+                                    <TextView
+                                        android:id="@+id/kalbaraktualisasiPanenMonokultur"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Aktualisasi -- %"
+                                        android:textAlignment="textEnd"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+
+                                <ProgressBar
+                                    android:id="@+id/kalbarpbCapaianPanenMonokultur"
+                                    style="?android:attr/progressBarStyleHorizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="100"
+                                    android:progressTint="#E91E63" />
+                            </LinearLayout>
                         </LinearLayout>
 
-                        <ProgressBar
-                            android:id="@+id/progressBar"
-                            style="?android:attr/progressBarStyleHorizontal"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="100"
-                            android:progress="80" />
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="10dp">
+
+                            <TextView
+                                android:id="@+id/kalbartextView5s"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Tumpangsari"
+                                android:textFontWeight="900"
+                                android:textSize="10sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:paddingStart="10dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="fill_horizontal"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/kalbarcapaianTanamTumpangsari"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Capaian Tanam --Ha/--Ha"
+                                        android:textSize="10sp" />
+
+                                    <TextView
+                                        android:id="@+id/kalbarpersenCapaianTanamTumpangsari"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Aktualisasi -- %"
+                                        android:textAlignment="textEnd"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+
+                                <ProgressBar
+                                    android:id="@+id/kalbarpbCapaianTanamTumpangsari"
+                                    style="?android:attr/progressBarStyleHorizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="100" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:paddingStart="10dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="fill_horizontal"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/kalbarcapaianPanenTumpangsari"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Capaian Panen --Ton/--Ton"
+                                        android:textSize="10sp" />
+
+                                    <TextView
+                                        android:id="@+id/kalbaraktualisasiPanenTumpangsari"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Aktualisasi -- %"
+                                        android:textAlignment="textEnd"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+
+                                <ProgressBar
+                                    android:id="@+id/kalbarpbCapaianPanenTumpangsari"
+                                    style="?android:attr/progressBarStyleHorizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="100"
+                                    android:progressTint="#E91E63" />
+                            </LinearLayout>
+                        </LinearLayout>
+
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/targetDanCapaianRV"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="10dp">
+                    android:layout_height="match_parent" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:id="@+id/textViews22"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="KAB. ABC" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="fill_horizontal"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/textViedw23"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Tertanaman -- Ha dari -- Ha"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/textViesw24"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Aktualisasi -- %"
-                                android:textAlignment="textEnd"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-
-                        <ProgressBar
-                            android:id="@+id/progasressBar"
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="100"
-                            android:progress="80" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="10dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:id="@+id/textViasdew22"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="KAB. ABC" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="fill_horizontal"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/texdstView23"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Tertanaman -- Ha dari -- Ha"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/textViesfdw24"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Aktualisasi -- %"
-                                android:textAlignment="textEnd"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-
-                        <ProgressBar
-                            android:id="@+id/progressBadfar"
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="100"
-                            android:progress="80" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="10dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:id="@+id/textVieadsfw22"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="KAB. ABC" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="fill_horizontal"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/textadfView23"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Tertanaman -- Ha dari -- Ha"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/textVadfiew24"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Aktualisasi -- %"
-                                android:textAlignment="textEnd"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-
-                        <ProgressBar
-                            android:id="@+id/progressadffBar"
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="100"
-                            android:progress="80" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="10dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:id="@+id/textViegdasw22"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="KAB. ABC" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="fill_horizontal"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/textViesdfw23"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Tertanaman -- Ha dari -- Ha"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/textVieasdgaw24"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Aktualisasi -- %"
-                                android:textAlignment="textEnd"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-
-                        <ProgressBar
-                            android:id="@+id/progressBasdgar"
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="100"
-                            android:progress="80" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="10dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:id="@+id/textViewadsga22"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="KAB. ABC" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="fill_horizontal"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/textVsaddsaiew23"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Tertanaman -- Ha dari -- Ha"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/textVsdgdsiew24"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Aktualisasi -- %"
-                                android:textAlignment="textEnd"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-
-                        <ProgressBar
-                            android:id="@+id/progressBasdasdgaar"
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="100"
-                            android:progress="80" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
+
+        <TextView
+            android:id="@+id/tvIsOffline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#252323"
+            android:paddingVertical="2dp"
+            android:text="Anda sedang dalam mode Offline!"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
