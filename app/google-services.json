@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "850449358161",
+    "project_id": "kp3k-e76b2",
+    "storage_bucket": "kp3k-e76b2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:850449358161:android:ffe01327c95b6025e20770",
+        "android_client_info": {
+          "package_name": "id.creatodidak.kp3k"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVz6PqJJpZv3xy09iX8IZrfTfWzxkA6dM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
