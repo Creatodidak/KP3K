@@ -100,4 +100,10 @@ interface Data {
         @Part("nrp") nrp: RequestBody,
         @Part foto: MultipartBody.Part,
     ): BasicResponse
+
+    @GET("/android/verifikasi/{nrp}/{nohp}")
+    suspend fun getKodeVerifikasi(@Path("nrp") nrp: String, @Path("nohp") nohp : String): BasicResponse
+
+    @GET("/android/verifikasi/auth/{nrp}/{kode}")
+    suspend fun sendKodeVerifikasi(@Path("nrp") nrp: String, @Path("kode") kode : String): BasicResponse
 }

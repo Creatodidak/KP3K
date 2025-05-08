@@ -6,51 +6,75 @@
     android:layout_height="match_parent"
     tools:context=".IncomingCallActivity">
 
-    <!-- Video View untuk menampilkan video panggilan -->
-    <FrameLayout
-        android:id="@+id/videoViewContainer"
+    <ImageView
+        android:id="@+id/imageView24"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@android:color/black"/>
+        app:srcCompat="@drawable/greenbg" />
 
-    <!-- Nama Pemanggil -->
-    <TextView
-        android:id="@+id/callerName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Admin"
-        android:textSize="18sp"
-        android:textColor="@android:color/white"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="16dp"
+    <ImageView
+        android:id="@+id/imageView25"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/textView40"
+        app:srcCompat="@drawable/logo" />
 
-    <!-- Tombol Terima Panggilan -->
-    <Button
-        android:id="@+id/btnAccept"
+    <TextView
+        android:id="@+id/textView40"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Terima Panggilan"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/robinson"
+        android:text="POSKO KETAHANAN PANGAN PRESISI\nPOLDA KALIMANTAN BARAT"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView42" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btAccept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="75dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/baseline_call_24"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btDecline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="75dp"
+        android:clickable="true"
+        app:backgroundTint="#FB0000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:srcCompat="@drawable/baseline_cancel_24"
+        tools:ignore="SpeakableTextPresentCheck" />
 
-    <!-- Tombol Tolak Panggilan -->
-    <Button
-        android:id="@+id/btnReject"
+    <TextView
+        android:id="@+id/textView42"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tolak Panggilan"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@id/btnAccept"
+        android:layout_marginTop="32dp"
+        android:text="Panggilan masuk..."
+        android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

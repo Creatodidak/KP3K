@@ -13,17 +13,32 @@ import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 
 class AgoraService : Service() {
+
     private lateinit var rtcEngine: RtcEngine
+    private var isRtcInitialized = false
 
     override fun onCreate() {
         super.onCreate()
         val notification = createNotification()
-        startForeground(1, notification) // Foreground service WAJIB punya notifikasi
+            startForeground(1, notification)
         initializeAgora()
     }
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val channel = intent?.getStringExtra("channel")
+
+        if (channel != null) {
+            joinChannel(null, channel)
+        }
+
+        return START_STICKY
+    }
+
     private fun initializeAgora() {
-        val appId = "29942f98950b4396b940f81670ae6fd7" // Ganti dengan App ID kamu
+        if (isRtcInitialized) return
+
+        val appId = "f5a427c2bfd44f3e8285507e4c1ee34f" // Ganti dengan App ID kamu
+
         rtcEngine = RtcEngine.create(applicationContext, appId, object : IRtcEngineEventHandler() {
             override fun onUserJoined(uid: Int, elapsed: Int) {
                 Log.d("AGORA", "User joined: $uid")
@@ -32,14 +47,24 @@ class AgoraService : Service() {
             override fun onUserOffline(uid: Int, reason: Int) {
                 Log.d("AGORA", "User offline: $uid, reason: $reason")
             }
+
+            override fun onJoinChannelSuccess(channel: String?, uid: Int, elapsed: Int) {
+                Log.d("AGORA", "Join channel success: $channel, uid: $uid")
+            }
         })
 
+        isRtcInitialized = true
         Log.d("AGORA", "RtcEngine initialized")
     }
 
-    fun joinChannel(token: String?, channelName: String) {
+    private fun joinChannel(token: String?, channelName: String) {
+        if (!isRtcInitialized) {
+            Log.e("AGORA", "RtcEngine not initialized")
+            return
+        }
+
         rtcEngine.joinChannel(token, channelName, "", 0)
-        Log.d("AGORA", "Joined channel: $channelName")
+        Log.d("AGORA", "Joining channel: $channelName with token: $token")
     }
 
     private fun createNotification(): Notification {
@@ -58,15 +83,18 @@ class AgoraService : Service() {
 
         return NotificationCompat.Builder(this, channelId)
             .setContentTitle("Layanan Panggilan Aktif")
-            .setContentText("Menunggu panggilan masuk...")
+            .setContentText("Terhubung ke layanan panggilan")
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .build()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        RtcEngine.destroy()
-        Log.d("AGORA", "RtcEngine destroyed")
+        if (isRtcInitialized) {
+            RtcEngine.destroy()
+            isRtcInitialized = false
+            Log.d("AGORA", "RtcEngine destroyed")
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

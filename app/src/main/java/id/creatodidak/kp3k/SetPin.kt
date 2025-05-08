@@ -59,20 +59,23 @@ class SetPin : AppCompatActivity() {
 
         lupaPin.paintFlags = lupaPin.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         lupaPin.setOnClickListener {
-            val phoneNumber = "6289523468041"
-            val message = "Halo, saya lupa pin...\nNRP saya ${sh.getString("nrp", "")}"
+//            val phoneNumber = "6289523468041"
+//            val message = "Halo, saya lupa pin...\nNRP saya ${sh.getString("nrp", "")}"
+//
+//            val url = "https://wa.me/$phoneNumber?text=${Uri.encode(message)}"
+//            val intent = Intent(Intent.ACTION_VIEW).apply {
+//                data = url.toUri()
+//                setPackage("com.whatsapp")
+//            }
+//
+//            try {
+//                startActivity(intent)
+//            } catch (e: Exception) {
+//                Toast.makeText(this, "WhatsApp tidak terpasang!", Toast.LENGTH_SHORT).show()
+//            }
 
-            val url = "https://wa.me/$phoneNumber?text=${Uri.encode(message)}"
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                data = url.toUri()
-                setPackage("com.whatsapp")
-            }
-
-            try {
-                startActivity(intent)
-            } catch (e: Exception) {
-                Toast.makeText(this, "WhatsApp tidak terpasang!", Toast.LENGTH_SHORT).show()
-            }
+            val i = Intent(this, VideoCallActivity::class.java)
+            startActivity(i)
         }
     }
 

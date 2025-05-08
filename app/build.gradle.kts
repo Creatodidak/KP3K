@@ -15,8 +15,8 @@ android {
         applicationId = "id.creatodidak.kp3k"
         minSdk = 30
         targetSdk = 35
-        versionCode = 4
-        versionName = "Alpha-1.2"
+        versionCode = 5
+        versionName = "Alpha-1.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,9 +29,11 @@ android {
                 "proguard-rules.pro"
             )
              buildConfigField("String", "BASE_URL", "\"https://server.resldk.cloud/\"")
+             buildConfigField("String", "AGORA_ID", "\"6141104f89c84e5f89063dffef241e71\"")
         }
         debug {
              buildConfigField("String", "BASE_URL", "\"http://36.93.138.110:3011/\"")
+             buildConfigField("String", "AGORA_ID", "\"6141104f89c84e5f89063dffef241e71\"")
         }
     }
 
@@ -47,9 +49,6 @@ android {
             excludes.add("META-INF/NOTICE")
             excludes.add("META-INF/NOTICE.txt")
             excludes.add("META-INF/io.netty.versions.properties")
-        }
-        jniLibs {
-            excludes.add("**/*.so")
         }
     }
 
@@ -136,6 +135,7 @@ dependencies {
     implementation ("androidx.biometric:biometric:1.1.0")
     //noinspection UseTomlInstead
     implementation ("com.github.yalantis:ucrop:2.2.8")
+    //noinspection UseTomlInstead
 
     implementation(libs.androidx.gridlayout)
     implementation(libs.androidx.lifecycle.livedata.ktx)

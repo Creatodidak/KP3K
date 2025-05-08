@@ -1,12 +1,16 @@
 package id.creatodidak.kp3k.dashboard
 
+import android.Manifest
 import android.app.DownloadManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -14,35 +18,36 @@ import android.view.Menu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.core.content.edit
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
-import androidx.core.view.GravityCompat
-import androidx.lifecycle.lifecycleScope
+import com.google.android.material.navigation.NavigationView
 import id.creatodidak.kp3k.BuildConfig
 import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.SetPin
+import id.creatodidak.kp3k.Verifikasi
 import id.creatodidak.kp3k.Welcome
 import id.creatodidak.kp3k.api.Client
 import id.creatodidak.kp3k.api.Update
 import id.creatodidak.kp3k.api.model.MUpdate
 import id.creatodidak.kp3k.databinding.ActivityDashboardOpsionalBinding
 import id.creatodidak.kp3k.network.SocketManager
-import id.creatodidak.kp3k.offline.AppDatabase
 import io.socket.client.Socket
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnPermissionDenied
 import java.io.File
-import androidx.core.content.edit
 
 class DashboardOpsional : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -50,11 +55,24 @@ class DashboardOpsional : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityDashboardOpsionalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarDashboardOpsional.toolbar)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = "INCOMING_CALL_CHANNEL"
+            val channelName = "Incoming Call"
+            val channelDescription = "Channel for incoming calls"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val notificationChannel = NotificationChannel(channelId, channelName, importance).apply {
+                description = channelDescription
+            }
+
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -71,6 +89,16 @@ class DashboardOpsional : AppCompatActivity() {
             val i = Intent(this@DashboardOpsional, SetPin::class.java)
             startActivity(i)
             finish()
+        }
+
+        val hasAskedPermission = sharedPreferences.getBoolean("asked_audio_permission", false)
+
+        if (!hasAskedPermission) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 1001)
+            } else {
+                sharedPreferences.edit().putBoolean("asked_audio_permission", true).apply()
+            }
         }
 
         if (socket.connected()) {
@@ -130,8 +158,13 @@ class DashboardOpsional : AppCompatActivity() {
                 }
                 .show()
         }else{
-            lifecycleScope.launch {
-                checkUpdate()
+            if(sharedPreferences.getString("status", "").isNullOrEmpty() || sharedPreferences.getString("status", "").equals("UNVERIFIED")){
+                val i = Intent(this@DashboardOpsional, Verifikasi::class.java)
+                startActivity(i)
+            }else{
+                lifecycleScope.launch {
+                    checkUpdate()
+                }
             }
         }
 
@@ -200,6 +233,31 @@ class DashboardOpsional : AppCompatActivity() {
     fun onPermissionDenied() {
         Toast.makeText(this, "Permission denied. Cannot download the update.", Toast.LENGTH_SHORT).show()
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == 1001) {
+            val granted = grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+            val sharedPref = getSharedPreferences("session", MODE_PRIVATE)
+
+            // Tandai bahwa izin telah diminta
+            sharedPref.edit().putBoolean("asked_audio_permission", true).apply()
+
+            if (granted) {
+                // Izin diberikan, lakukan aksi yang diperlukan
+                Toast.makeText(this, "Permission granted!", Toast.LENGTH_SHORT).show()
+            } else {
+                // Izin ditolak, beri feedback ke pengguna
+                Toast.makeText(this, "Permission denied! Audio call may not work.", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
 
     private fun registerReceiverForInstall(context: Context, filename: String) {
         val onComplete = object : BroadcastReceiver() {
