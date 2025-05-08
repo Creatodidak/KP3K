@@ -5,9 +5,11 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.media.AudioAttributes
@@ -41,7 +43,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     Log.i("RECEIVED AGORA TOKEN", data["token"].toString())
                 }
                 "test" -> {
-                    showAnimeNotification()
+//                    showAnimeNotification()
                 }
                 "update" -> {
                     showUpdateNotif()
@@ -50,7 +52,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             Log.i("onMessageReceived: ", data["type"].toString())
         }
     }
-
 
     @RequiresPermission(Manifest.permission.VIBRATE)
     private fun handleIncomingCall(remoteMessage: RemoteMessage) {
@@ -71,23 +72,45 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val notificationManager = getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(channel)
 
-        val intent = Intent(this, IncomingCallActivity::class.java)
-        intent.putExtra("channel", remoteMessage.data["channel"])
-        intent.putExtra("token", remoteMessage.data["token"])
+        // Intent untuk Answer
+        val answerIntent = Intent(this, IncomingCallActivity::class.java).apply {
+            putExtra("channel", remoteMessage.data["channel"])
+            putExtra("token", remoteMessage.data["token"])
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
 
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        // Intent untuk Decline
+        val declineIntent = Intent(this, CallActionReceiver::class.java).apply {
+            action = "DECLINE_ACTION"
+            putExtra("notificationId", notificationId)
+        }
+
+        val answerPendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            answerIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val declinePendingIntent = PendingIntent.getBroadcast(
+            this,
+            1,
+            declineIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val builder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.logo)
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo))
             .setContentTitle("Panggilan Masuk")
             .setContentText("Klik untuk menjawab panggilan")
-            .setContentIntent(pendingIntent)
+            .addAction(R.drawable.baseline_cancel_24, "Tolak", declinePendingIntent)
+            .addAction(R.drawable.baseline_call_24, "Jawab", answerPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_CALL)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setFullScreenIntent(pendingIntent, true)
+            .setFullScreenIntent(answerPendingIntent, true)
             .setAutoCancel(true)
+            .setTimeoutAfter(50000)
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             return
@@ -95,51 +118,65 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         NotificationManagerCompat.from(this).notify(notificationId, builder.build())
         CallSoundManager.playSound(applicationContext)
-        // Timeout setelah 50 detik jika tidak dijawab
+
+        // Timeout handler
         android.os.Handler(mainLooper).postDelayed({
             if (!isCallAnswered) {
                 NotificationManagerCompat.from(this).cancel(notificationId)
                 CallSoundManager.stopSound()
-                showMissedCallNotification()
+                showMissedCallNotification(this)
             }
-        }, 50_000) // 50 detik
-
+        }, 50000)
     }
 
-    private fun showMissedCallNotification() {
-        val missedChannelId = "MISSED_CALL_CHANNEL"
-        val missedChannelName = "Panggilan Tidak Terjawab"
+    companion object {
+        private const val CALL_CHANNEL_ID = "CALL_CHANNEL"
+        private const val ANIME_CHANNEL_ID = "anime_channel_id"
+        private const val UPDATE_CHANNEL_ID = "update_channel_id"
+        private const val CALL_NOTIFICATION_ID = 1001
+        private const val ANIME_NOTIFICATION_ID = 2001
+        private const val UPDATE_NOTIFICATION_ID = 3001
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val missedChannel = NotificationChannel(
-                missedChannelId,
-                missedChannelName,
-                NotificationManager.IMPORTANCE_DEFAULT
-            ).apply {
-                description = "Notifikasi panggilan tidak terjawab"
+        @JvmStatic
+        var isCallAnswered: Boolean = false
+
+        @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+        @JvmStatic
+        fun showMissedCallNotification(context: Context) {
+            val missedChannelId = "MISSED_CALL_CHANNEL"
+            val missedChannelName = "Panggilan Tidak Terjawab"
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val missedChannel = NotificationChannel(
+                    missedChannelId,
+                    missedChannelName,
+                    NotificationManager.IMPORTANCE_DEFAULT
+                ).apply {
+                    description = "Notifikasi panggilan tidak terjawab"
+                }
+                context.getSystemService(NotificationManager::class.java)
+                    .createNotificationChannel(missedChannel)
             }
-            getSystemService(NotificationManager::class.java)
-                .createNotificationChannel(missedChannel)
+
+            val intent = Intent(context, DashboardOpsional::class.java)
+            val pendingIntent = PendingIntent.getActivity(
+                context,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val missedNotif = NotificationCompat.Builder(context, missedChannelId)
+                .setSmallIcon(R.drawable.logo)
+                .setContentTitle("Panggilan Tidak Terjawab")
+                .setContentText("Anda melewatkan panggilan.")
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .build()
+
+            NotificationManagerCompat.from(context).notify(880802, missedNotif)
         }
-
-        val intent = Intent(this, DashboardOpsional::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val missedNotif = NotificationCompat.Builder(this, missedChannelId)
-            .setSmallIcon(R.drawable.logo)
-            .setContentTitle("Panggilan Tidak Terjawab")
-            .setContentText("Anda melewatkan panggilan.")
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .build()
-
-        NotificationManagerCompat.from(this).notify(880802, missedNotif)
     }
 
     private fun showUpdateNotif() {
@@ -173,64 +210,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    private fun showAnimeNotification() {
-        // Cek permission POST_NOTIFICATIONS di Android 13+
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // Permission belum diberikan, bisa minta di UI jika perlu
-            return
-        }
-
-        createAnimeChannel()
-
-        val intent = Intent(this, DashboardOpsional::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val largeIcon = BitmapFactory.decodeResource(resources, R.drawable.logo)
-        val smallIcon = R.drawable.logo
-
-        val notification = NotificationCompat.Builder(this, ANIME_CHANNEL_ID)
-            .setSmallIcon(smallIcon)
-            .setContentTitle("Slime Taoshite 300-nen")
-            .setContentText("Episode 5 sudah tersedia!")
-            .setLargeIcon(largeIcon)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setAutoCancel(false)
-            .build()
-
-        try {
-            NotificationManagerCompat.from(this)
-                .notify(ANIME_NOTIFICATION_ID, notification)
-        } catch (e: SecurityException) {
-            // Permission missing, gagal kirim notifikasi anime
-        }
-    }
-
-    private fun createCallChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CALL_CHANNEL_ID,
-                "Panggilan Masuk",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "Notifikasi untuk panggilan masuk"
-            }
-            (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-                .createNotificationChannel(channel)
-        }
-    }
     private fun createUpdateChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -245,39 +224,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    private fun createAnimeChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                ANIME_CHANNEL_ID,
-                "Anime Updates",
-                NotificationManager.IMPORTANCE_HIGH    // heads-up
-            ).apply {
-                description = "Notifikasi update episode anime"
-                enableVibration(true)
-                vibrationPattern = longArrayOf(0, 250, 250, 250)
-                setSound( RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
-                    Notification.AUDIO_ATTRIBUTES_DEFAULT )
-            }
-            getSystemService(NotificationManager::class.java)
-                .createNotificationChannel(channel)
-        }
-    }
-
-
-    companion object {
-        private const val CALL_CHANNEL_ID = "CALL_CHANNEL"
-        private const val ANIME_CHANNEL_ID = "anime_channel_id"
-        private const val UPDATE_CHANNEL_ID = "update_channel_id"
-        private const val CALL_NOTIFICATION_ID = 1001
-        private const val ANIME_NOTIFICATION_ID = 2001
-        private const val UPDATE_NOTIFICATION_ID = 3001
-
-        // Flag static untuk status panggilan
-        @JvmStatic
-        var isCallAnswered: Boolean = false
-    }
-
-
+    // ... (fungsi lainnya tetap sama seperti sebelumnya)
     object CallSoundManager {
         private var mediaPlayer: MediaPlayer? = null
         private var vibrator: Vibrator? = null
@@ -313,6 +260,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             vibrator = null
         }
     }
+}
 
-
+class CallActionReceiver : BroadcastReceiver() {
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+    override fun onReceive(context: Context, intent: Intent) {
+        when (intent.action) {
+            "DECLINE_ACTION" -> {
+                MyFirebaseMessagingService.CallSoundManager.stopSound()
+                val notificationId = intent.getIntExtra("notificationId", 880801)
+                NotificationManagerCompat.from(context).cancel(notificationId)
+                MyFirebaseMessagingService.showMissedCallNotification(context)
+            }
+        }
+    }
 }

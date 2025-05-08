@@ -51,7 +51,9 @@ class VideoCallActivity : AppCompatActivity() {
         override fun onUserOffline(uid: Int, reason: Int) {
             super.onUserOffline(uid, reason)
             runOnUiThread {
-//                showToast("User offline: $uid")
+                val i = Intent(this@VideoCallActivity, EndCallActivity::class.java)
+                startActivity(i)
+                finish()
             }
         }
 
@@ -59,7 +61,9 @@ class VideoCallActivity : AppCompatActivity() {
             super.onError(err)
             val errorMessage = "Agora Error code: $err"
             Log.e("AgoraError", errorMessage)
-//            showToast(errorMessage)
+            val i = Intent(this@VideoCallActivity, EndCallActivity::class.java)
+            startActivity(i)
+            finish()
         }
     }
 
@@ -84,7 +88,7 @@ class VideoCallActivity : AppCompatActivity() {
 
         btnEndCall.setOnClickListener {
             mRtcEngine?.leaveChannel()
-            val i = Intent(this, DashboardOpsional::class.java)
+            val i = Intent(this@VideoCallActivity, EndCallActivity::class.java)
             startActivity(i)
             finish()
         }

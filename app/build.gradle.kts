@@ -136,6 +136,7 @@ dependencies {
     //noinspection UseTomlInstead
     implementation ("com.github.yalantis:ucrop:2.2.8")
     //noinspection UseTomlInstead
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
     implementation(libs.androidx.gridlayout)
     implementation(libs.androidx.lifecycle.livedata.ktx)

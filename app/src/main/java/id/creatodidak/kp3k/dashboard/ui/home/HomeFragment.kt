@@ -20,6 +20,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.yalantis.ucrop.UCrop
 import id.creatodidak.kp3k.BuildConfig
 import id.creatodidak.kp3k.R
@@ -119,6 +121,17 @@ class HomeFragment : Fragment() {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             pickImageLauncher.launch(intent)
         }
+
+        val youtubePlayerView = binding.youtubePlayerView
+        lifecycle.addObserver(youtubePlayerView)
+
+        youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                val videoId = "p4OALvMzx9A"
+                youTubePlayer.cueVideo(videoId, 0f)
+            }
+        })
+
     }
 
     private suspend fun uploadFotoProfile(uri: Uri) {

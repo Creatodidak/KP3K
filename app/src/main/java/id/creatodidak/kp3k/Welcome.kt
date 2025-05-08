@@ -7,8 +7,11 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import permissions.dispatcher.*
 
 @RuntimePermissions
@@ -62,7 +65,8 @@ class Welcome : AppCompatActivity() {
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.READ_MEDIA_IMAGES,
         Manifest.permission.ACCESS_NETWORK_STATE,
-        Manifest.permission.READ_PHONE_STATE
+        Manifest.permission.READ_PHONE_STATE,
+        Manifest.permission.USE_FULL_SCREEN_INTENT
     )
     fun checkPermissions() {
         // All required permissions are granted
@@ -80,7 +84,8 @@ class Welcome : AppCompatActivity() {
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.READ_MEDIA_IMAGES,
         Manifest.permission.ACCESS_NETWORK_STATE,
-        Manifest.permission.READ_PHONE_STATE
+        Manifest.permission.READ_PHONE_STATE,
+        Manifest.permission.USE_FULL_SCREEN_INTENT
     )
     fun onPermissionsDenied() {
         // Handle the case where permissions are denied
@@ -98,7 +103,9 @@ class Welcome : AppCompatActivity() {
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.READ_MEDIA_IMAGES,
         Manifest.permission.ACCESS_NETWORK_STATE,
-        Manifest.permission.READ_PHONE_STATE
+        Manifest.permission.READ_PHONE_STATE,
+        Manifest.permission.USE_FULL_SCREEN_INTENT
+
     )
     fun showRationaleForPermissions(request: PermissionRequest) {
         // Show rationale dialog to explain why the permissions are needed
@@ -120,7 +127,8 @@ class Welcome : AppCompatActivity() {
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.READ_MEDIA_IMAGES,
         Manifest.permission.ACCESS_NETWORK_STATE,
-        Manifest.permission.READ_PHONE_STATE
+        Manifest.permission.READ_PHONE_STATE,
+        Manifest.permission.USE_FULL_SCREEN_INTENT
     )
     fun onNeverAskAgain() {
         // Handle case when the user selects "Don't ask again" for permissions
