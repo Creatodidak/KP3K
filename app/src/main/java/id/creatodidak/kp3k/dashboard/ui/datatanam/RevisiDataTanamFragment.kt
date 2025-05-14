@@ -16,28 +16,29 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.createBitmap
-import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
-import id.creatodidak.kp3k.databinding.FragmentTambahDataTanamBinding
-import id.creatodidak.kp3k.helper.CameraActivity
-import id.creatodidak.kp3k.helper.SumberFoto
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.asRequestBody
-
-import java.io.File
-import java.io.FileOutputStream
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.launch
-import okhttp3.RequestBody.Companion.toRequestBody
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import id.creatodidak.kp3k.BuildConfig
 import id.creatodidak.kp3k.api.Client
 import id.creatodidak.kp3k.api.Data
+import id.creatodidak.kp3k.databinding.FragmentRevisiDataTanamBinding
+import id.creatodidak.kp3k.helper.CameraActivity
 import id.creatodidak.kp3k.helper.Loading
-class TambahDataTanamFragment : Fragment() {
-    private var _binding: FragmentTambahDataTanamBinding? = null
+import id.creatodidak.kp3k.helper.SumberFoto
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
+import java.io.FileOutputStream
+
+class RevisiDataTanamFragment : Fragment() {
+    private lateinit var _binding : FragmentRevisiDataTanamBinding
     private val binding get() = _binding!!
     private lateinit var cameraLauncher1: ActivityResultLauncher<Intent>
     private lateinit var cameraLauncher2: ActivityResultLauncher<Intent>
@@ -55,12 +56,22 @@ class TambahDataTanamFragment : Fragment() {
     private var pathDok2 = ""
     private var pathDok3 = ""
     private var pathDok4 = ""
+    private var isDok1Changed = false
+    private var isDok2Changed = false
+    private var isDok3Changed = false
+    private var isDok4Changed = false
+    private var oldMasaTanam = ""
+    private var oldLuasTanam = ""
+    private var oldPrediksi = ""
+    private var oldVarietas = ""
+    val fileUrl = "${BuildConfig.BASE_URL}file/"
 
+    val args: RevisiDataTanamFragmentArgs by navArgs()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentTambahDataTanamBinding.inflate(inflater, container, false)
+        _binding = FragmentRevisiDataTanamBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val sh = requireContext().getSharedPreferences("session", Context.MODE_PRIVATE)
@@ -83,6 +94,7 @@ class TambahDataTanamFragment : Fragment() {
                 binding.watermarks1.visibility = View.GONE
                 binding.imageDok1.visibility = View.VISIBLE
                 binding.buttonPilihDok1.text = "UBAH FOTO"
+                isDok1Changed = true
             }
         }
         cameraLauncher2 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -97,6 +109,7 @@ class TambahDataTanamFragment : Fragment() {
                 binding.watermarks2.visibility = View.GONE
                 binding.imageDok2.visibility = View.VISIBLE
                 binding.buttonPilihDok2.text = "UBAH FOTO"
+                isDok2Changed = true
             }
         }
         cameraLauncher3 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -111,6 +124,7 @@ class TambahDataTanamFragment : Fragment() {
                 binding.watermarks3.visibility = View.GONE
                 binding.imageDok3.visibility = View.VISIBLE
                 binding.buttonPilihDok3.text = "UBAH FOTO"
+                isDok3Changed = true
             }
         }
         cameraLauncher4 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -125,6 +139,7 @@ class TambahDataTanamFragment : Fragment() {
                 binding.watermarks4.visibility = View.GONE
                 binding.imageDok4.visibility = View.VISIBLE
                 binding.buttonPilihDok4.text = "UBAH FOTO"
+                isDok4Changed = true
             }
         }
         galeriLauncher1 = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -137,6 +152,7 @@ class TambahDataTanamFragment : Fragment() {
                 binding.watermarks1.visibility = View.VISIBLE
                 binding.imageDok1.visibility = View.VISIBLE
                 binding.buttonPilihDok1.text = "UBAH FOTO"
+                isDok1Changed = true
             }
         }
         galeriLauncher2 = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -147,6 +163,7 @@ class TambahDataTanamFragment : Fragment() {
                 binding.watermarks2.visibility = View.VISIBLE
                 binding.imageDok2.visibility = View.VISIBLE
                 binding.buttonPilihDok2.text = "UBAH FOTO"
+                isDok2Changed = true
             }
         }
         galeriLauncher3 = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -157,6 +174,7 @@ class TambahDataTanamFragment : Fragment() {
                 binding.watermarks3.visibility = View.VISIBLE
                 binding.imageDok3.visibility = View.VISIBLE
                 binding.buttonPilihDok3.text = "UBAH FOTO"
+                isDok3Changed = true
             }
         }
         galeriLauncher4 = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -167,6 +185,7 @@ class TambahDataTanamFragment : Fragment() {
                 binding.watermarks4.visibility = View.VISIBLE
                 binding.imageDok4.visibility = View.VISIBLE
                 binding.buttonPilihDok4.text = "UBAH FOTO"
+                isDok4Changed = true
             }
         }
 
@@ -211,141 +230,156 @@ class TambahDataTanamFragment : Fragment() {
                 })
         }
 
-        binding.btnKirimDataTanam.setOnClickListener {
-            binding.btnKirimDataTanam.isEnabled = false
-            if(isValid()){
-                processData()
-            }else{
-                binding.btnKirimDataTanam.isEnabled = true
-            }
+        lifecycleScope.launch {
+            loadExistData(args.id)
         }
         return root
     }
 
+    private suspend fun loadExistData(id: String){
+        Loading.show(requireContext())
+        try {
+            val result = Client.retrofit.create(Data::class.java).getDataTanamById(id)
+            if(result !== null){
+                binding.etMasaTanam.setText(result.masatanam)
+                binding.etLuasTanam.setText(result.luastanam)
+                binding.etPrediksi.setText(result.prediksipanen)
+                binding.etVarietas.setText(result.varietas)
+                Glide.with(requireContext())
+                    .load(fileUrl+url(result.foto1.toString()))
+                    .into(binding.imageDok1)
+                Glide.with(requireContext())
+                    .load(fileUrl+url(result.foto2.toString()))
+                    .into(binding.imageDok2)
+                Glide.with(requireContext())
+                    .load(fileUrl+url(result.foto3.toString()))
+                    .into(binding.imageDok3)
+                Glide.with(requireContext())
+                    .load(fileUrl+url(result.foto4.toString()))
+                    .into(binding.imageDok4)
+                oldMasaTanam = result.masatanam.toString()
+                oldLuasTanam = result.luastanam.toString()
+                oldPrediksi = result.prediksipanen.toString()
+                oldVarietas = result.varietas.toString()
+                binding.btnKirimDataTanam.setOnClickListener {
+                    binding.btnKirimDataTanam.isEnabled = false
+                    if(isValid()){
+                        processData()
+                    }else{
+                        binding.btnKirimDataTanam.isEnabled = true
+                    }
+                }
+            }else{
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Error")
+                    .setMessage("Gagal mendapatkan data dari server!")
+                    .setPositiveButton("OK") { dialog, _ ->
+                        dialog.dismiss()
+                        findNavController().popBackStack()
+                    }
+                    .show()
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+            AlertDialog.Builder(requireContext())
+                .setTitle("Error")
+                .setMessage("Gagal mendapatkan data dari server! -> $e")
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                    findNavController().popBackStack()
+                }
+                .show()
+        }finally {
+            Loading.hide()
+        }
+    }
+
     private fun processData(){
-        val args: TambahDataTanamFragmentArgs by navArgs()
         var foto1Part: MultipartBody.Part? = null
         var foto2Part: MultipartBody.Part? = null
         var foto3Part: MultipartBody.Part? = null
         var foto4Part: MultipartBody.Part? = null
-        var kodelahan: RequestBody = createPartFromString(args.lahanId)
-        var luasTanam: RequestBody
-        var komoditas: RequestBody = createPartFromString("1")
-        var prediksi: RequestBody
-        var varietas: RequestBody
-        var masatanam: RequestBody
+        var id: RequestBody = createPartFromString(args.id)
+        var luasTanam: RequestBody? = null
+        var prediksi: RequestBody? = null
+        var varietas: RequestBody? = null
+        var masatanam: RequestBody? = null
 
-        foto1Part = if (isDok1camera) {
-            prepareFilePart("foto1", compressCamera(File(pathDok1)))
-        }else{
-            prepareFilePart("foto1", saveBitmapToFile(getBitmapFromView(binding.dok1)))
+        if (isDok1Changed) {
+            foto1Part = if (isDok1camera) {
+                prepareFilePart("foto1", compressCamera(File(pathDok1)))
+            } else {
+                prepareFilePart("foto1", saveBitmapToFile(getBitmapFromView(binding.dok1)))
+            }
+        }
+        if (isDok2Changed) {
+            foto2Part = if (isDok2camera) {
+                prepareFilePart("foto2", compressCamera(File(pathDok2)))
+            } else {
+                prepareFilePart("foto2", saveBitmapToFile(getBitmapFromView(binding.dok2)))
+            }
+        }
+        if (isDok3Changed) {
+            foto3Part = if (isDok3camera) {
+                prepareFilePart("foto3", compressCamera(File(pathDok3)))
+            } else {
+                prepareFilePart("foto3", saveBitmapToFile(getBitmapFromView(binding.dok3)))
+            }
+        }
+        if (isDok4Changed) {
+            foto4Part = if (isDok4camera) {
+                prepareFilePart("foto4", compressCamera(File(pathDok4)))
+            } else {
+                prepareFilePart("foto4", saveBitmapToFile(getBitmapFromView(binding.dok4)))
+            }
         }
 
-        foto2Part = if (isDok2camera) {
-            prepareFilePart("foto2", compressCamera(File(pathDok2)))
-        }else{
-            prepareFilePart("foto2", saveBitmapToFile(getBitmapFromView(binding.dok2)))
+        if(binding.etMasaTanam.text.toString() != oldMasaTanam){
+            masatanam = createPartFromString(binding.etMasaTanam.text.toString())
+        }
+        if(binding.etLuasTanam.text.toString() != oldLuasTanam){
+            luasTanam = createPartFromString(binding.etLuasTanam.text.toString())
+        }
+        if(binding.etPrediksi.text.toString() != oldPrediksi){
+            prediksi = createPartFromString(binding.etPrediksi.text.toString())
+        }
+        if(binding.etVarietas.text.toString() != oldVarietas){
+            varietas = createPartFromString(binding.etVarietas.text.toString())
         }
 
-        foto3Part = if (isDok3camera) {
-            prepareFilePart("foto3", compressCamera(File(pathDok3)))
-        }else{
-            prepareFilePart("foto3", saveBitmapToFile(getBitmapFromView(binding.dok3)))
-        }
-
-        foto4Part = if (isDok4camera) {
-            prepareFilePart("foto4", compressCamera(File(pathDok4)))
+        if(foto1Part == null && foto2Part == null && foto3Part == null && foto4Part == null && luasTanam == null && prediksi == null && varietas == null && masatanam == null){
+            AlertDialog.Builder(requireContext())
+                .setTitle("Konfirmasi")
+                .setMessage("Tidak ada perubahan data!")
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                    binding.btnKirimDataTanam.isEnabled = true
+                }
+                .show()
         }else {
-            prepareFilePart("foto4", saveBitmapToFile(getBitmapFromView(binding.dok4)))
-        }
-
-        luasTanam = createPartFromString(binding.etLuasTanam.text.toString())
-        prediksi = createPartFromString(binding.etPrediksi.text.toString())
-        varietas  = createPartFromString(binding.etVarietas.text.toString())
-        masatanam = createPartFromString(binding.etMasaTanam.text.toString())
-        if(foto1Part != null && foto2Part != null && foto3Part != null && foto4Part != null && luasTanam != null && varietas != null && prediksi != null && kodelahan != null && komoditas != null && masatanam != null){
             AlertDialog.Builder(requireContext())
                 .setTitle("Konfirmasi")
                 .setMessage("Apakah Anda yakin ingin mengirim data?")
                 .setPositiveButton("Ya") { _, _ ->
                     lifecycleScope.launch {
-                        sendDatatanam(
+                        sendDataTanamUpdate(
+                            id,
+                            masatanam,
+                            luasTanam,
+                            varietas,
+                            prediksi,
                             foto1Part,
                             foto2Part,
                             foto3Part,
                             foto4Part,
-                            luasTanam,
-                            varietas,
-                            prediksi,
-                            kodelahan,
-                            komoditas,
-                            masatanam
                         )
                     }
                 }
                 .setNegativeButton("Tidak", null)
                 .show()
-
         }
     }
 
-    private suspend fun sendDatatanam(
-        foto1Part: MultipartBody.Part,
-        foto2Part: MultipartBody.Part,
-        foto3Part: MultipartBody.Part,
-        foto4Part: MultipartBody.Part,
-        luasTanam: RequestBody,
-        varietas: RequestBody,
-        prediksi: RequestBody,
-        kodelahan: RequestBody,
-        komoditas: RequestBody,
-        masatanam: RequestBody,
-    ){
-        try {
-            Loading.show(requireContext())
-            var result = Client.retrofit.create(Data::class.java).uploadLaporanTanam(
-                kodelahan,
-                masatanam,
-                luasTanam,
-                prediksi,
-                komoditas,
-                varietas,
-                foto1Part,
-                foto2Part,
-                foto3Part,
-                foto4Part
-            )
-
-            if(result.isSuccessful){
-                Loading.hide()
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Berhasil")
-                    .setMessage("Data berhasil dikirim")
-                    .setPositiveButton("OK", { _, _ ->
-                        resetField()
-                        findNavController().popBackStack()
-                    })
-                    .show()
-                binding.btnKirimDataTanam.isEnabled = true
-            }else{
-                Loading.hide()
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Gagal")
-                    .setMessage("Data gagal dikirim")
-                    .setPositiveButton("OK", null)
-                    .show()
-                binding.btnKirimDataTanam.isEnabled = true
-            }
-        }catch (e: Exception){
-            Loading.hide()
-            AlertDialog.Builder(requireContext())
-                .setTitle("Gagal")
-                .setMessage(e.message)
-                .setPositiveButton("OK", null)
-                .show()
-            binding.btnKirimDataTanam.isEnabled = true
-        }
-    }
     private fun isValid(): Boolean {
         if (binding.etMasaTanam.text.toString().isEmpty()) {
             binding.etMasaTanam.error = "Masa Tanam Harus Diisi"
@@ -382,41 +416,60 @@ class TambahDataTanamFragment : Fragment() {
         return true
     }
 
-    private fun resetField(){
-        binding.etLuasTanam.text.clear()
-        binding.etMasaTanam.text.clear()
-        binding.etPrediksi.text.clear()
-        binding.etVarietas.text.clear()
-        binding.errorDok1.visibility = View.GONE
-        binding.errorDok2.visibility = View.GONE
-        binding.errorDok3.visibility = View.GONE
-        binding.errorDok4.visibility = View.GONE
-        binding.imageDok1.visibility = View.GONE
-        binding.imageDok2.visibility = View.GONE
-        binding.imageDok3.visibility = View.GONE
-        binding.imageDok4.visibility = View.GONE
-        binding.watermarks1.visibility = View.GONE
-        binding.watermarks2.visibility = View.GONE
-        binding.watermarks3.visibility = View.GONE
-        binding.watermarks4.visibility = View.GONE
-        binding.buttonPilihDok1.text = "PILIH DOKUMENTASI"
-        binding.buttonPilihDok2.text = "PILIH DOKUMENTASI"
-        binding.buttonPilihDok3.text = "PILIH DOKUMENTASI"
-        binding.buttonPilihDok4.text = "PILIH DOKUMENTASI"
-        isDok1camera = false
-        isDok2camera = false
-        isDok3camera = false
-        isDok4camera = false
-        pathDok1 = ""
-        pathDok2 = ""
-        pathDok3 = ""
-        pathDok4 = ""
-        binding.tvNrpCamera.text = ""
-        binding.tvNrpCamera1.text = ""
-        binding.tvNrpCamera2.text = ""
-        binding.tvNrpCamera3.text = ""
-    }
+    private suspend fun sendDataTanamUpdate(
+        id: RequestBody,
+        masatanam: RequestBody?,
+        luasTanam: RequestBody?,
+        varietas: RequestBody?,
+        prediksi: RequestBody?,
+        foto1Part: MultipartBody.Part?,
+        foto2Part: MultipartBody.Part?,
+        foto3Part: MultipartBody.Part?,
+        foto4Part: MultipartBody.Part?,
+    ) {
+        try {
+            Loading.show(requireContext())
+            var result = Client.retrofit.create(Data::class.java).updateLaporanTanam(
+                id,
+                masatanam,
+                luasTanam,
+                prediksi,
+                varietas,
+                foto1Part,
+                foto2Part,
+                foto3Part,
+                foto4Part
+            )
 
+            if(result.isSuccessful){
+                Loading.hide()
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Berhasil")
+                    .setMessage("Data berhasil dikirim")
+                    .setPositiveButton("OK", { _, _ ->
+                        findNavController().popBackStack()
+                    })
+                    .show()
+                binding.btnKirimDataTanam.isEnabled = true
+            }else{
+                Loading.hide()
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Gagal")
+                    .setMessage("Data gagal dikirim")
+                    .setPositiveButton("OK", null)
+                    .show()
+                binding.btnKirimDataTanam.isEnabled = true
+            }
+        }catch (e: Exception){
+            Loading.hide()
+            AlertDialog.Builder(requireContext())
+                .setTitle("Gagal")
+                .setMessage(e.message)
+                .setPositiveButton("OK", null)
+                .show()
+            binding.btnKirimDataTanam.isEnabled = true
+        }
+    }
     private fun getBitmapFromView(view: View): Bitmap {
         val bitmap = createBitmap(view.width, view.height)
         val canvas = Canvas(bitmap)
@@ -460,4 +513,14 @@ class TambahDataTanamFragment : Fragment() {
     }
     fun createPartFromString(value: String): RequestBody =
         value.toRequestBody("text/plain".toMediaTypeOrNull())
+
+    fun url(fullPath: String): String {
+        val keyword = "uploads/"
+        val index = fullPath.indexOf(keyword)
+        return if (index != -1) {
+            fullPath.substring(index + keyword.length)
+        } else {
+            fullPath // fallback kalau tidak mengandung "uploads/"
+        }
+    }
 }

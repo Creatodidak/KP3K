@@ -1,8 +1,22 @@
 package id.creatodidak.kp3k.helper
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+
+    fun formatTanggalKeIndonesia(isoDate: String): String {
+        val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        isoFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+        val date: Date = isoFormat.parse(isoDate) ?: return ""
+
+        val formatIndonesia = SimpleDateFormat("EEEE, d MMMM yyyy", Locale("id", "ID"))
+        return formatIndonesia.format(date)
+    }
 
     fun getAgeFromDate(input: String): String {
         val inputDate = ZonedDateTime.parse(input).withZoneSameInstant(ZoneId.systemDefault()).toLocalDate()

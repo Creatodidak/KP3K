@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.api.Client
 import id.creatodidak.kp3k.api.Data
+import id.creatodidak.kp3k.api.model.MNewOwnerItem
 import id.creatodidak.kp3k.api.model.MOwnerItem
 import id.creatodidak.kp3k.api.model.OwnerItem
 import id.creatodidak.kp3k.api.model.newLahan
@@ -30,7 +31,7 @@ import kotlinx.coroutines.launch
 class AddLahan : Fragment() {
     private var _binding: FragmentAddLahanBinding? = null
     private val binding get() = _binding!!
-    private var DataOwner = mutableListOf<OwnerItem?>()
+    private var DataOwner = mutableListOf<MNewOwnerItem?>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -122,23 +123,22 @@ class AddLahan : Fragment() {
             Loading.show(requireContext())
 
             val sh = requireContext().getSharedPreferences("session", Context.MODE_PRIVATE)
-            val nrp = sh.getString("nrp", null)
-            if (nrp.isNullOrEmpty()) {
+            val desaid = sh.getString("desaid", null)
+            if (desaid.isNullOrEmpty()) {
                 Loading.hide()
-                showDialog("Gagal", "Nrp tidak ditemukan")
+                showDialog("Gagal", "desaid tidak ditemukan")
                 return
             }
 
             val response = Client.retrofit.create(Data::class.java).sendNewLahan(newLahan(
+                owner_id = DataOwner[binding.spPemilik.selectedItemPosition-1]?.kode.toString(),
+                type = binding.spJenisLahan.selectedItem.toString(),
                 luas = binding.etLuas.text.toString(),
                 latitude = binding.etLatitude.text.toString(),
                 longitude = binding.etLongitude.text.toString(),
-                nrp = nrp,
-                owner_id = DataOwner[binding.spPemilik.selectedItemPosition-1]?.kode.toString(),
-                jenis = binding.spJenisLahan.selectedItem.toString()
             ))
             Loading.hide()
-            if (response.kode == 200) {
+            if (response.kode == 201) {
                 showDialog("Berhasil", response.msg)
             } else {
                 showDialog("Gagal", response.msg)
@@ -154,15 +154,15 @@ class AddLahan : Fragment() {
     private suspend fun loadOwner(s: String) {
         try {
             val sh = requireContext().getSharedPreferences("session", Context.MODE_PRIVATE)
-            val nrp = sh.getString("nrp", null)
-            if (nrp.isNullOrEmpty()) {
+            val desaid = sh.getString("desaid", null)
+            if (desaid.isNullOrEmpty()) {
                 Loading.hide()
-                showDialog("Gagal", "Nrp tidak ditemukan")
+                showDialog("Gagal", "desaid tidak ditemukan")
                 return
             }
-            val response = Client.retrofit.create(Data::class.java).getOwnerByType(s, nrp)
+            val response = Client.retrofit.create(Data::class.java).getOwner(desaid)
 
-            if (response.owner.isNullOrEmpty()) {
+            if (response.isNullOrEmpty()) {
                 AlertDialog.Builder(requireContext())
                     .setTitle("Peringatan")
                     .setCancelable(false)
@@ -181,8 +181,8 @@ class AddLahan : Fragment() {
                 val spPemilik = binding.spPemilik
 
                 val pemilikList = mutableListOf("PILIH")
-                DataOwner.addAll(response.owner)
-                pemilikList.addAll(response.owner.map { "${it?.namaPok} - ${it?.nama}" })
+                DataOwner.addAll(response)
+                pemilikList.addAll(response.map { "${it.namaPok} - ${it.nama}" })
                 spPemilik.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, pemilikList)
 
                 binding.LLDataPemilik.visibility = View.VISIBLE

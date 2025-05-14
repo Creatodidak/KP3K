@@ -62,7 +62,7 @@ class HomeFragment : Fragment() {
         val sharedPrefs = requireContext()
             .getSharedPreferences("session", Context.MODE_PRIVATE)
         binding.nama.text = "${sharedPrefs.getString("pangkat", "")} ${sharedPrefs.getString("nama", "")}"
-        binding.tvBPKP.text = "BA PENGGERAK DESA ${sharedPrefs.getString("desabinaan", "")}, KEC. ${sharedPrefs.getString("kecamatan", "")}, KAB. ${sharedPrefs.getString("kabupaten", "")}"
+        binding.tvBPKP.text = "BA PENGGERAK DESA ${sharedPrefs.getString("desa", "")}, KEC. ${sharedPrefs.getString("kecamatan", "")}, KAB. ${sharedPrefs.getString("kabupaten", "")}"
         val BASE_URL = "${BuildConfig.BASE_URL}file/"
         db = AppDatabase.getDatabase(requireContext())
         if(sharedPrefs.getString("foto", "") === "/personil/img/default.jpg") {

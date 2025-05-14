@@ -15,8 +15,8 @@ android {
         applicationId = "id.creatodidak.kp3k"
         minSdk = 30
         targetSdk = 35
-        versionCode = 5
-        versionName = "Alpha-1.3"
+        versionCode = 7
+        versionName = "Alpha-1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -32,7 +32,8 @@ android {
              buildConfigField("String", "AGORA_ID", "\"6141104f89c84e5f89063dffef241e71\"")
         }
         debug {
-             buildConfigField("String", "BASE_URL", "\"http://36.93.138.110:3011/\"")
+//             buildConfigField("String", "BASE_URL", "\"http://36.93.138.110:3011/\"")
+            buildConfigField("String", "BASE_URL", "\"https://server.resldk.cloud/\"")
              buildConfigField("String", "AGORA_ID", "\"6141104f89c84e5f89063dffef241e71\"")
         }
     }

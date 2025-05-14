@@ -2,7 +2,9 @@ package id.creatodidak.kp3k.adapter.pemiliklahan
 
 import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import id.creatodidak.kp3k.BuildConfig
@@ -10,14 +12,17 @@ import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.api.model.DatatanamItem
 import id.creatodidak.kp3k.api.model.LahanOwnerItem
 import id.creatodidak.kp3k.api.model.LahantumpangsariItem
+import id.creatodidak.kp3k.api.model.MRealisasiItem
 import id.creatodidak.kp3k.databinding.ItemLahanTugasSayaTumpangsariBinding
 import id.creatodidak.kp3k.databinding.ItemRealisasiTanamBinding
 import id.creatodidak.kp3k.helper.formatDuaDesimal
 import id.creatodidak.kp3k.helper.getAgeFromDate
 
 class DataTanamAdapter(
-    private val data: List<DatatanamItem?>,
-    private val onWrapperClick: (String) -> Unit
+    private val data: List<MRealisasiItem?>,
+    private val onWrapperClick: (String) -> Unit,
+    private val onPanenClick: (String) -> Unit,
+    private val onRevisiClick: (String) -> Unit
 ) : RecyclerView.Adapter<DataTanamAdapter.DataTanamViewHolder>() {
 
     inner class DataTanamViewHolder(val binding: ItemRealisasiTanamBinding) :
@@ -34,7 +39,7 @@ class DataTanamAdapter(
         val item = data[position]
         val b = holder.binding
 
-        b.tvDataTanamKe.text = "Data Tanam Ke-${position + 1}"
+        b.tvDataTanamKe.text = "Penanaman Ke-${position + 1} Masa Tanam ${item?.masatanam}"
         b.tvLuasTanam.text = "${formatDuaDesimal((item?.luastanam?.toDoubleOrNull() ?: 0.0)/10000)} Ha"
         if(item?.tanggaltanam == null){
             b.tvUmurTanam.text = "Tidak diketahui"
@@ -52,9 +57,55 @@ class DataTanamAdapter(
                 .into(b.ivFoto1)
         }
 
-        b.wrapperDataTanam.setOnClickListener {
+        b.tvPerkembangan.setOnClickListener {
             val data = "${item?.id}|${position+1}|${item?.tanggaltanam}"
             onWrapperClick(data)
+        }
+
+        b.tvPanen.setOnClickListener {
+            val data = "${item?.id}|${position+1}|${item?.tanggaltanam}|${item?.masatanam}"
+            onPanenClick(data)
+        }
+
+        when (item?.status?.uppercase()) {
+            "UNVERIFIED" -> {
+                b.tvStatusTanam.setTextColor(ContextCompat.getColor(b.root.context, android.R.color.holo_blue_dark))
+                b.lyActionTanam.visibility = View.GONE
+                b.tvStatusTanam.text = item.status
+                b.tvRevisiDataTanam.visibility = View.GONE
+            }
+            "VERIFIED" -> {
+                b.tvStatusTanam.setTextColor(ContextCompat.getColor(b.root.context, android.R.color.holo_green_dark))
+                b.lyActionTanam.visibility = View.VISIBLE
+                b.tvStatusTanam.text = item.status
+                b.tvRevisiDataTanam.visibility = View.GONE
+                if(item.realisisasipanen == null){
+                    b.tvPerkembangan.text = "ISI DATA PERKEMBANGAN"
+                    b.tvPanen.text = "ISI DATA PANEN"
+                }else{
+                    if(item.realisisasipanen.status === "VERIFIED"){
+                        b.tvPerkembangan.text = "DATA PERKEMBANGAN"
+                        b.tvPanen.text = "DATA PANEN"
+                    }else{
+                        b.tvPerkembangan.text = "LIHAT DATA PERKEMBANGAN"
+                        b.tvPanen.text = "LIHAT DATA PANEN"
+                    }
+                }
+            }
+            "REJECTED" -> {
+                b.tvStatusTanam.setTextColor(ContextCompat.getColor(b.root.context, android.R.color.holo_red_dark))
+                b.lyActionTanam.visibility = View.GONE
+                b.tvStatusTanam.text = "${item.status} - ${item.alasan}"
+                b.tvRevisiDataTanam.visibility = View.VISIBLE
+                b.tvRevisiDataTanam.setOnClickListener {
+                    val data = "${item.id}"
+                    onRevisiClick(data)
+                }
+            }
+            else -> {
+                b.tvStatusTanam.setTextColor(ContextCompat.getColor(b.root.context, android.R.color.black))
+                b.lyActionTanam.visibility = View.GONE
+            }
         }
 
         if(!item?.foto2.isNullOrEmpty()){

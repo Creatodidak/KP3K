@@ -46,7 +46,12 @@ class DataPerkembanganTanamanFragment : Fragment() {
             loadData(kodelahan, tanamanid)
         }
 
-        adapter = DataPerkembanganAdapter(listPerkembangan, tanggaltanam)
+        adapter = DataPerkembanganAdapter(listPerkembangan, tanggaltanam,
+            onRevisiClick = {data ->
+                val action = DataPerkembanganTanamanFragmentDirections.actionDataPerkembanganTanamanFragmentToRevisiDataPerkembanganFragment(data)
+                findNavController().navigate(action)
+            }
+        )
         binding.rvPerkembangan.adapter = adapter
         binding.rvPerkembangan.layoutManager = LinearLayoutManager(requireContext())
         return root
@@ -54,7 +59,7 @@ class DataPerkembanganTanamanFragment : Fragment() {
 
     private suspend fun loadData(kodelahan: String, tanamanid: String){
         try {
-            val result = Client.retrofit.create(Data::class.java).getDataPerkembangan(kodelahan, tanamanid)
+            val result = Client.retrofit.create(Data::class.java).getDataPerkembangan(tanamanid)
             if (!result.isEmpty()){
                 showData(result)
                 listPerkembangan.clear()

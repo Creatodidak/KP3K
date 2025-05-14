@@ -106,6 +106,47 @@
         <action
             android:id="@+id/action_dataTanamFragment_to_dataPerkembanganTanamanFragment"
             app:destination="@id/nav_data_perkembangan_tanaman"/>
+        <action
+            android:id="@+id/action_dataTanamFragment_to_panenFragment"
+            app:destination="@id/nav_panen"/>
+        <action
+            android:id="@+id/action_dataTanamFragment_to_revisiDataTanamFragment"
+            app:destination="@id/nav_revisi_data_tanam_fragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_revisi_data_tanam_fragment"
+        android:name="id.creatodidak.kp3k.dashboard.ui.datatanam.RevisiDataTanamFragment"
+        android:label="REVISI DATA TANAM"
+        tools:layout="@layout/fragment_revisi_data_tanam" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_panen"
+        android:name="id.creatodidak.kp3k.dashboard.ui.panen.PanenFragment"
+        android:label="DATA PANEN"
+        tools:layout="@layout/fragment_panen" >
+        <argument
+            android:name="tanaman_id"
+            app:argType="string" />
+        <argument
+            android:name="urutan"
+            app:argType="string" />
+        <argument
+            android:name="pemilik"
+            app:argType="string" />
+        <argument
+            android:name="tanggaltanam"
+            app:argType="string" />
+        <argument
+            android:name="kodelahan"
+            app:argType="string" />
+        <argument
+            android:name="masatanam"
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -131,6 +172,18 @@
         <action
             android:id="@+id/action_dataPerkembanganTanamanFragment_to_addDataPerkembanganTanamanFragment"
             app:destination="@id/nav_add_data_perkembangan_tanaman"/>
+        <action
+            android:id="@+id/action_dataPerkembanganTanamanFragment_to_revisiDataPerkembanganFragment"
+            app:destination="@id/nav_revisi_data_perkembangan"/>
+    </fragment>
+    <fragment
+        android:id="@+id/nav_revisi_data_perkembangan"
+        android:name="id.creatodidak.kp3k.dashboard.ui.dataperkembangan.RevisiDataPerkembanganFragment"
+        android:label="REVISI DATA PERKEMBANGAN TANAMAN"
+        tools:layout="@layout/fragment_revisi_data_perkembangan" >
+        <argument
+            android:name="id"
+            app:argType="string" />
     </fragment>
 
     <fragment

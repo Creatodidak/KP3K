@@ -4,11 +4,26 @@ import com.google.gson.annotations.SerializedName
 
 data class MLogin(
 
+	@field:SerializedName("kecamatanbinaan")
+	val kecamatanbinaan: String? = null,
+
 	@field:SerializedName("polsek")
 	val polsek: Polsek? = null,
 
+	@field:SerializedName("kecamatanbinaan_id")
+	val kecamatanbinaanId: String? = null,
+
+	@field:SerializedName("desabinaan_id")
+	val desabinaanId: String? = null,
+
+	@field:SerializedName("kabupatenbinaan_id")
+	val kabupatenbinaanId: String? = null,
+
 	@field:SerializedName("message")
 	val message: String? = null,
+
+	@field:SerializedName("kabupatenbinaan")
+	val kabupatenbinaan: String? = null,
 
 	@field:SerializedName("user")
 	val user: User? = null,
@@ -20,7 +35,13 @@ data class MLogin(
 	val token: String? = null,
 
 	@field:SerializedName("desabinaan")
-	val desabinaan: Desabinaan? = null
+	val desabinaan: String? = null
+)
+
+data class Polsek(
+
+	@field:SerializedName("nama")
+	val nama: String? = null
 )
 
 data class User(
@@ -68,43 +89,7 @@ data class User(
 	val status: String? = null
 )
 
-data class Desabinaan(
-
-	@field:SerializedName("provinsi")
-	val provinsi: String? = null,
-
-	@field:SerializedName("provinsi_id")
-	val provinsiId: String? = null,
-
-	@field:SerializedName("nama")
-	val nama: String? = null,
-
-	@field:SerializedName("kabupaten_id")
-	val kabupatenId: String? = null,
-
-	@field:SerializedName("kode")
-	val kode: String? = null,
-
-	@field:SerializedName("kecamatan")
-	val kecamatan: String? = null,
-
-	@field:SerializedName("id")
-	val id: Int? = null,
-
-	@field:SerializedName("kabupaten")
-	val kabupaten: String? = null,
-
-	@field:SerializedName("kecamatan_id")
-	val kecamatanId: String? = null
-)
-
 data class Polres(
-
-	@field:SerializedName("nama")
-	val nama: String? = null
-)
-
-data class Polsek(
 
 	@field:SerializedName("nama")
 	val nama: String? = null

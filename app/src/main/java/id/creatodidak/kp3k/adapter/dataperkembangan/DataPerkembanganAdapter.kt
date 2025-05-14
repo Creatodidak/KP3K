@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import id.creatodidak.kp3k.BuildConfig
@@ -17,7 +18,8 @@ import id.creatodidak.kp3k.helper.getAgeFromDate
 
 class DataPerkembanganAdapter(
     private val data: List<MDataPerkembanganItem>,
-    private val tanggalTanam: String
+    private val tanggalTanam: String,
+    private val onRevisiClick: (String) -> Unit,
 ) : RecyclerView.Adapter<DataPerkembanganAdapter.DataPerkembanganViewHolder>() {
 
     inner class DataPerkembanganViewHolder(val binding: ItemPerkembanganTanamanBinding) :
@@ -45,7 +47,6 @@ class DataPerkembanganAdapter(
         b.tvWarnaDaun.text = item.warnadaun.uppercase()
         b.tvCurahHujan.text = item.curahhujan.uppercase()
         b.tvSeranganHama.text = item.hama.uppercase()
-        Log.d("DEBUG_HAMA", "Hama: ${item.hama}, Keterangan: ${item.keteranganhama}, Tanggal Tanam: $tanggalTanam")
         b.tvKeteranganHama.text = item.keteranganhama.uppercase()
         b.tvKeteranganLainnya.text = item.keterangan
         val fileUrl = "${BuildConfig.BASE_URL}file/"
@@ -76,6 +77,31 @@ class DataPerkembanganAdapter(
                 .placeholder(R.drawable.bgpaparan)
                 .into(b.ivFoto4)
         }
+
+        when (item.status.uppercase()) {
+            "UNVERIFIED" -> {
+                b.tvStatusPerkembangan.setTextColor(ContextCompat.getColor(b.root.context, android.R.color.holo_blue_dark))
+                b.tvStatusPerkembangan.text = item.status
+                b.tvRevisiDataPerkembangan.visibility = View.GONE
+            }
+            "VERIFIED" -> {
+                b.tvStatusPerkembangan.setTextColor(ContextCompat.getColor(b.root.context, android.R.color.holo_green_dark))
+                b.tvStatusPerkembangan.text = item.status
+                b.tvRevisiDataPerkembangan.visibility = View.GONE
+            }
+            "REJECTED" -> {
+                b.tvStatusPerkembangan.setTextColor(ContextCompat.getColor(b.root.context, android.R.color.holo_red_dark))
+                b.tvStatusPerkembangan.text = "${item.status} - ${item.alasan}"
+                b.tvRevisiDataPerkembangan.visibility = View.VISIBLE
+                b.tvRevisiDataPerkembangan.setOnClickListener {
+                    val data = "${item.id}"
+                    onRevisiClick(data)
+                }
+            }
+            else -> {
+            }
+        }
+        
     }
 
     fun url(fullPath: String): String {

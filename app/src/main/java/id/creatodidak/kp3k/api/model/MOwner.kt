@@ -36,6 +36,5 @@ data class AddOwner(
 	val nik : String,
 	val alamat : String,
 	val telepon : String,
-	val nrp : String,
-	val jenis : String
+	val desa_id : String,
 )

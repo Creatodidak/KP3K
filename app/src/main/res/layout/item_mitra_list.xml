@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -226,10 +227,20 @@
                 </TableLayout>
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tvAlasanOwner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="#F60202"
+                android:visibility="gone" />
+
             <LinearLayout
+                android:id="@+id/lyActOwner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/LLTelepon"
@@ -282,6 +293,19 @@
 
                 </LinearLayout>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvHapusOwner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FA0303"
+                android:padding="4dp"
+                android:text="HAPUS DAN AJUKAN ULANG"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:ignore="TextContrastCheck" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

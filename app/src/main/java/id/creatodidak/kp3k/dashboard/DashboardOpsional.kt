@@ -148,7 +148,7 @@ class DashboardOpsional : AppCompatActivity() {
 
         versionText.setText("Versi "+versionName)
 
-        if(sharedPreferences.getString("desabinaan", "").isNullOrEmpty()){
+        if(sharedPreferences.getString("desaid", "").isNullOrEmpty()){
             AlertDialog.Builder(this@DashboardOpsional)
                 .setTitle("Informasi")
                 .setMessage("Data session kurang lengkap, silahkan login kembali!")

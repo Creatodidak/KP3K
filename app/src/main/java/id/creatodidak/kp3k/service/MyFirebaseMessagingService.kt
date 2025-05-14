@@ -30,9 +30,9 @@ import id.creatodidak.kp3k.IncomingCallActivity
 import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.VideoCallActivity
 import id.creatodidak.kp3k.dashboard.DashboardOpsional
+import androidx.core.net.toUri
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-    private var mediaPlayer: MediaPlayer? = null
 
     @RequiresPermission(Manifest.permission.VIBRATE)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -40,13 +40,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             when (data["type"]) {
                 "incoming_call" -> {
                     handleIncomingCall(remoteMessage)
-                    Log.i("RECEIVED AGORA TOKEN", data["token"].toString())
-                }
-                "test" -> {
-//                    showAnimeNotification()
                 }
                 "update" -> {
-                    showUpdateNotif()
+                    showUpdateNotif(remoteMessage)
+                }
+                "verifikasi" -> {
+                    handleVerifikasi(remoteMessage)
+                }
+                "reminder" -> {
+                    handleReminder(remoteMessage)
                 }
             }
             Log.i("onMessageReceived: ", data["type"].toString())
@@ -59,7 +61,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val channelId = "INCOMING_CALL_CHANNEL"
         val channelName = "Panggilan Masuk"
 
-        val soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.ringtone)
+        val soundUri =
+            (ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.ringtone).toUri()
 
         val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply {
             setSound(soundUri, AudioAttributes.Builder()
@@ -72,14 +75,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val notificationManager = getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(channel)
 
-        // Intent untuk Answer
         val answerIntent = Intent(this, IncomingCallActivity::class.java).apply {
             putExtra("channel", remoteMessage.data["channel"])
             putExtra("token", remoteMessage.data["token"])
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
 
-        // Intent untuk Decline
         val declineIntent = Intent(this, CallActionReceiver::class.java).apply {
             action = "DECLINE_ACTION"
             putExtra("notificationId", notificationId)
@@ -119,7 +120,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         NotificationManagerCompat.from(this).notify(notificationId, builder.build())
         CallSoundManager.playSound(applicationContext)
 
-        // Timeout handler
         android.os.Handler(mainLooper).postDelayed({
             if (!isCallAnswered) {
                 NotificationManagerCompat.from(this).cancel(notificationId)
@@ -129,14 +129,160 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }, 50000)
     }
 
-    companion object {
-        private const val CALL_CHANNEL_ID = "CALL_CHANNEL"
-        private const val ANIME_CHANNEL_ID = "anime_channel_id"
-        private const val UPDATE_CHANNEL_ID = "update_channel_id"
-        private const val CALL_NOTIFICATION_ID = 1001
-        private const val ANIME_NOTIFICATION_ID = 2001
-        private const val UPDATE_NOTIFICATION_ID = 3001
+    @RequiresPermission(Manifest.permission.VIBRATE)
+    private fun handleVerifikasi(remoteMessage: RemoteMessage) {
+        val notificationId = System.currentTimeMillis().toInt()
+        val channelId = "VERIFIKASI_CHANNEL_V2"
+        val channelName = "Informasi Verifikasi"
 
+        val soundUri =
+            (ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.notif).toUri()
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply {
+            setSound(soundUri, AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build())
+            enableVibration(true)
+            vibrationPattern = longArrayOf(0, 250, 250, 250, 250)
+        }
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
+        val intent = Intent(this, DashboardOpsional::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val msg = remoteMessage.data["msg"] ?: ""
+        var title = if (msg.contains("ditolak", ignoreCase = true)) {
+            "Pengajuan Ditolak!"
+        } else {
+            "Pengajuan Diterima!"
+        }
+
+
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.logo)
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo))
+            .setContentTitle(title)
+            .setContentText(remoteMessage.data["msg"])
+            .setStyle(NotificationCompat.BigTextStyle().bigText(remoteMessage.data["msg"]))
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setContentIntent(pendingIntent)
+            .setSound(soundUri)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setAutoCancel(false)
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
+
+        NotificationManagerCompat.from(this).notify(notificationId, builder.build())
+    }
+
+    @RequiresPermission(Manifest.permission.VIBRATE)
+    private fun handleReminder(remoteMessage: RemoteMessage) {
+        val notificationId = System.currentTimeMillis().toInt()
+        val channelId = "REMINDER_CHANNEL"
+        val channelName = "Mengingatkan Tugas"
+
+        val soundUri =
+            (ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.notifupdate).toUri()
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply {
+            setSound(soundUri, AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build())
+            enableVibration(true)
+            vibrationPattern = longArrayOf(0, 250, 250, 250, 250)
+        }
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
+        val intent = Intent(this, DashboardOpsional::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val msg = remoteMessage.data["msg"] ?: ""
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.logo)
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo))
+            .setContentTitle("Pengingat dari Admin")
+            .setContentText(msg)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(msg))
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setContentIntent(pendingIntent)
+            .setSound(soundUri)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setAutoCancel(false)
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
+
+        NotificationManagerCompat.from(this).notify(notificationId, builder.build())
+    }
+
+    @RequiresPermission(Manifest.permission.VIBRATE)
+    private fun showUpdateNotif(remoteMessage: RemoteMessage) {
+        val notificationId = System.currentTimeMillis().toInt()
+        val channelId = "UPDATE_CHANNEL_V4"
+        val channelName = "Informasi Update"
+
+        val soundUri =
+            (ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.notifupdate).toUri()
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply {
+            setSound(soundUri, AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build())
+            enableVibration(true)
+            vibrationPattern = longArrayOf(0, 250, 250, 250, 250)
+        }
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
+        val intent = Intent(this, DashboardOpsional::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.logo)
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo))
+            .setContentTitle("Update Terbaru KP3K")
+            .setContentText(remoteMessage.data["msg"])
+            .setStyle(NotificationCompat.BigTextStyle().bigText(remoteMessage.data["msg"]))
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setContentIntent(pendingIntent)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setSound(soundUri)
+            .setAutoCancel(false)
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
+
+        NotificationManagerCompat.from(this).notify(notificationId, builder.build())
+    }
+    
+    companion object {
         @JvmStatic
         var isCallAnswered: Boolean = false
 
@@ -179,52 +325,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    private fun showUpdateNotif() {
-        createUpdateChannel()
 
-        val intent = Intent(this, DashboardOpsional::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val notification = NotificationCompat.Builder(this, UPDATE_CHANNEL_ID)
-            .setSmallIcon(R.drawable.logo)
-            .setContentTitle("Update Tersedia!")
-            .setContentText("Klik untuk mendapatkan update!")
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_CALL)
-            .setFullScreenIntent(pendingIntent, true)
-            .setAutoCancel(true)
-            .build()
-
-        try {
-            (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-                .notify(UPDATE_NOTIFICATION_ID, notification)
-        } catch (e: SecurityException) {
-            // Permission missing, gagal kirim notifikasi panggilan
-        }
-    }
-
-    private fun createUpdateChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                UPDATE_CHANNEL_ID,
-                "Update Aplikasi",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "Notifikasi untuk Update Aplikasi"
-            }
-            (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-                .createNotificationChannel(channel)
-        }
-    }
-
-    // ... (fungsi lainnya tetap sama seperti sebelumnya)
     object CallSoundManager {
         private var mediaPlayer: MediaPlayer? = null
         private var vibrator: Vibrator? = null

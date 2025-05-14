@@ -50,5 +50,13 @@ data class MDataPerkembanganItem(
 	val foto3: String,
 
 	@field:SerializedName("foto2")
-	val foto2: String
+	val foto2: String,
+
+	@field:SerializedName("status")
+	val status: String,
+
+	@field:SerializedName("alasan")
+	val alasan: String
+
+
 )

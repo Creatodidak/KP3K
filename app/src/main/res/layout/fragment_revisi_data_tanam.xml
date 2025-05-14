@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".dashboard.ui.datatanam.TambahDataTanamFragment">
+    tools:context=".dashboard.ui.datatanam.RevisiDataTanamFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -201,7 +201,6 @@
                         android:layout_height="0dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/bgpaparan"
-                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="4:3"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -312,7 +311,6 @@
                         android:layout_height="0dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/bgpaparan"
-                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="4:3"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -423,7 +421,6 @@
                         android:layout_height="0dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/bgpaparan"
-                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="4:3"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -534,7 +531,6 @@
                         android:layout_height="0dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/bgpaparan"
-                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="4:3"
                         app:layout_constraintEnd_toEndOf="parent"

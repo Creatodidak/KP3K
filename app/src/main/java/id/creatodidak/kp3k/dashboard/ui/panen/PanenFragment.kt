@@ -1,4 +1,4 @@
-package id.creatodidak.kp3k.dashboard.ui.dataperkembangan
+package id.creatodidak.kp3k.dashboard.ui.panen
 
 import android.app.Activity
 import android.content.Context
@@ -12,24 +12,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.createBitmap
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import id.creatodidak.kp3k.BuildConfig
 import id.creatodidak.kp3k.api.Client
 import id.creatodidak.kp3k.api.Data
-import id.creatodidak.kp3k.databinding.FragmentAddDataPerkembanganTanamanBinding
+import id.creatodidak.kp3k.databinding.FragmentPanenBinding
 import id.creatodidak.kp3k.helper.CameraActivity
 import id.creatodidak.kp3k.helper.Loading
 import id.creatodidak.kp3k.helper.SumberFoto
+import id.creatodidak.kp3k.helper.formatTanggalKeIndonesia
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -38,10 +38,12 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.FileOutputStream
+import kotlin.getValue
 
-class AddDataPerkembanganTanamanFragment : Fragment() {
-    private lateinit var _binding: FragmentAddDataPerkembanganTanamanBinding
-    private val binding get() = _binding
+class PanenFragment : Fragment() {
+    private lateinit var _binding: FragmentPanenBinding
+    private val binding get() = _binding!!
+    private val args : PanenFragmentArgs by navArgs()
     private lateinit var cameraLauncher1: ActivityResultLauncher<Intent>
     private lateinit var cameraLauncher2: ActivityResultLauncher<Intent>
     private lateinit var cameraLauncher3: ActivityResultLauncher<Intent>
@@ -58,45 +60,28 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
     private var pathDok2 = ""
     private var pathDok3 = ""
     private var pathDok4 = ""
-    private val args: AddDataPerkembanganTanamanFragmentArgs by navArgs()
+    private var isDok1Changed = false
+    private var isDok2Changed = false
+    private var isDok3Changed = false
+    private var isDok4Changed = false
+    private var oldJumlahPanen = ""
+    private var oldKeterangan = ""
+    private var id = ""
+    val fileUrl = "${BuildConfig.BASE_URL}file/"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentAddDataPerkembanganTanamanBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        val listCurahHujan = listOf("PILIH", "RENDAH", "SEDANG", "TINGGI")
-        val listSeranganHama = listOf("PILIH", "TANAMAN TERSERANG HAMA", "TANAMAN TIDAK TERSERANG HAMA")
+    ): View {
+        _binding = FragmentPanenBinding.inflate(inflater, container, false)
+        val root : View = binding.root
+        val tanamanid = args.tanamanId
+        val urutan = args.urutan
+        val pemilik= args.pemilik
+        val tanggaltanam = args.tanggaltanam
+        val kodelahan = args.kodelahan
+        val masatanam = args.masatanam
 
-        binding.spCurahHujan.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listCurahHujan)
-        binding.spHama.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listSeranganHama)
-        binding.spHama.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                when(position) {
-                    0 -> {
-                        binding.lyKeteranganHama.visibility = View.GONE
-                    }
-
-                    1 -> {
-                        binding.lyKeteranganHama.visibility = View.VISIBLE
-                    }
-
-                    2 -> {
-                        binding.lyKeteranganHama.visibility = View.GONE
-                    }
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-
-        }
         val sh = requireContext().getSharedPreferences("session", Context.MODE_PRIVATE)
         val nrp = sh.getString("nrp", "")
         if(nrp != ""){
@@ -117,6 +102,7 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
                 binding.watermarks1.visibility = View.GONE
                 binding.imageDok1.visibility = View.VISIBLE
                 binding.buttonPilihDok1.text = "UBAH FOTO"
+                isDok1Changed = true
             }
         }
         cameraLauncher2 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -131,6 +117,7 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
                 binding.watermarks2.visibility = View.GONE
                 binding.imageDok2.visibility = View.VISIBLE
                 binding.buttonPilihDok2.text = "UBAH FOTO"
+                isDok2Changed = true
             }
         }
         cameraLauncher3 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -145,6 +132,7 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
                 binding.watermarks3.visibility = View.GONE
                 binding.imageDok3.visibility = View.VISIBLE
                 binding.buttonPilihDok3.text = "UBAH FOTO"
+                isDok3Changed = true
             }
         }
         cameraLauncher4 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -159,6 +147,7 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
                 binding.watermarks4.visibility = View.GONE
                 binding.imageDok4.visibility = View.VISIBLE
                 binding.buttonPilihDok4.text = "UBAH FOTO"
+                isDok4Changed = true
             }
         }
         galeriLauncher1 = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -171,6 +160,7 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
                 binding.watermarks1.visibility = View.VISIBLE
                 binding.imageDok1.visibility = View.VISIBLE
                 binding.buttonPilihDok1.text = "UBAH FOTO"
+                isDok1Changed = true
             }
         }
         galeriLauncher2 = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -181,6 +171,7 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
                 binding.watermarks2.visibility = View.VISIBLE
                 binding.imageDok2.visibility = View.VISIBLE
                 binding.buttonPilihDok2.text = "UBAH FOTO"
+                isDok2Changed = true
             }
         }
         galeriLauncher3 = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -191,6 +182,7 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
                 binding.watermarks3.visibility = View.VISIBLE
                 binding.imageDok3.visibility = View.VISIBLE
                 binding.buttonPilihDok3.text = "UBAH FOTO"
+                isDok3Changed = true
             }
         }
         galeriLauncher4 = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -201,6 +193,7 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
                 binding.watermarks4.visibility = View.VISIBLE
                 binding.imageDok4.visibility = View.VISIBLE
                 binding.buttonPilihDok4.text = "UBAH FOTO"
+                isDok4Changed = true
             }
         }
 
@@ -245,40 +238,114 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
                 })
         }
 
-        binding.btnKirimDataPerkembanganTanam.setOnClickListener {
-            binding.btnKirimDataPerkembanganTanam.isEnabled = false
+        binding.tvTajuk.text = "DATA PANEN PENANAMAN KE $urutan MASA TANAM $masatanam DI LAHAN $pemilik"
+
+        lifecycleScope.launch {
+            checkDataPanen(tanamanid)
+        }
+
+        binding.btnKirimDataPanen.setOnClickListener {
+            binding.btnKirimDataPanen.isEnabled = false
             if(isValid()){
                 processData()
             }else{
-                binding.btnKirimDataPerkembanganTanam.isEnabled = true
+                binding.btnKirimDataPanen.isEnabled = true
+            }
+        }
+
+        binding.btnKirimDataPanenUpdate.setOnClickListener {
+            binding.btnKirimDataPanenUpdate.isEnabled = false
+            if(isValid()){
+                processData2()
+            }else{
+                binding.btnKirimDataPanenUpdate.isEnabled = true
             }
         }
         return root
     }
 
+    private suspend fun checkDataPanen(tanamanid : String) {
+        try {
+            val response = Client.retrofit.create(Data::class.java).getDataPanen(tanamanid)
+            binding.lyRekapPanen.visibility = View.VISIBLE
+            binding.lyAddDataPanen.visibility = View.GONE
+            binding.tvTotalPanen.text = "${response.jumlahpanen} KG"
+            binding.tvKeterangan.text = response.keterangan
+            binding.tvTanggalPanen.text = "${formatTanggalKeIndonesia(response.createAt.toString())}"
+            binding.etJumlahPanen.setText(response.jumlahpanen.toString())
+            binding.etKeteranganTambahan.setText(response.keterangan)
+
+            oldJumlahPanen = response.jumlahpanen.toString()
+            oldKeterangan = response.keterangan.toString()
+            id = response.id.toString()
+            Glide.with(requireContext()).load(fileUrl+url(response.foto1.toString())).into(binding.ivPanen1)
+            Glide.with(requireContext()).load(fileUrl+url(response.foto2.toString())).into(binding.ivPanen2)
+            Glide.with(requireContext()).load(fileUrl+url(response.foto3.toString())).into(binding.ivPanen3)
+            Glide.with(requireContext()).load(fileUrl+url(response.foto4.toString())).into(binding.ivPanen4)
+            Glide.with(requireContext()).load(fileUrl+url(response.foto1.toString())).into(binding.imageDok1)
+            Glide.with(requireContext()).load(fileUrl+url(response.foto2.toString())).into(binding.imageDok2)
+            Glide.with(requireContext()).load(fileUrl+url(response.foto3.toString())).into(binding.imageDok3)
+            Glide.with(requireContext()).load(fileUrl+url(response.foto4.toString())).into(binding.imageDok4)
+            binding.imageDok1.visibility = View.VISIBLE
+            binding.imageDok2.visibility = View.VISIBLE
+            binding.imageDok3.visibility = View.VISIBLE
+            binding.imageDok4.visibility = View.VISIBLE
+
+            when (response.status?.uppercase()) {
+                "UNVERIFIED" -> {
+                    binding.tvStatusPanen.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            android.R.color.holo_blue_dark
+                        )
+                    )
+                    binding.tvStatusPanen.text = response.status
+                    binding.btRevisiPanen.visibility = View.GONE
+                }
+                "VERIFIED" -> {
+                    binding.tvStatusPanen.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            android.R.color.holo_green_dark
+                        )
+                    )
+                    binding.tvStatusPanen.text = response.status
+                    binding.btRevisiPanen.visibility = View.GONE
+                }
+                "REJECTED" -> {
+                    binding.tvStatusPanen.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            android.R.color.holo_red_dark
+                        )
+                    )
+                    binding.tvStatusPanen.text = "${response.status} - ${response.alasan}"
+                    binding.btRevisiPanen.visibility = View.VISIBLE
+                    binding.btRevisiPanen.setOnClickListener {
+                        binding.lyRekapPanen.visibility = View.GONE
+                        binding.lyAddDataPanen.visibility = View.VISIBLE
+                        binding.btRevisiPanen.visibility = View.GONE
+                        binding.btnKirimDataPanen.visibility = View.GONE
+                        binding.btnKirimDataPanenUpdate.visibility = View.VISIBLE
+                    }
+                }
+                else -> binding.tvStatusPanen.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black)) // default
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+            binding.lyRekapPanen.visibility = View.GONE
+            binding.lyAddDataPanen.visibility = View.VISIBLE
+        }
+    }
+
     private fun isValid(): Boolean {
-        if (binding.etTinggiTanaman.text.toString().isEmpty()) {
-            binding.etTinggiTanaman.error = "Tinggi Tanaman Harus Diisi"
+        if (binding.etJumlahPanen.text.toString().isEmpty()) {
+            binding.etJumlahPanen.error = "Jumlah Panen Harus Diisi"
             return false
         }
-        if (binding.etKondisiTanah.text.toString().isEmpty()) {
-            binding.etKondisiTanah.error = "Kondisi Tanah Harus Diisi"
+        if (binding.etKeteranganTambahan.text.toString().isEmpty()) {
+            binding.etKeteranganTambahan.error = "Keterangan Harus Diisi"
             return false
-        }
-        if (binding.etWarnaDaun.text.toString().isEmpty()) {
-            binding.etWarnaDaun.error = "Warna daun harus diisi"
-            return false
-        }
-        if(binding.spHama.selectedItemPosition == 0){
-            binding.errHama.visibility = View.VISIBLE
-            return false
-        }
-        if(binding.spHama.selectedItemPosition == 0 && binding.etKeteranganHama.text.toString().isEmpty()){
-            binding.etKeteranganHama.error = "Keterangan Hama harus diisi"
-            return false
-        }
-        if(binding.spCurahHujan.selectedItemPosition == 0){
-            binding.errCurahHujan.visibility = View.VISIBLE
         }
         if(binding.imageDok1.isGone){
             binding.errorDok1.visibility = View.VISIBLE
@@ -299,139 +366,9 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
         return true
     }
 
-    private fun processData(){
-        var foto1Part: MultipartBody.Part? = null
-        var foto2Part: MultipartBody.Part? = null
-        var foto3Part: MultipartBody.Part? = null
-        var foto4Part: MultipartBody.Part? = null
-        var tanaman_id: RequestBody = createPartFromString(args.tanamanId)
-        var kodelahan: RequestBody = createPartFromString(args.kodelahan)
-        var tinggiTanaman: RequestBody = createPartFromString(binding.etTinggiTanaman.text.toString())
-        var kondisitanah: RequestBody = createPartFromString(binding.etKondisiTanah.text.toString())
-        var warnaDaun: RequestBody = createPartFromString(binding.etWarnaDaun.text.toString())
-        var curahhujan: RequestBody = createPartFromString(binding.spCurahHujan.selectedItem.toString())
-        var hama : RequestBody = createPartFromString(binding.spHama.selectedItem.toString())
-        val keteranganHama: RequestBody = createPartFromString(
-            binding.etKeteranganHama.text.toString().takeIf { it.isNotBlank() } ?: "-"
-        )
-        val keterangan: RequestBody = createPartFromString(
-            binding.etKeteranganTambahan.text.toString().takeIf { it.isNotBlank() } ?: "-"
-        )
-
-        foto1Part = if (isDok1camera) {
-            prepareFilePart("foto1", compressCamera(File(pathDok1)))
-        }else{
-            prepareFilePart("foto1", saveBitmapToFile(getBitmapFromView(binding.dok1)))
-        }
-
-        foto2Part = if (isDok2camera) {
-            prepareFilePart("foto2", compressCamera(File(pathDok2)))
-        }else{
-            prepareFilePart("foto2", saveBitmapToFile(getBitmapFromView(binding.dok2)))
-        }
-
-        foto3Part = if (isDok3camera) {
-            prepareFilePart("foto3", compressCamera(File(pathDok3)))
-        }else{
-            prepareFilePart("foto3", saveBitmapToFile(getBitmapFromView(binding.dok3)))
-        }
-
-        foto4Part = if (isDok4camera) {
-            prepareFilePart("foto4", compressCamera(File(pathDok4)))
-        }else {
-            prepareFilePart("foto4", saveBitmapToFile(getBitmapFromView(binding.dok4)))
-        }
-
-        if(foto1Part != null && foto2Part != null && foto3Part != null && foto4Part != null && tinggiTanaman != null && kondisitanah != null && warnaDaun != null && curahhujan != null && hama != null && keteranganHama != null && keterangan != null && tanaman_id != null && kodelahan != null){
-            AlertDialog.Builder(requireContext())
-                .setTitle("Konfirmasi")
-                .setMessage("Apakah Anda yakin ingin mengirim data?")
-                .setPositiveButton("Ya") { _, _ ->
-                    lifecycleScope.launch {
-                        sendDataKembangTanaman(foto1Part, foto2Part, foto3Part, foto4Part, tinggiTanaman, kondisitanah, warnaDaun, curahhujan, hama, keteranganHama, keterangan, tanaman_id, kodelahan)
-                    }
-                }
-                .setNegativeButton("Tidak", null)
-                .show()
-
-        }
-    }
-
-    private suspend fun sendDataKembangTanaman(
-        foto1Part: MultipartBody.Part,
-        foto2Part: MultipartBody.Part,
-        foto3Part: MultipartBody.Part,
-        foto4Part: MultipartBody.Part,
-        tinggiTanaman: RequestBody,
-        kondisitanah: RequestBody,
-        warnaDaun: RequestBody,
-        curahhujan: RequestBody,
-        hama: RequestBody,
-        keteranganHama: RequestBody,
-        keterangan: RequestBody,
-        tanaman_id: RequestBody,
-        kodelahan: RequestBody
-    ) {
-        try {
-            Loading.show(requireContext())
-            var result = Client.retrofit.create(Data::class.java).uploadLaporanPerkembanganTanam(
-                kodelahan,
-                tanaman_id,
-                tinggiTanaman,
-                kondisitanah,
-                warnaDaun,
-                curahhujan,
-                hama,
-                keteranganHama,
-                keterangan,
-                foto1Part,
-                foto2Part,
-                foto3Part,
-                foto4Part
-            )
-
-            if(result.isSuccessful){
-                Loading.hide()
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Berhasil")
-                    .setMessage("Data berhasil dikirim")
-                    .setPositiveButton("OK", { _, _ ->
-                        resetField()
-                        findNavController().popBackStack()
-                    })
-                    .show()
-                binding.btnKirimDataPerkembanganTanam.isEnabled = true
-            }else{
-                Loading.hide()
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Gagal")
-                    .setMessage("Data gagal dikirim")
-                    .setPositiveButton("OK", null)
-                    .show()
-                binding.btnKirimDataPerkembanganTanam.isEnabled = true
-            }
-        }catch (e: Exception){
-            Loading.hide()
-            AlertDialog.Builder(requireContext())
-                .setTitle("Gagal")
-                .setMessage(e.message)
-                .setPositiveButton("OK", null)
-                .show()
-        }
-        binding.btnKirimDataPerkembanganTanam.isEnabled = true
-    }
-
     private fun resetField(){
-        binding.etTinggiTanaman.text.clear()
-        binding.etKondisiTanah.text.clear()
-        binding.etWarnaDaun.text.clear()
-        binding.etKeteranganHama.text.clear()
-        binding.spHama.setSelection(0)
-        binding.spCurahHujan.setSelection(0)
+        binding.etJumlahPanen.text.clear()
         binding.etKeteranganTambahan.text.clear()
-        binding.etKeteranganHama.text.clear()
-        binding.errCurahHujan.visibility = View.GONE
-        binding.errHama.visibility = View.GONE
         binding.errorDok1.visibility = View.GONE
         binding.errorDok2.visibility = View.GONE
         binding.errorDok3.visibility = View.GONE
@@ -462,6 +399,245 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
         binding.tvNrpCamera3.text = ""
     }
 
+    private fun processData(){
+        val args: PanenFragmentArgs by navArgs()
+        var foto1Part: MultipartBody.Part? = null
+        var foto2Part: MultipartBody.Part? = null
+        var foto3Part: MultipartBody.Part? = null
+        var foto4Part: MultipartBody.Part? = null
+        var tanaman_id: RequestBody = createPartFromString(args.tanamanId)
+        var jumlahpanen: RequestBody = createPartFromString(binding.etJumlahPanen.text.toString())
+        var keterangan: RequestBody = createPartFromString(binding.etKeteranganTambahan.text.toString())
+
+        foto1Part = if (isDok1camera) {
+            prepareFilePart("foto1", compressCamera(File(pathDok1)))
+        }else{
+            prepareFilePart("foto1", saveBitmapToFile(getBitmapFromView(binding.dok1)))
+        }
+
+        foto2Part = if (isDok2camera) {
+            prepareFilePart("foto2", compressCamera(File(pathDok2)))
+        }else{
+            prepareFilePart("foto2", saveBitmapToFile(getBitmapFromView(binding.dok2)))
+        }
+
+        foto3Part = if (isDok3camera) {
+            prepareFilePart("foto3", compressCamera(File(pathDok3)))
+        }else{
+            prepareFilePart("foto3", saveBitmapToFile(getBitmapFromView(binding.dok3)))
+        }
+
+        foto4Part = if (isDok4camera) {
+            prepareFilePart("foto4", compressCamera(File(pathDok4)))
+        }else {
+            prepareFilePart("foto4", saveBitmapToFile(getBitmapFromView(binding.dok4)))
+        }
+
+        if(foto1Part != null && foto2Part != null && foto3Part != null && foto4Part != null && tanaman_id != null && jumlahpanen != null && keterangan != null){
+            AlertDialog.Builder(requireContext())
+                .setTitle("Konfirmasi")
+                .setMessage("Apakah Anda yakin ingin mengirim data?")
+                .setPositiveButton("Ya") { _, _ ->
+                    lifecycleScope.launch {
+                        sendDataPanen(
+                            foto1Part,
+                            foto2Part,
+                            foto3Part,
+                            foto4Part,
+                            tanaman_id,
+                            jumlahpanen,
+                            keterangan
+                        )
+                    }
+                }
+                .setNegativeButton("Tidak", null)
+                .show()
+
+        }
+    }
+    private fun processData2(){
+        var id1 = createPartFromString(id)
+        var foto1Part: MultipartBody.Part? = null
+        var foto2Part: MultipartBody.Part? = null
+        var foto3Part: MultipartBody.Part? = null
+        var foto4Part: MultipartBody.Part? = null
+        var jumlahpanen: RequestBody? = null
+        var keterangan: RequestBody? = null
+
+        if (isDok1Changed) {
+            foto1Part = if (isDok1camera) {
+                prepareFilePart("foto1", compressCamera(File(pathDok1)))
+            } else {
+                prepareFilePart("foto1", saveBitmapToFile(getBitmapFromView(binding.dok1)))
+            }
+        }
+        if (isDok2Changed) {
+            foto2Part = if (isDok2camera) {
+                prepareFilePart("foto2", compressCamera(File(pathDok2)))
+            } else {
+                prepareFilePart("foto2", saveBitmapToFile(getBitmapFromView(binding.dok2)))
+            }
+        }
+        if (isDok3Changed) {
+            foto3Part = if (isDok3camera) {
+                prepareFilePart("foto3", compressCamera(File(pathDok3)))
+            } else {
+                prepareFilePart("foto3", saveBitmapToFile(getBitmapFromView(binding.dok3)))
+            }
+        }
+        if (isDok4Changed) {
+            foto4Part = if (isDok4camera) {
+                prepareFilePart("foto4", compressCamera(File(pathDok4)))
+            } else {
+                prepareFilePart("foto4", saveBitmapToFile(getBitmapFromView(binding.dok4)))
+            }
+        }
+        if(binding.etJumlahPanen.text.toString() != oldJumlahPanen){
+            jumlahpanen = createPartFromString(binding.etJumlahPanen.text.toString())
+        }
+        if(binding.etKeteranganTambahan.text.toString() != oldKeterangan){
+            keterangan = createPartFromString(binding.etKeteranganTambahan.text.toString())
+        }
+
+        if(foto1Part == null && foto2Part == null && foto3Part == null && foto4Part == null && jumlahpanen == null && keterangan == null){
+            AlertDialog.Builder(requireContext())
+                .setTitle("Konfirmasi")
+                .setMessage("Tidak ada perubahan data!")
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                    binding.btnKirimDataPanenUpdate.isEnabled = true
+                }
+                .show()
+        }else {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Konfirmasi")
+                .setMessage("Apakah Anda yakin ingin mengirim data?")
+                .setPositiveButton("Ya") { _, _ ->
+                    lifecycleScope.launch {
+                        sendDataPanenUpdate(
+                            id1,
+                            jumlahpanen,
+                            keterangan,
+                            foto1Part,
+                            foto2Part,
+                            foto3Part,
+                            foto4Part,
+                        )
+                    }
+                }
+                .setNegativeButton("Tidak", null)
+                .show()
+        }
+    }
+
+    private suspend fun sendDataPanenUpdate(
+        id1: RequestBody,
+        jumlahpanen: RequestBody?,
+        keterangan: RequestBody?,
+        foto1Part: MultipartBody.Part?,
+        foto2Part: MultipartBody.Part?,
+        foto3Part: MultipartBody.Part?,
+        foto4Part: MultipartBody.Part?
+    ) {
+        try {
+            Loading.show(requireContext())
+            val result = Client.retrofit.create(Data::class.java).uploadUpdateDataPanen(
+                id1,
+                jumlahpanen,
+                keterangan,
+                foto1Part,
+                foto2Part,
+                foto3Part,
+                foto4Part
+            )
+
+            if(result.isSuccessful){
+                Loading.hide()
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Berhasil")
+                    .setMessage("Data berhasil dikirim")
+                    .setPositiveButton("OK", { _, _ ->
+                        resetField()
+                        val fragmentManager = parentFragmentManager
+                        val currentFragment = this
+
+                        fragmentManager.beginTransaction()
+                            .detach(currentFragment)
+                            .commitNow()
+                    })
+                    .show()
+                binding.btnKirimDataPanenUpdate.isEnabled = true
+            }else{
+                Loading.hide()
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Gagal")
+                    .setMessage("Data gagal dikirim")
+                    .setPositiveButton("OK", null)
+                    .show()
+                binding.btnKirimDataPanenUpdate.isEnabled = true
+            }
+        }catch (e: Exception){
+            Loading.hide()
+            AlertDialog.Builder(requireContext())
+                .setTitle("Gagal")
+                .setMessage(e.message)
+                .setPositiveButton("OK", null)
+                .show()
+            binding.btnKirimDataPanenUpdate.isEnabled = true
+        }
+    }
+
+    private suspend fun sendDataPanen(
+        foto1Part: MultipartBody.Part,
+        foto2Part: MultipartBody.Part,
+        foto3Part: MultipartBody.Part,
+        foto4Part: MultipartBody.Part,
+        tanaman_id: RequestBody,
+        jumlahpanen: RequestBody,
+        keterangan: RequestBody
+    ) {
+        try {
+            Loading.show(requireContext())
+            val result = Client.retrofit.create(Data::class.java).uploadDataPanen(
+                tanaman_id,
+                jumlahpanen,
+                keterangan,
+                foto1Part,
+                foto2Part,
+                foto3Part,
+                foto4Part
+            )
+
+            if(result.isSuccessful){
+                Loading.hide()
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Berhasil")
+                    .setMessage("Data berhasil dikirim")
+                    .setPositiveButton("OK", { _, _ ->
+                        resetField()
+                        findNavController().popBackStack()
+                    })
+                    .show()
+                binding.btnKirimDataPanen.isEnabled = true
+            }else{
+                Loading.hide()
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Gagal")
+                    .setMessage("Data gagal dikirim")
+                    .setPositiveButton("OK", null)
+                    .show()
+                binding.btnKirimDataPanen.isEnabled = true
+            }
+        }catch (e: Exception){
+            Loading.hide()
+            AlertDialog.Builder(requireContext())
+                .setTitle("Gagal")
+                .setMessage(e.message)
+                .setPositiveButton("OK", null)
+                .show()
+            binding.btnKirimDataPanen.isEnabled = true
+        }
+    }
     private fun getBitmapFromView(view: View): Bitmap {
         val bitmap = createBitmap(view.width, view.height)
         val canvas = Canvas(bitmap)
@@ -496,6 +672,16 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
         }
 
         return compressedFile
+    }
+
+    fun url(fullPath: String): String {
+        val keyword = "uploads/"
+        val index = fullPath.indexOf(keyword)
+        return if (index != -1) {
+            fullPath.substring(index + keyword.length)
+        } else {
+            fullPath // fallback kalau tidak mengandung "uploads/"
+        }
     }
 
     fun prepareFilePart(partName: String, file: File): MultipartBody.Part {

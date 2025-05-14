@@ -79,9 +79,8 @@ data class OwnerItem(
 
 data class newLahan(
 	val owner_id : String,
+	val type: String,
 	val luas : String,
 	val latitude : String,
 	val longitude : String,
-	val nrp : String,
-	val jenis: String,
 )

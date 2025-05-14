@@ -35,9 +35,7 @@ class AddPemilikLahanFragment : Fragment() {
         val root: View = binding.root
         val type = listOf("PILIH TYPE", "PRIBADI", "PERUSAHAAN", "POKTAN", "KWT")
         val gapki = listOf("PILIH", "YA", "TIDAK")
-        val jenislahan = listOf("PILIH", "MONOKULTUR", "TUMPANG SARI")
 
-        val spJenis = binding.spJenisLahan
         val spType = binding.spType
         val spGapki = binding.spGapki
 
@@ -45,47 +43,7 @@ class AddPemilikLahanFragment : Fragment() {
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, type)
         spGapki.adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, gapki)
-        spJenis.adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
-            jenislahan
-        )
 
-
-        spJenis.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                when (position) {
-                    0 -> {
-                        binding.LLPemilikBelumTerdaftar.visibility = View.GONE
-                        binding.btKirimPemilikLahan.visibility = View.GONE
-                        resetField()
-                    }
-
-                    1 -> {
-                        binding.LLPemilikBelumTerdaftar.visibility = View.VISIBLE
-                        binding.LLGapki.visibility = View.GONE
-                        binding.btKirimPemilikLahan.visibility = View.VISIBLE
-                        resetField()
-                    }
-
-                    2 -> {
-                        binding.LLPemilikBelumTerdaftar.visibility = View.VISIBLE
-                        binding.LLGapki.visibility = View.VISIBLE
-                        binding.btKirimPemilikLahan.visibility = View.VISIBLE
-                        resetField()
-                    }
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-        }
         binding.btKirimPemilikLahan.setOnClickListener {
             if(startValidate()){
                 AlertDialog.Builder(requireContext())
@@ -119,13 +77,17 @@ class AddPemilikLahanFragment : Fragment() {
             val nik = binding.etNik.text.toString()
             val alamat = binding.etAlamat.text.toString()
             val telepon = binding.etTelepon.text.toString()
-            val jenisLahan = binding.spJenisLahan.selectedItem.toString()
             val type = binding.spType.selectedItem.toString()
-            val gapki = binding.spGapki.selectedItem.toString()
+            var gapki = ""
+            if(!binding.spGapki.selectedItem.toString().equals("YA")){
+                gapki = "-"
+            }else{
+                gapki = binding.spGapki.selectedItem.toString()
+            }
 
             val sh = requireContext().getSharedPreferences("session", Context.MODE_PRIVATE)
-            val nrp = sh.getString("nrp", null)
-            if (nrp.isNullOrEmpty()) {
+            val desaid = sh.getString("desaid", null)
+            if (desaid.isNullOrEmpty()) {
                 Loading.hide()
                 showDialog("Gagal", "Nrp tidak ditemukan")
                 return
@@ -137,16 +99,15 @@ class AddPemilikLahanFragment : Fragment() {
                     nik = nik,
                     alamat = alamat,
                     telepon = telepon,
-                    jenis = jenisLahan,
                     gapki = gapki,
                     nama_pok = namaPok,
-                    nrp = nrp,
+                    desa_id = desaid,
                     type = type
                 )
             )
 
             Loading.hide()
-            if (response.kode == 200) {
+            if (response.kode == 201) {
                 showDialog("Berhasil", response.msg)
             } else {
                 showDialog("Gagal", response.msg)
@@ -198,7 +159,6 @@ class AddPemilikLahanFragment : Fragment() {
         val nik = binding.etNik.text.toString()
         val alamat = binding.etAlamat.text.toString()
         val telepon = binding.etTelepon.text.toString()
-        val jenisLahan = binding.spJenisLahan.selectedItem.toString()
         val type = binding.spType.selectedItem.toString()
         val gapki = binding.spGapki.selectedItem.toString()
 
@@ -232,7 +192,7 @@ class AddPemilikLahanFragment : Fragment() {
             errorText.text = "Wajib Dipilih"
             isValid = false
         }
-        if (jenisLahan == "TUMPANG SARI" && gapki == "PILIH") {
+        if (gapki == "PILIH") {
             val errorText = binding.spGapki.selectedView as TextView
             errorText.error = ""
             errorText.setTextColor(Color.RED)

@@ -20,6 +20,7 @@ import id.creatodidak.kp3k.adapter.pemiliklahan.DataTanamAdapter
 import id.creatodidak.kp3k.api.Client
 import id.creatodidak.kp3k.api.Data
 import id.creatodidak.kp3k.api.model.DatatanamItem
+import id.creatodidak.kp3k.api.model.MRealisasiItem
 import id.creatodidak.kp3k.dashboard.ui.pemiliklahan.ListLahanPemilikLahanFragmentArgs
 import id.creatodidak.kp3k.databinding.FragmentDataTanamBinding
 import id.creatodidak.kp3k.helper.CameraActivity
@@ -29,7 +30,7 @@ import kotlinx.coroutines.launch
 class DataTanamFragment : Fragment() {
     private var _binding: FragmentDataTanamBinding? = null
     private val binding get() = _binding!!
-    var data = mutableListOf<DatatanamItem?>()
+    var data = mutableListOf<MRealisasiItem?>()
     private lateinit var adapter : DataTanamAdapter
     private val args: DataTanamFragmentArgs by navArgs()
     override fun onCreateView(
@@ -62,15 +63,26 @@ class DataTanamFragment : Fragment() {
     private suspend fun loadLahan(s: String){
         try {
             val result = Client.retrofit.create(Data::class.java).getDataTanamOnLahan(s)
-            if(!result.datatanam.isNullOrEmpty()){
+            if(!result.isNullOrEmpty()){
                 data.clear()
-                data.addAll(result.datatanam)
+                data.addAll(result)
                 adapter = DataTanamAdapter(data,
                     onWrapperClick = {data ->
                         val sData = data.split("|")
                         val action = DataTanamFragmentDirections.actionDataTanamFragmentToDataPerkembanganTanamanFragment(sData[0], sData[1], args.pemilik, sData[2], args.lahanId)
                         findNavController().navigate(action)
-                    })
+                    },
+                    onPanenClick = {data ->
+                        val sData = data.split("|")
+                        val action = DataTanamFragmentDirections.actionDataTanamFragmentToPanenFragment(sData[0], sData[1], args.pemilik, sData[2], args.lahanId, sData[3])
+                        findNavController().navigate(action)
+                    },
+                    onRevisiClick = {data ->
+                        val action = DataTanamFragmentDirections.actionDataTanamFragmentToRevisiDataTanamFragment(data)
+                        findNavController().navigate(action)
+                    }
+
+                )
                 binding.rvDataTanam.adapter = adapter
                 binding.rvDataTanam.layoutManager = LinearLayoutManager(requireContext())
                 adapter.notifyDataSetChanged()

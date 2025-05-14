@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".dashboard.ui.datatanam.TambahDataTanamFragment">
+    tools:context=".dashboard.ui.dataperkembangan.RevisiDataPerkembanganFragment">
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,7 +30,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Masa Tanam"
+                    android:text="Tinggi Tanaman (cm)"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -40,7 +41,7 @@
                     android:padding="2dp">
 
                     <EditText
-                        android:id="@+id/etMasaTanam"
+                        android:id="@+id/etTinggiTanaman"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -59,7 +60,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Luas Tanam (Meter Persegi)"
+                    android:text="Kondisi Tanah"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -70,68 +71,7 @@
                     android:padding="2dp">
 
                     <EditText
-                        android:id="@+id/etLuasTanam"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="number|numberDecimal|numberSigned"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="4dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Komoditas"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/bordergreenrounded"
-                    android:orientation="vertical"
-                    android:padding="2dp">
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:enabled="false"
-                        android:inputType="number|numberDecimal|numberSigned"
-                        android:text="JAGUNG"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="4dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Varietas Bibit"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/bordergreenrounded"
-                    android:orientation="vertical"
-                    android:padding="2dp">
-
-                    <EditText
-                        android:id="@+id/etVarietas"
+                        android:id="@+id/etKondisiTanah"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -150,7 +90,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Prediksi Jumlah Panen (KG)"
+                    android:text="Warna Daun"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -161,13 +101,146 @@
                     android:padding="2dp">
 
                     <EditText
-                        android:id="@+id/etPrediksi"
+                        android:id="@+id/etWarnaDaun"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="number|numberDecimal|numberSigned"
+                        android:inputType="text"
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="4dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Curah Hujan"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bordergreenrounded"
+                    android:orientation="vertical"
+                    android:padding="2dp">
+
+                    <Spinner
+                        android:id="@+id/spCurahHujan"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/errCurahHujan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Data harus dipilih!"
+                    android:textColor="#F80202"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="4dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Apakah Tanaman Terserang Hama"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bordergreenrounded"
+                    android:orientation="vertical"
+                    android:padding="2dp">
+
+                    <Spinner
+                        android:id="@+id/spHama"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/errHama"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Data harus dipilih!"
+                    android:textColor="#F80202"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyKeteranganHama"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="4dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Keterangan Hama"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bordergreenrounded"
+                    android:orientation="vertical"
+                    android:padding="2dp">
+
+                    <EditText
+                        android:id="@+id/etKeteranganHama"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:gravity="start|top"
+                        android:inputType="textMultiLine"
+                        android:minLines="5"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="4dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Keterangan Tambahan"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bordergreenrounded"
+                    android:orientation="vertical"
+                    android:padding="2dp">
+
+                    <EditText
+                        android:id="@+id/etKeteranganTambahan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:gravity="start|top"
+                        android:inputType="textMultiLine"
+                        android:minLines="5"
+                        tools:ignore="SpeakableTextPresentCheck" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -201,7 +274,6 @@
                         android:layout_height="0dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/bgpaparan"
-                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="4:3"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -312,7 +384,6 @@
                         android:layout_height="0dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/bgpaparan"
-                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="4:3"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -423,7 +494,6 @@
                         android:layout_height="0dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/bgpaparan"
-                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="4:3"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -534,7 +604,6 @@
                         android:layout_height="0dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/bgpaparan"
-                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="4:3"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -616,12 +685,12 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/btnKirimDataTanam"
+                android:id="@+id/btnKirimDataPerkembanganTanam"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:backgroundTint="#4CAF50"
-                android:text="KIRIM DATA TANAM"
+                android:text="KIRIM DATA PERKEMBANGAN"
                 android:textColor="@color/white" />
 
         </LinearLayout>

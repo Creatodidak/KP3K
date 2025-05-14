@@ -2,28 +2,25 @@ package id.creatodidak.kp3k.api
 
 import id.creatodidak.kp3k.api.model.AddOwner
 import id.creatodidak.kp3k.api.model.BasicResponse
-import id.creatodidak.kp3k.api.model.LoginRequest
 import id.creatodidak.kp3k.api.model.MBasicData
-import id.creatodidak.kp3k.api.model.MDataPerkembangan
 import id.creatodidak.kp3k.api.model.MDataPerkembanganItem
-import id.creatodidak.kp3k.api.model.MListLahanOwner
-import id.creatodidak.kp3k.api.model.MLogin
+import id.creatodidak.kp3k.api.model.MLahanMitra
 import id.creatodidak.kp3k.api.model.MMyLahan
-import id.creatodidak.kp3k.api.model.MOwner
-import id.creatodidak.kp3k.api.model.MOwnerAddLahan
-import id.creatodidak.kp3k.api.model.MOwnerItem
+import id.creatodidak.kp3k.api.model.MNewOwnerItem
+import id.creatodidak.kp3k.api.model.MRealisasiItem
+import id.creatodidak.kp3k.api.model.MRealisasiPanen
 import id.creatodidak.kp3k.api.model.MRealisasiTanam
-import id.creatodidak.kp3k.api.model.OwnerItem
 import id.creatodidak.kp3k.api.model.newLahan
-import id.creatodidak.kp3k.dashboard.ui.lahantugas.AddLahan
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 
@@ -34,33 +31,31 @@ interface Data {
     @GET("/android/lahantugas/{nrp}")
     suspend fun getMyLahan(@Path("nrp") nrp: String): MMyLahan
 
-    @GET("/android/getowner/{nrp}")
+    @GET("/android/mitra/desa/{desa_id}")
     suspend fun getOwner(
-        @Path("nrp") nrp: String
-    ): List<MOwnerItem>
+        @Path("desa_id") desa_id: String
+    ): List<MNewOwnerItem>
 
-    @GET("/android/getowner/{type}/{nrp}")
-    suspend fun getOwnerByType(
-        @Path("type") type: String,
-        @Path("nrp") nrp: String
-    ): MOwnerAddLahan
-
-    @POST("/android/add/pemiliklahan")
+    @POST("/android/mitra/add")
     suspend fun sendNewPemilikLahan(@Body request: AddOwner): BasicResponse
 
-    @POST("/android/add/lahan")
+    @POST("/android/lahan/add")
     suspend fun sendNewLahan(@Body request: newLahan): BasicResponse
 
-    @GET("/android/lahan/{id_lahan}")
-    suspend fun getOwnerLahan(@Path("id_lahan") id_lahan: String): MListLahanOwner
+    @GET("/android/lahan/mitra/{owner_id}")
+    suspend fun getOwnerLahan(@Path("owner_id") ownerid: String): MLahanMitra
 
-    @GET("/android/datatanam/bylahan/{id_lahan}")
-    suspend fun getDataTanamOnLahan(@Path("id_lahan") id_lahan: String): MRealisasiTanam
+    @GET("/android/realisasi/lahan/{id_lahan}")
+    suspend fun getDataTanamOnLahan(@Path("id_lahan") id_lahan: String): List<MRealisasiItem>
+
+    @GET("/android/realisasi/{id}")
+    suspend fun getDataTanamById(@Path("id") id: String): MRealisasiItem
 
     @Multipart
-    @POST("/android/datatanam/add")
+    @POST("/android/realisasi/add")
     suspend fun uploadLaporanTanam(
         @Part("kodelahan") kodelahan: RequestBody,
+        @Part("masatanam") masatanam: RequestBody,
         @Part("luastanam") luastanam: RequestBody,
         @Part("prediksipanen") prediksipanen: RequestBody,
         @Part("komoditas") komoditas: RequestBody,
@@ -69,11 +64,24 @@ interface Data {
         @Part foto2: MultipartBody.Part,
         @Part foto3: MultipartBody.Part,
         @Part foto4: MultipartBody.Part,
-        @Part video: MultipartBody.Part? = null // opsional
     ): Response<ResponseBody>
 
     @Multipart
-    @POST("/android/dataperkembangan/add")
+    @PUT("/android/realisasi/update")
+    suspend fun updateLaporanTanam(
+        @Part("id") id: RequestBody,
+        @Part("masatanam") masatanam: RequestBody? = null,
+        @Part("luastanam") luastanam: RequestBody? = null,
+        @Part("prediksipanen") prediksipanen: RequestBody? = null,
+        @Part("varietas") varietas: RequestBody? = null,
+        @Part foto1: MultipartBody.Part? = null,
+        @Part foto2: MultipartBody.Part? = null,
+        @Part foto3: MultipartBody.Part? = null,
+        @Part foto4: MultipartBody.Part? = null,
+    ): Response<ResponseBody>
+
+    @Multipart
+    @POST("/android/perkembangan/add")
     suspend fun uploadLaporanPerkembanganTanam(
         @Part("kodelahan") kodelahan: RequestBody,
         @Part("tanaman_id") tanaman_id: RequestBody,
@@ -91,8 +99,55 @@ interface Data {
         @Part video: MultipartBody.Part? = null
     ): Response<ResponseBody>
 
-    @GET("/android/perkembangan/{kodelahan}}/{tanaman_id}")
-    suspend fun getDataPerkembangan(@Path("kodelahan") kodelahan: String, @Path("tanaman_id") tanaman_id : String): List<MDataPerkembanganItem>
+    @Multipart
+    @PUT("/android/perkembangan/update")
+    suspend fun uploadUpdateLaporanPerkembanganTanam(
+        @Part("id") id: RequestBody,
+        @Part("tinggitanaman") tinggitanaman: RequestBody? = null,
+        @Part("kondisitanah") kondisitanah: RequestBody? = null,
+        @Part("warnadaun") warnadaun: RequestBody? = null,
+        @Part("curahhujan") curahhujan : RequestBody? = null,
+        @Part("hama") hama : RequestBody? = null,
+        @Part("keteranganhama") keteranganhama : RequestBody? = null,
+        @Part("keterangan") keterangan : RequestBody? = null,
+        @Part foto1: MultipartBody.Part? = null,
+        @Part foto2: MultipartBody.Part? = null,
+        @Part foto3: MultipartBody.Part? = null,
+        @Part foto4: MultipartBody.Part? = null,
+    ): Response<ResponseBody>
+
+    @GET("/android/perkembangan/tanaman/{tanaman_id}")
+    suspend fun getDataPerkembangan(@Path("tanaman_id") tanaman_id : String): List<MDataPerkembanganItem>
+
+    @GET("/android/perkembangan/{id}")
+    suspend fun getDataPerkembaganById(@Path("id") id: String): MDataPerkembanganItem
+
+    @GET("/android/panen/tanaman/{tanaman_id}")
+    suspend fun getDataPanen(@Path("tanaman_id") tanaman_id : String): MRealisasiPanen
+
+    @Multipart
+    @POST("/android/panen/add")
+    suspend fun uploadDataPanen(
+        @Part("tanaman_id") tanaman_id: RequestBody,
+        @Part("jumlahpanen") jumlahpanen: RequestBody,
+        @Part("keterangan") keterangan: RequestBody,
+        @Part foto1: MultipartBody.Part,
+        @Part foto2: MultipartBody.Part,
+        @Part foto3: MultipartBody.Part,
+        @Part foto4: MultipartBody.Part,
+    ): Response<ResponseBody>
+
+    @Multipart
+    @PUT("/android/panen/update")
+    suspend fun uploadUpdateDataPanen(
+        @Part("id") id: RequestBody,
+        @Part("jumlahpanen") jumlahpanen: RequestBody? = null,
+        @Part("keterangan") keterangan: RequestBody? = null,
+        @Part foto1: MultipartBody.Part? = null,
+        @Part foto2: MultipartBody.Part? = null,
+        @Part foto3: MultipartBody.Part? = null,
+        @Part foto4: MultipartBody.Part? = null,
+    ): Response<ResponseBody>
 
     @Multipart
     @POST("/android/fotoprofile")
@@ -106,4 +161,11 @@ interface Data {
 
     @GET("/android/verifikasi/auth/{nrp}/{kode}")
     suspend fun sendKodeVerifikasi(@Path("nrp") nrp: String, @Path("kode") kode : String): BasicResponse
+
+    @DELETE("/android/mitra/delete/{kode}")
+    suspend fun deleteOwner(@Path("kode") kode : String): Response<ResponseBody>
+
+    @DELETE("/android/lahan/delete/{kode}")
+    suspend fun deleteLahan(@Path("kode") kode : String): Response<ResponseBody>
+
 }

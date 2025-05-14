@@ -23,13 +23,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp"
+                android:paddingTop="10dp">
 
                 <ImageView
                     android:id="@+id/ivJenisLahan"
@@ -70,6 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:paddingHorizontal="10dp"
                 android:text="Alamat Lahan"
                 android:textSize="10sp"
                 android:textStyle="bold" />
@@ -78,13 +80,15 @@
                 android:id="@+id/tvAlamatLahan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
                 android:textSize="10sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -123,6 +127,27 @@
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvStatusLahan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvHapusLahan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FA0303"
+                android:padding="4dp"
+                android:text="HAPUS DAN AJUKAN ULANG"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:visibility="visible"
+                tools:ignore="TextContrastCheck" />
 
         </LinearLayout>
 
