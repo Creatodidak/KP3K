@@ -15,15 +15,27 @@ android {
         applicationId = "id.creatodidak.kp3k"
         minSdk = 30
         targetSdk = 35
-        versionCode = 7
+        versionCode = 10
         versionName = "Alpha-1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(project.property("RELEASE_STORE_FILE") as String)
+            storePassword = project.property("RELEASE_STORE_PASSWORD") as String
+            keyAlias = project.property("RELEASE_KEY_ALIAS") as String
+            keyPassword = project.property("RELEASE_KEY_PASSWORD") as String
+        }
+    }
+
     buildTypes {
+
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -33,6 +45,7 @@ android {
         }
         debug {
 //             buildConfigField("String", "BASE_URL", "\"http://36.93.138.110:3011/\"")
+            signingConfig = signingConfigs.getByName("release")
             buildConfigField("String", "BASE_URL", "\"https://server.resldk.cloud/\"")
              buildConfigField("String", "AGORA_ID", "\"6141104f89c84e5f89063dffef241e71\"")
         }

@@ -21,3 +21,4 @@
 #-renamesourcefileattribute SourceFile
 -keep class io.agora.** { *; }
 -dontwarn io.agora.**
+-dontwarn reactor.blockhound.integration.BlockHoundIntegration

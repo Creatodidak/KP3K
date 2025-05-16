@@ -9,6 +9,16 @@
         <item name="android:textColor">#070707</item>
         <item name="android:fontFamily">@font/workregular</item>
     </style>
+    <style name="Theme.KP3K.PIMPINAN" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here -->
+        <item name="colorPrimary">#F44336</item>
+        <item name="colorPrimaryDark">#D32F2F</item>
+        <item name="colorAccent">#F44336</item>
+        <item name="android:textColor">#070707</item>
+        <item name="android:fontFamily">@font/workregular</item>
+    </style>
+
+
     <style name="VideoStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>

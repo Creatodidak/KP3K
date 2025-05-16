@@ -3,8 +3,10 @@ package id.creatodidak.kp3k
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +27,8 @@ class Login : AppCompatActivity() {
     private lateinit var usernameET: EditText
     private lateinit var passwordET: EditText
     private lateinit var btnLogin: Button
-
+    private lateinit var spRole: Spinner
+    private var selectedRole: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,12 +41,30 @@ class Login : AppCompatActivity() {
             insets
         }
 
+        val roles = listOf("PILIH ROLE", "PIMPINAN", "PAMATWIL", "KAPOLRES", "BINTARA PENGGERAK")
+        spRole = findViewById<Spinner>(R.id.spRole)
+        spRole.adapter = ArrayAdapter(this@Login, android.R.layout.simple_spinner_dropdown_item, roles)
         usernameET = findViewById(R.id.usernameEditText)
         passwordET = findViewById(R.id.passwordEditText)
         btnLogin = findViewById(R.id.btnLogin)
 
         btnLogin.setOnClickListener {
-            lifecycleScope.launch { attemptLogin() }
+            if(spRole.selectedItemPosition == 0){
+                AlertDialog.Builder(this)
+                    .setTitle("Gagal Login")
+                    .setMessage("Role harus dipilih")
+                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                    .show()
+            }else{
+                selectedRole = if(spRole.selectedItem.toString() == "BINTARA PENGGERAK"){
+                    "BPKP"
+                }else{
+                    spRole.selectedItem.toString()
+                }
+                lifecycleScope.launch {
+                    attemptLogin()
+                }
+            }
         }
     }
 
@@ -55,41 +76,73 @@ class Login : AppCompatActivity() {
 
         setInputsEnabled(false)
         Loading.show(this@Login)
-
         try {
-            val response = Client.retrofit
-                .create(Auth::class.java)
-                .login(LoginRequest(username, password, "BPKP"))
+            if(selectedRole === "BPKP"){
+                val response = Client.retrofit
+                    .create(Auth::class.java)
+                    .login(LoginRequest(username, password, selectedRole!!))
 
-            response.user?.let { user ->
-                val prefs = getSharedPreferences("session", MODE_PRIVATE).edit()
-                with(prefs) {
-                    putString("token", response.token)
-                    putString("nrp", user.nrp)
-                    putString("nohp", user.nohp)
-                    putString("jabatan", user.jabatan)
-                    putString("polda", user.polda)
-                    putString("polres", user.polres)
-                    putString("namapolres", response.polres?.nama)
-                    putString("polsek", user.polsek)
-                    putString("namapolsek", response.polsek?.nama ?: "-")
-                    putString("foto", user.foto)
-                    putString("role", user.role)
-                    putString("status", user.status)
-                    putString("nama", user.nama)
-                    putString("pangkat", user.pangkat)
-                    putString("desa", response.desabinaan)
-                    putString("desaid", response.desabinaanId)
-                    putString("provinsi", "KALIMANTAN BARAT")
-                    putString("kabupaten", response.kabupatenbinaan)
-                    putString("kabupatenid", response.kabupatenbinaanId)
-                    putString("kecamatan", response.kecamatanbinaan)
-                    putString("kecamatanid", response.kecamatanbinaanId)
-                    putBoolean("isLoggedIn", true)
-                    apply()
-                }
-                loadFcmToken(user.nrp!!)
-            } ?: showErrorDialog("Username atau password salah")
+                response.user?.let { user ->
+                    val prefs = getSharedPreferences("session", MODE_PRIVATE).edit()
+                    with(prefs) {
+                        putString("token", response.token)
+                        putString("nrp", user.nrp)
+                        putString("nohp", user.nohp)
+                        putString("jabatan", user.jabatan)
+                        putString("polda", user.polda)
+                        putString("polres", user.polres)
+                        putString("namapolres", response.polres?.nama)
+                        putString("polsek", user.polsek)
+                        putString("namapolsek", response.polsek?.nama ?: "-")
+                        putString("foto", user.foto)
+                        putString("role", user.role)
+                        putString("status", user.status)
+                        putString("nama", user.nama)
+                        putString("pangkat", user.pangkat)
+                        putString("desa", response.desabinaan)
+                        putString("desaid", response.desabinaanId)
+                        putString("provinsi", "KALIMANTAN BARAT")
+                        putString("kabupaten", response.kabupatenbinaan)
+                        putString("kabupatenid", response.kabupatenbinaanId)
+                        putString("kecamatan", response.kecamatanbinaan)
+                        putString("kecamatanid", response.kecamatanbinaanId)
+                        putBoolean("isLoggedIn", true)
+                        apply()
+                    }
+                    loadFcmToken(user.nrp!!)
+                } ?: showErrorDialog("Username atau password salah")
+            }else{
+
+            }
+        } catch (e: Exception) {
+            showErrorDialog("Terjadi kesalahan: ${e.localizedMessage}")
+        }
+    }
+
+    private suspend fun attemptLoginPimpinan() {
+        val username = usernameET.text.toString().trim()
+        val password = passwordET.text.toString().trim()
+
+        if (!validateInput(username, password)) return
+
+        setInputsEnabled(false)
+        Loading.show(this@Login)
+        try {
+                val response = Client.retrofit
+                    .create(Auth::class.java)
+                    .loginPimpinan(LoginRequest(username, password, selectedRole!!))
+
+                response.user?.let { user ->
+                    val prefs = getSharedPreferences("session", MODE_PRIVATE).edit()
+                    with(prefs) {
+                        putString("token", response.token)
+                        putString("jabatan", user.jabatan)
+                        putString("role", user.role)
+                        putBoolean("isLoggedIn", true)
+                        apply()
+                    }
+                    loadFcmToken(user.username!!)
+                } ?: showErrorDialog("Username atau password salah")
         } catch (e: Exception) {
             showErrorDialog("Terjadi kesalahan: ${e.localizedMessage}")
         }
@@ -116,8 +169,22 @@ class Login : AppCompatActivity() {
                     val prefs = getSharedPreferences("session", MODE_PRIVATE).edit()
                     prefs.putString("fcmtoken", fcmToken).apply()
 
-                    lifecycleScope.launch {
-                        registerFcmToken(fcmToken, nrp)
+                    if(selectedRole ===  "BPKP"){
+                        lifecycleScope.launch {
+                            registerFcmToken(fcmToken, nrp)
+                        }
+                    }else if(selectedRole === "PIMPINAN"){
+                        lifecycleScope.launch {
+                            registerFcmToken(fcmToken, nrp)
+                        }
+                    }else if(selectedRole === "PAMATWIL"){
+                        lifecycleScope.launch {
+                            registerFcmToken(fcmToken, nrp)
+                        }
+                    }else if(selectedRole === "KAPOLRES"){
+                        lifecycleScope.launch {
+                            registerFcmToken(fcmToken, nrp)
+                        }
                     }
                 } else {
                     setInputsEnabled(true)

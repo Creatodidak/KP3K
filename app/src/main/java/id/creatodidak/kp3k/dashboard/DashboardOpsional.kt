@@ -9,20 +9,25 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
+import androidx.core.graphics.toColorInt
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +36,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
 import id.creatodidak.kp3k.BuildConfig
 import id.creatodidak.kp3k.R
@@ -38,9 +46,11 @@ import id.creatodidak.kp3k.SetPin
 import id.creatodidak.kp3k.Verifikasi
 import id.creatodidak.kp3k.Welcome
 import id.creatodidak.kp3k.api.Client
+import id.creatodidak.kp3k.api.Data
 import id.creatodidak.kp3k.api.Update
 import id.creatodidak.kp3k.api.model.MUpdate
 import id.creatodidak.kp3k.databinding.ActivityDashboardOpsionalBinding
+import id.creatodidak.kp3k.helper.LocationHelperOld
 import id.creatodidak.kp3k.network.SocketManager
 import io.socket.client.Socket
 import kotlinx.coroutines.launch
@@ -52,6 +62,17 @@ import java.io.File
 class DashboardOpsional : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityDashboardOpsionalBinding
+    private lateinit var locationHelper: LocationHelperOld
+    private val locationPermissionRequest =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            ) {
+                locationHelper.requestLocation()  // Mulai pembaruan lokasi saat izin diberikan
+            } else {
+                Toast.makeText(this@DashboardOpsional, "Izin lokasi diperlukan", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -168,6 +189,40 @@ class DashboardOpsional : AppCompatActivity() {
             }
         }
 
+        locationHelper = LocationHelperOld(
+            this,
+            lifecycleOwner = this
+        ) { location ->
+            if (location != null) {
+                lifecycleScope.launch {
+                    sendMyLocation(location.latitude, location.longitude, sharedPreferences.getString("nrp", ""))
+                }
+
+            } else {
+                Toast.makeText(this@DashboardOpsional, "Lokasi tidak ditemukan", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        checkPermissionsAndStartRequest()
+
+    }
+
+    private suspend fun sendMyLocation(latitude: Double, longitude: Double, nrp: String?){
+        try{
+            val res = Client.retrofit.create(Data::class.java).sendLocation(
+                Data.LocationRequest(
+                    nrp!!,
+                    latitude.toString(),
+                    longitude.toString()
+                )
+            )
+
+            if(!res.isSuccessful){
+                Log.i("Tracking", res.raw().toString())
+            }
+        }catch (e: Exception){
+            Log.e("Error", e.message.toString())
+        }
     }
 
     private suspend fun checkUpdate() {
@@ -309,6 +364,36 @@ class DashboardOpsional : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+    private fun isLocationEnabled(): Boolean {
+        val locationManager =
+            this@DashboardOpsional.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+    private fun checkPermissionsAndStartRequest() {
+        if (ContextCompat.checkSelfPermission(
+                this@DashboardOpsional,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            // Periksa jika lokasi aktif
+            if (isLocationEnabled()) {
+                locationHelper.requestLocation() // Meminta lokasi terbaik
+            } else {
+                Toast.makeText(this@DashboardOpsional, "Aktifkan lokasi terlebih dahulu", Toast.LENGTH_LONG).show()
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(intent)
+            }
+        } else {
+            locationPermissionRequest.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()

@@ -44,6 +44,9 @@
         android:windowSoftInputMode="adjustResize"
         tools:targetApi="31">
         <activity
+            android:name=".pimpinan.DashboardPimpinan"
+            android:exported="false" />
+        <activity
             android:name=".TesterActivity"
             android:exported="false" />
         <activity

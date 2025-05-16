@@ -168,4 +168,16 @@ interface Data {
     @DELETE("/android/lahan/delete/{kode}")
     suspend fun deleteLahan(@Path("kode") kode : String): Response<ResponseBody>
 
+    data class LocationRequest(
+        val nrp: String,
+        val lat: String,
+        val long: String
+    )
+
+    @POST("/android/tracking")
+    suspend fun sendLocation(
+        @Body request: LocationRequest
+    ): Response<ResponseBody>
+
+
 }
