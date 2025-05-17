@@ -24,6 +24,7 @@ import androidx.core.net.toUri
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import id.creatodidak.kp3k.pimpinan.DashboardPimpinan
 
 class SetPin : AppCompatActivity() {
 
@@ -128,7 +129,14 @@ class SetPin : AppCompatActivity() {
         if(sh.getBoolean("isPinSetted", false)){
             if(pin == sh.getString("pin", "")){
                 sh.edit() { putBoolean("isCurrentlyLogedIn", true) }
-                val i = Intent(this, DashboardOpsional::class.java)
+
+                val i = if(sh.getString("role", "") === "BPKP"){
+                    Intent(this, DashboardOpsional::class.java)
+                }else if(sh.getString("role", "") === "PIMPINAN"){
+                    Intent(this, DashboardPimpinan::class.java)
+                }else{
+                    null
+                }
                 startActivity(i)
                 finish()
             }   else{
@@ -142,7 +150,11 @@ class SetPin : AppCompatActivity() {
                     putBoolean("isCurrentlyLogedIn", true)
                     putString("pin", pin)
                 }
-                val nrp = sh.getString("nrp", "")
+                val nrp = if(intent.getStringExtra("role") === "BPKP"){
+                    sh.getString("nrp", "")
+                }else{
+                    sh.getString("username", "")
+                }
                 if(nrp !== null){
                     lifecycleScope.launch {
                         registerPin(pin, nrp)
@@ -154,10 +166,24 @@ class SetPin : AppCompatActivity() {
 
     private suspend fun registerPin(pin: String, nrp: String) {
         try {
+            if(intent.getStringExtra("role") === "BPKP"){
+                Client.retrofit
+                    .create(Auth::class.java)
+                    .registerPin(PINRegister(nrp, pin))
+            }else if(intent.getStringExtra("role") === "PIMPINAN"){
+                Client.retrofit
+                    .create(Auth::class.java)
+                    .registerPinPimpinan(Auth.PINRegisterPimpinan(nrp, pin))
+            }else if(intent.getStringExtra("role") === "PAMATWIL"){
+                Client.retrofit
+                    .create(Auth::class.java)
+                    .registerPinPamatwil(Auth.PINRegisterPimpinan(nrp, pin))
+            }else if(intent.getStringExtra("role") === "KAPOLRES"){
+                Client.retrofit
+                    .create(Auth::class.java)
+                    .registerPinKapolres(Auth.PINRegisterPimpinan(nrp, pin))
+            }
             Loading.show(this@SetPin)
-            val response = Client.retrofit
-                .create(Auth::class.java)
-                .registerPin(PINRegister(nrp, pin))
 
             val sharedPreferences = getSharedPreferences("session", MODE_PRIVATE)
             with(sharedPreferences.edit()){
@@ -168,7 +194,13 @@ class SetPin : AppCompatActivity() {
             e.printStackTrace()
         }finally {
             Loading.hide()
-            val i = Intent(this, DashboardOpsional::class.java)
+            val i = if(intent.getStringExtra("role") === "BPKP"){
+                Intent(this, DashboardOpsional::class.java)
+            }else if(intent.getStringExtra("role") === "PIMPINAN"){
+                Intent(this, DashboardPimpinan::class.java)
+            }else{
+                null
+            }
             startActivity(i)
             finish()
         }

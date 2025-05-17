@@ -15,6 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.gson.annotations.SerializedName
 import id.creatodidak.kp3k.api.Auth
 import id.creatodidak.kp3k.api.Client
 import id.creatodidak.kp3k.api.model.LoginRequest
@@ -111,23 +112,7 @@ class Login : AppCompatActivity() {
                     }
                     loadFcmToken(user.nrp!!)
                 } ?: showErrorDialog("Username atau password salah")
-            }else{
-
-            }
-        } catch (e: Exception) {
-            showErrorDialog("Terjadi kesalahan: ${e.localizedMessage}")
-        }
-    }
-
-    private suspend fun attemptLoginPimpinan() {
-        val username = usernameET.text.toString().trim()
-        val password = passwordET.text.toString().trim()
-
-        if (!validateInput(username, password)) return
-
-        setInputsEnabled(false)
-        Loading.show(this@Login)
-        try {
+            }else if(selectedRole === "PIMPINAN"){
                 val response = Client.retrofit
                     .create(Auth::class.java)
                     .loginPimpinan(LoginRequest(username, password, selectedRole!!))
@@ -143,6 +128,51 @@ class Login : AppCompatActivity() {
                     }
                     loadFcmToken(user.username!!)
                 } ?: showErrorDialog("Username atau password salah")
+            }else if(selectedRole === "PAMATWIL"){
+                val response = Client.retrofit
+                    .create(Auth::class.java)
+                    .loginPamatwil(LoginRequest(username, password, selectedRole!!))
+
+                response.user?.let { user ->
+                    val prefs = getSharedPreferences("session", MODE_PRIVATE).edit()
+                    with(prefs) {
+                        putString("token", response.token)
+                        putString("jabatan", user.jabatan)
+                        putString("role", user.role)
+                        putString("polres_id", user.polresId)
+                        putString("polres", user.polres)
+                        putString("kabupaten", user.kabupaten)
+                        putString("kabupaten_id", user.kabupatenId)
+                        putString("penugasan", user.penugasan)
+
+                        putBoolean("isLoggedIn", true)
+                        apply()
+                    }
+                    loadFcmToken(user.username!!)
+                } ?: showErrorDialog("Username atau password salah")
+            }else if(selectedRole === "KAPOLRES"){
+                val response = Client.retrofit
+                    .create(Auth::class.java)
+                    .loginKapolres(LoginRequest(username, password, selectedRole!!))
+
+                response.user?.let { user ->
+                    val prefs = getSharedPreferences("session", MODE_PRIVATE).edit()
+                    with(prefs) {
+                        putString("token", response.token)
+                        putString("jabatan", user.jabatan)
+                        putString("role", user.role)
+                        putString("polres_id", user.polresId)
+                        putString("polres", user.polres)
+                        putString("kabupaten", user.kabupaten)
+                        putString("kabupaten_id", user.kabupatenId)
+                        putString("penugasan", user.penugasan)
+
+                        putBoolean("isLoggedIn", true)
+                        apply()
+                    }
+                    loadFcmToken(user.username!!)
+                } ?: showErrorDialog("Username atau password salah")
+            }
         } catch (e: Exception) {
             showErrorDialog("Terjadi kesalahan: ${e.localizedMessage}")
         }
@@ -161,7 +191,7 @@ class Login : AppCompatActivity() {
         return valid
     }
 
-    private fun loadFcmToken(nrp: String) {
+    private fun loadFcmToken(nrp: String?) {
         FirebaseMessaging.getInstance().token
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -171,19 +201,19 @@ class Login : AppCompatActivity() {
 
                     if(selectedRole ===  "BPKP"){
                         lifecycleScope.launch {
-                            registerFcmToken(fcmToken, nrp)
+                            registerFcmToken(fcmToken, nrp!!)
                         }
                     }else if(selectedRole === "PIMPINAN"){
                         lifecycleScope.launch {
-                            registerFcmToken(fcmToken, nrp)
+                            registerFcmTokenPimpinan(fcmToken)
                         }
                     }else if(selectedRole === "PAMATWIL"){
                         lifecycleScope.launch {
-                            registerFcmToken(fcmToken, nrp)
+                            registerFcmTokenPamatwil(fcmToken)
                         }
                     }else if(selectedRole === "KAPOLRES"){
                         lifecycleScope.launch {
-                            registerFcmToken(fcmToken, nrp)
+                            registerFcmTokenKapolres(fcmToken)
                         }
                     }
                 } else {
@@ -209,7 +239,75 @@ class Login : AppCompatActivity() {
         } finally {
             setInputsEnabled(true)
             Loading.hide()
-            startActivity(Intent(this@Login, SetPin::class.java))
+            val i = Intent(this@Login, SetPin::class.java)
+            i.putExtra("role", "BPKP")
+            startActivity(i)
+            finish()
+        }
+    }
+
+    private suspend fun registerFcmTokenPimpinan(fcmToken: String) {
+        try {
+            Client.retrofit
+                .create(Auth::class.java)
+                .registerFcmPimpinan(Auth.TokenRegisterPimpinan(usernameET.text.toString(), fcmToken))
+
+            getSharedPreferences("session", MODE_PRIVATE).edit().apply {
+                putBoolean("isFcmRegistered", true)
+                apply()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            setInputsEnabled(true)
+            Loading.hide()
+            val i = Intent(this@Login, SetPin::class.java)
+            i.putExtra("role", "PIMPINAN")
+            startActivity(i)
+            finish()
+        }
+    }
+
+    private suspend fun registerFcmTokenPamatwil(fcmToken: String) {
+        try {
+            Client.retrofit
+                .create(Auth::class.java)
+                .registerFcmPamatwil(Auth.TokenRegisterPimpinan(usernameET.text.toString(), fcmToken))
+
+            getSharedPreferences("session", MODE_PRIVATE).edit().apply {
+                putBoolean("isFcmRegistered", true)
+                apply()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            setInputsEnabled(true)
+            Loading.hide()
+            val i = Intent(this@Login, SetPin::class.java)
+            i.putExtra("role", "PAMATWIL")
+            startActivity(i)
+            finish()
+        }
+    }
+
+    private suspend fun registerFcmTokenKapolres(fcmToken: String) {
+        try {
+            Client.retrofit
+                .create(Auth::class.java)
+                .registerFcmKapolres(Auth.TokenRegisterPimpinan(usernameET.text.toString(), fcmToken))
+
+            getSharedPreferences("session", MODE_PRIVATE).edit().apply {
+                putBoolean("isFcmRegistered", true)
+                apply()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            setInputsEnabled(true)
+            Loading.hide()
+            val i = Intent(this@Login, SetPin::class.java)
+            i.putExtra("role", "KAPOLRES")
+            startActivity(i)
             finish()
         }
     }

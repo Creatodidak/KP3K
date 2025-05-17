@@ -7,6 +7,8 @@ import id.creatodidak.kp3k.api.model.LoginRequest
 import id.creatodidak.kp3k.api.model.MLogin
 import id.creatodidak.kp3k.api.model.PINRegister
 import id.creatodidak.kp3k.api.model.TokenRegister
+import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -27,6 +29,28 @@ interface Auth {
     @POST("/auth/registerfcm")
     suspend fun registerFcm(@Body request: TokenRegister): MLogin
 
+    data class TokenRegisterPimpinan(
+        val username: String,
+        val token: String,
+    )
+    @POST("/auth/registerfcmpimpinan")
+    suspend fun registerFcmPimpinan(@Body request: TokenRegisterPimpinan): Response<ResponseBody>
+    @POST("/auth/registerfcmpamatwil")
+    suspend fun registerFcmPamatwil(@Body request: TokenRegisterPimpinan): Response<ResponseBody>
+    @POST("/auth/registerfcmkapolres")
+    suspend fun registerFcmKapolres(@Body request: TokenRegisterPimpinan): Response<ResponseBody>
     @POST("/auth/registerpin")
     suspend fun registerPin(@Body request: PINRegister): MLogin
+
+    data class PINRegisterPimpinan(
+        val username: String,
+        val pin: String,
+    )
+
+    @POST("/auth/registerpinpimpinan")
+    suspend fun registerPinPimpinan(@Body request: PINRegisterPimpinan): Response<ResponseBody>
+    @POST("/auth/registerpinpamatwil")
+    suspend fun registerPinPamatwil(@Body request: PINRegisterPimpinan): Response<ResponseBody>
+    @POST("/auth/registerpinkapolres")
+    suspend fun registerPinKapolres(@Body request: PINRegisterPimpinan): Response<ResponseBody>
 }
