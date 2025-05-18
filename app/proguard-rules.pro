@@ -22,3 +22,11 @@
 -keep class io.agora.** { *; }
 -dontwarn io.agora.**
 -dontwarn reactor.blockhound.integration.BlockHoundIntegration
+# JANGAN obfuscate class dan field di model yang digunakan Gson
+-keep class id.creatodidak.kp3k.api.model.** { *; }
+
+# Pastikan anotasi Gson tidak dibuang
+-keepattributes *Annotation*
+
+# Jangan obfuscate Gson itu sendiri (opsional tapi aman)
+-keep class com.google.gson.** { *; }

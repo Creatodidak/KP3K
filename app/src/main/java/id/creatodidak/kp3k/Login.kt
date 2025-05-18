@@ -15,12 +15,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.gson.annotations.SerializedName
 import id.creatodidak.kp3k.api.Auth
 import id.creatodidak.kp3k.api.Client
 import id.creatodidak.kp3k.api.model.LoginRequest
 import id.creatodidak.kp3k.api.model.TokenRegister
-import id.creatodidak.kp3k.dashboard.DashboardOpsional
 import id.creatodidak.kp3k.helper.Loading
 import kotlinx.coroutines.launch
 
@@ -44,22 +42,23 @@ class Login : AppCompatActivity() {
 
         val roles = listOf("PILIH ROLE", "PIMPINAN", "PAMATWIL", "KAPOLRES", "BINTARA PENGGERAK")
         spRole = findViewById<Spinner>(R.id.spRole)
-        spRole.adapter = ArrayAdapter(this@Login, android.R.layout.simple_spinner_dropdown_item, roles)
+        spRole.adapter =
+            ArrayAdapter(this@Login, android.R.layout.simple_spinner_dropdown_item, roles)
         usernameET = findViewById(R.id.usernameEditText)
         passwordET = findViewById(R.id.passwordEditText)
         btnLogin = findViewById(R.id.btnLogin)
 
         btnLogin.setOnClickListener {
-            if(spRole.selectedItemPosition == 0){
+            if (spRole.selectedItemPosition == 0) {
                 AlertDialog.Builder(this)
                     .setTitle("Gagal Login")
                     .setMessage("Role harus dipilih")
                     .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
                     .show()
-            }else{
-                selectedRole = if(spRole.selectedItem.toString() == "BINTARA PENGGERAK"){
+            } else {
+                selectedRole = if (spRole.selectedItem.toString() == "BINTARA PENGGERAK") {
                     "BPKP"
-                }else{
+                } else {
                     spRole.selectedItem.toString()
                 }
                 lifecycleScope.launch {
@@ -78,7 +77,7 @@ class Login : AppCompatActivity() {
         setInputsEnabled(false)
         Loading.show(this@Login)
         try {
-            if(selectedRole === "BPKP"){
+            if (selectedRole === "BPKP") {
                 val response = Client.retrofit
                     .create(Auth::class.java)
                     .login(LoginRequest(username, password, selectedRole!!))
@@ -112,7 +111,7 @@ class Login : AppCompatActivity() {
                     }
                     loadFcmToken(user.nrp!!)
                 } ?: showErrorDialog("Username atau password salah")
-            }else if(selectedRole === "PIMPINAN"){
+            } else if (selectedRole === "PIMPINAN") {
                 val response = Client.retrofit
                     .create(Auth::class.java)
                     .loginPimpinan(LoginRequest(username, password, selectedRole!!))
@@ -128,7 +127,7 @@ class Login : AppCompatActivity() {
                     }
                     loadFcmToken(user.username!!)
                 } ?: showErrorDialog("Username atau password salah")
-            }else if(selectedRole === "PAMATWIL"){
+            } else if (selectedRole === "PAMATWIL") {
                 val response = Client.retrofit
                     .create(Auth::class.java)
                     .loginPamatwil(LoginRequest(username, password, selectedRole!!))
@@ -150,7 +149,7 @@ class Login : AppCompatActivity() {
                     }
                     loadFcmToken(user.username!!)
                 } ?: showErrorDialog("Username atau password salah")
-            }else if(selectedRole === "KAPOLRES"){
+            } else if (selectedRole === "KAPOLRES") {
                 val response = Client.retrofit
                     .create(Auth::class.java)
                     .loginKapolres(LoginRequest(username, password, selectedRole!!))
@@ -199,19 +198,19 @@ class Login : AppCompatActivity() {
                     val prefs = getSharedPreferences("session", MODE_PRIVATE).edit()
                     prefs.putString("fcmtoken", fcmToken).apply()
 
-                    if(selectedRole ===  "BPKP"){
+                    if (selectedRole === "BPKP") {
                         lifecycleScope.launch {
                             registerFcmToken(fcmToken, nrp!!)
                         }
-                    }else if(selectedRole === "PIMPINAN"){
+                    } else if (selectedRole === "PIMPINAN") {
                         lifecycleScope.launch {
                             registerFcmTokenPimpinan(fcmToken)
                         }
-                    }else if(selectedRole === "PAMATWIL"){
+                    } else if (selectedRole === "PAMATWIL") {
                         lifecycleScope.launch {
                             registerFcmTokenPamatwil(fcmToken)
                         }
-                    }else if(selectedRole === "KAPOLRES"){
+                    } else if (selectedRole === "KAPOLRES") {
                         lifecycleScope.launch {
                             registerFcmTokenKapolres(fcmToken)
                         }
@@ -250,7 +249,12 @@ class Login : AppCompatActivity() {
         try {
             Client.retrofit
                 .create(Auth::class.java)
-                .registerFcmPimpinan(Auth.TokenRegisterPimpinan(usernameET.text.toString(), fcmToken))
+                .registerFcmPimpinan(
+                    Auth.TokenRegisterPimpinan(
+                        usernameET.text.toString(),
+                        fcmToken
+                    )
+                )
 
             getSharedPreferences("session", MODE_PRIVATE).edit().apply {
                 putBoolean("isFcmRegistered", true)
@@ -272,7 +276,12 @@ class Login : AppCompatActivity() {
         try {
             Client.retrofit
                 .create(Auth::class.java)
-                .registerFcmPamatwil(Auth.TokenRegisterPimpinan(usernameET.text.toString(), fcmToken))
+                .registerFcmPamatwil(
+                    Auth.TokenRegisterPimpinan(
+                        usernameET.text.toString(),
+                        fcmToken
+                    )
+                )
 
             getSharedPreferences("session", MODE_PRIVATE).edit().apply {
                 putBoolean("isFcmRegistered", true)
@@ -294,7 +303,12 @@ class Login : AppCompatActivity() {
         try {
             Client.retrofit
                 .create(Auth::class.java)
-                .registerFcmKapolres(Auth.TokenRegisterPimpinan(usernameET.text.toString(), fcmToken))
+                .registerFcmKapolres(
+                    Auth.TokenRegisterPimpinan(
+                        usernameET.text.toString(),
+                        fcmToken
+                    )
+                )
 
             getSharedPreferences("session", MODE_PRIVATE).edit().apply {
                 putBoolean("isFcmRegistered", true)

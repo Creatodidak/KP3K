@@ -15,7 +15,7 @@ android {
         applicationId = "id.creatodidak.kp3k"
         minSdk = 30
         targetSdk = 35
-        versionCode = 10
+        versionCode = 12
         versionName = "Alpha-1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -44,9 +44,9 @@ android {
              buildConfigField("String", "AGORA_ID", "\"6141104f89c84e5f89063dffef241e71\"")
         }
         debug {
-//             buildConfigField("String", "BASE_URL", "\"http://36.93.138.110:3011/\"")
+             buildConfigField("String", "BASE_URL", "\"http://36.93.138.110:3011/\"")
             signingConfig = signingConfigs.getByName("release")
-            buildConfigField("String", "BASE_URL", "\"https://server.resldk.cloud/\"")
+//            buildConfigField("String", "BASE_URL", "\"https://server.resldk.cloud/\"")
              buildConfigField("String", "AGORA_ID", "\"6141104f89c84e5f89063dffef241e71\"")
         }
     }
@@ -151,6 +151,8 @@ dependencies {
     implementation ("com.github.yalantis:ucrop:2.2.8")
     //noinspection UseTomlInstead
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    //noinspection UseTomlInstead
+    implementation ("com.google.maps.android:android-maps-utils:2.2.3")
 
     implementation(libs.androidx.gridlayout)
     implementation(libs.androidx.lifecycle.livedata.ktx)

@@ -29,12 +29,12 @@ data class MOwnerItem(
 )
 
 data class AddOwner(
-	val gapki : String,
-	val type : String,
-	val nama_pok : String,
-	val nama : String,
-	val nik : String,
-	val alamat : String,
-	val telepon : String,
-	val desa_id : String,
+	@SerializedName("gapki") val gapki: String,
+	@SerializedName("type") val type: String,
+	@SerializedName("nama_pok") val nama_pok: String,
+	@SerializedName("nama") val nama: String,
+	@SerializedName("nik") val nik: String,
+	@SerializedName("alamat") val alamat: String,
+	@SerializedName("telepon") val telepon: String,
+	@SerializedName("desa_id") val desa_id: String
 )

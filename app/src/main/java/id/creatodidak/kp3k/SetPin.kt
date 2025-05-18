@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -32,6 +33,7 @@ class SetPin : AppCompatActivity() {
     private lateinit var fabNext: FloatingActionButton
     private lateinit var perintah: TextView
     private lateinit var lupaPin: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -129,14 +131,13 @@ class SetPin : AppCompatActivity() {
         if(sh.getBoolean("isPinSetted", false)){
             if(pin == sh.getString("pin", "")){
                 sh.edit() { putBoolean("isCurrentlyLogedIn", true) }
-
-                val i = if(sh.getString("role", "") === "BPKP"){
-                    Intent(this, DashboardOpsional::class.java)
-                }else if(sh.getString("role", "") === "PIMPINAN"){
-                    Intent(this, DashboardPimpinan::class.java)
-                }else{
-                    null
+                val role = sh.getString("role", "")
+                val i = when (role) {
+                    "BPKP" -> Intent(this, DashboardOpsional::class.java)
+                    "PIMPINAN" -> Intent(this, DashboardPimpinan::class.java)
+                    else -> null
                 }
+
                 startActivity(i)
                 finish()
             }   else{
@@ -150,11 +151,17 @@ class SetPin : AppCompatActivity() {
                     putBoolean("isCurrentlyLogedIn", true)
                     putString("pin", pin)
                 }
-                val nrp = if(intent.getStringExtra("role") === "BPKP"){
-                    sh.getString("nrp", "")
-                }else{
-                    sh.getString("username", "")
+                val roles = intent.getStringExtra("role")
+                var nrp : String? = "" ;
+
+                if(!roles.isNullOrEmpty()){
+                    if(roles === "BPKP"){
+                        nrp = sh.getString("nrp", "")
+                    }else{
+                        nrp = sh.getString("username", "")
+                    }
                 }
+
                 if(nrp !== null){
                     lifecycleScope.launch {
                         registerPin(pin, nrp)
@@ -166,19 +173,21 @@ class SetPin : AppCompatActivity() {
 
     private suspend fun registerPin(pin: String, nrp: String) {
         try {
-            if(intent.getStringExtra("role") === "BPKP"){
+            val roles = intent.getStringExtra("role")
+
+            if(roles === "BPKP"){
                 Client.retrofit
                     .create(Auth::class.java)
                     .registerPin(PINRegister(nrp, pin))
-            }else if(intent.getStringExtra("role") === "PIMPINAN"){
+            }else if(roles === "PIMPINAN"){
                 Client.retrofit
                     .create(Auth::class.java)
                     .registerPinPimpinan(Auth.PINRegisterPimpinan(nrp, pin))
-            }else if(intent.getStringExtra("role") === "PAMATWIL"){
+            }else if(roles === "PAMATWIL"){
                 Client.retrofit
                     .create(Auth::class.java)
                     .registerPinPamatwil(Auth.PINRegisterPimpinan(nrp, pin))
-            }else if(intent.getStringExtra("role") === "KAPOLRES"){
+            }else if(roles === "KAPOLRES"){
                 Client.retrofit
                     .create(Auth::class.java)
                     .registerPinKapolres(Auth.PINRegisterPimpinan(nrp, pin))
@@ -194,13 +203,22 @@ class SetPin : AppCompatActivity() {
             e.printStackTrace()
         }finally {
             Loading.hide()
-            val i = if(intent.getStringExtra("role") === "BPKP"){
-                Intent(this, DashboardOpsional::class.java)
-            }else if(intent.getStringExtra("role") === "PIMPINAN"){
-                Intent(this, DashboardPimpinan::class.java)
-            }else{
-                null
+            val roles = intent.getStringExtra("role")
+
+            val i = when (roles) {
+                "BPKP" -> Intent(this, DashboardOpsional::class.java)
+                "PIMPINAN" -> Intent(this, DashboardPimpinan::class.java)
+                else -> null
             }
+
+            if (i != null) {
+                startActivity(i)
+                finish()
+            } else {
+                Toast.makeText(this, "Role tidak dikenali: $roles", Toast.LENGTH_SHORT).show()
+                Log.e("SetPin", "Role tidak valid atau Intent null!")
+            }
+
             startActivity(i)
             finish()
         }

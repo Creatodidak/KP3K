@@ -78,9 +78,9 @@ data class OwnerItem(
 )
 
 data class newLahan(
-	val owner_id : String,
-	val type: String,
-	val luas : String,
-	val latitude : String,
-	val longitude : String,
+	@SerializedName("owner_id") val owner_id: String,
+	@SerializedName("type") val type: String,
+	@SerializedName("luas") val luas: String,
+	@SerializedName("latitude") val latitude: String,
+	@SerializedName("longitude") val longitude: String
 )

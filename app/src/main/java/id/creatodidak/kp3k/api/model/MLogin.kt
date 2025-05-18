@@ -95,17 +95,19 @@ data class Polres(
 	val nama: String? = null
 )
 
+
 data class LoginRequest(
-	val username: String,
-	val password: String,
-	val type: String
+	@SerializedName("username") val username: String,
+	@SerializedName("password") val password: String,
+	@SerializedName("type") val type: String
 )
 
 data class TokenRegister(
-	val nrp: String,
-	val token: String,
+	@SerializedName("nrp") val nrp: String,
+	@SerializedName("token") val token: String
 )
+
 data class PINRegister(
-	val nrp: String,
-	val pin: String,
+	@SerializedName("nrp") val nrp: String,
+	@SerializedName("pin") val pin: String
 )

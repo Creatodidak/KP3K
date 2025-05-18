@@ -1,5 +1,6 @@
 package id.creatodidak.kp3k.api
 
+import com.google.gson.annotations.SerializedName
 import id.creatodidak.kp3k.api.model.AddOwner
 import id.creatodidak.kp3k.api.model.BasicResponse
 import id.creatodidak.kp3k.api.model.MBasicData
@@ -169,9 +170,9 @@ interface Data {
     suspend fun deleteLahan(@Path("kode") kode : String): Response<ResponseBody>
 
     data class LocationRequest(
-        val nrp: String,
-        val lat: String,
-        val long: String
+        @SerializedName("nrp") val nrp: String,
+        @SerializedName("lat") val lat: String,
+        @SerializedName("long") val long: String
     )
 
     @POST("/android/tracking")

@@ -1,5 +1,6 @@
 package id.creatodidak.kp3k.api
 
+import com.google.gson.annotations.SerializedName
 import id.creatodidak.kp3k.api.model.LoginKapolres
 import id.creatodidak.kp3k.api.model.LoginPamatwil
 import id.creatodidak.kp3k.api.model.LoginPimpinan
@@ -30,8 +31,8 @@ interface Auth {
     suspend fun registerFcm(@Body request: TokenRegister): MLogin
 
     data class TokenRegisterPimpinan(
-        val username: String,
-        val token: String,
+        @SerializedName("username") val username: String,
+        @SerializedName("token") val token: String,
     )
     @POST("/auth/registerfcmpimpinan")
     suspend fun registerFcmPimpinan(@Body request: TokenRegisterPimpinan): Response<ResponseBody>
@@ -43,8 +44,8 @@ interface Auth {
     suspend fun registerPin(@Body request: PINRegister): MLogin
 
     data class PINRegisterPimpinan(
-        val username: String,
-        val pin: String,
+        @SerializedName("username") val username: String,
+        @SerializedName("pin") val pin: String,
     )
 
     @POST("/auth/registerpinpimpinan")
