@@ -49,6 +49,13 @@ class DataPerkembanganAdapter(
         b.tvSeranganHama.text = item.hama.uppercase()
         b.tvKeteranganHama.text = item.keteranganhama.uppercase()
         b.tvKeteranganLainnya.text = item.keterangan
+        b.tvPh.text = item.ph
+        b.tvPupuk.text = item.pupuk.uppercase()
+        b.tvPestisida.text = item.pestisida.uppercase()
+        b.tvKondisiAir.text = item.kondisiair.uppercase()
+        b.tvGangguanAlam.text = item.keterangangangguanalam.uppercase()
+        b.tvGangguanLainnya.text = item.keterangangangguanlainnya.uppercase()
+
         val fileUrl = "${BuildConfig.BASE_URL}file/"
         if(!item.foto1.isNullOrEmpty()){
             Glide.with(b.root.context)
@@ -78,7 +85,7 @@ class DataPerkembanganAdapter(
                 .into(b.ivFoto4)
         }
 
-        when (item.status.uppercase()) {
+        when (item.status?.uppercase()) {
             "UNVERIFIED" -> {
                 b.tvStatusPerkembangan.setTextColor(ContextCompat.getColor(b.root.context, android.R.color.holo_blue_dark))
                 b.tvStatusPerkembangan.text = item.status

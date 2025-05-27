@@ -41,7 +41,7 @@ interface Auth {
     @POST("/auth/registerfcmkapolres")
     suspend fun registerFcmKapolres(@Body request: TokenRegisterPimpinan): Response<ResponseBody>
     @POST("/auth/registerpin")
-    suspend fun registerPin(@Body request: PINRegister): MLogin
+    suspend fun registerPin(@Body request: PINRegister): Response<ResponseBody>
 
     data class PINRegisterPimpinan(
         @SerializedName("username") val username: String,

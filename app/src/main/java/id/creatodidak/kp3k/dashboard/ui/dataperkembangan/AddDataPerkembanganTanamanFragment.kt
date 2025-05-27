@@ -14,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -67,9 +66,13 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
         val root: View = binding.root
         val listCurahHujan = listOf("PILIH", "RENDAH", "SEDANG", "TINGGI")
         val listSeranganHama = listOf("PILIH", "TANAMAN TERSERANG HAMA", "TANAMAN TIDAK TERSERANG HAMA")
+        val listGangguan = listOf("PILIH", "ADA", "TIDAK ADA")
 
         binding.spCurahHujan.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listCurahHujan)
         binding.spHama.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listSeranganHama)
+        binding.spGangguanAlam.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listGangguan)
+        binding.spGangguanLainnya.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listGangguan)
+
         binding.spHama.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -88,6 +91,62 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
 
                     2 -> {
                         binding.lyKeteranganHama.visibility = View.GONE
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+
+        binding.spGangguanAlam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when(position) {
+                    0 -> {
+                        binding.lyKeteranganGangguanAlam.visibility = View.GONE
+                    }
+
+                    1 -> {
+                        binding.lyKeteranganGangguanAlam.visibility = View.VISIBLE
+                    }
+
+                    2 -> {
+                        binding.lyKeteranganGangguanAlam.visibility = View.GONE
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+
+        binding.spGangguanLainnya.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when(position) {
+                    0 -> {
+                        binding.lyKeteranganGangguanLainnya.visibility = View.GONE
+                    }
+
+                    1 -> {
+                        binding.lyKeteranganGangguanLainnya.visibility = View.VISIBLE
+                    }
+
+                    2 -> {
+                        binding.lyKeteranganGangguanLainnya.visibility = View.GONE
                     }
                 }
             }
@@ -277,6 +336,42 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
             binding.etKeteranganHama.error = "Keterangan Hama harus diisi"
             return false
         }
+        if(binding.spGangguanAlam.selectedItemPosition == 0){
+            binding.errGangguanAlam.visibility = View.VISIBLE
+            return false
+        }
+        if(binding.spGangguanAlam.selectedItemPosition == 0 && binding.etKeteranganGangguanAlam.text.toString().isEmpty()){
+            binding.etKeteranganGangguanAlam.error = "Keterangan gangguan alam harus diisi"
+            return false
+        }
+        if(binding.spGangguanLainnya.selectedItemPosition == 0){
+            binding.errGangguanLainnya.visibility = View.VISIBLE
+            return false
+        }
+        if(binding.spGangguanLainnya.selectedItemPosition == 0 && binding.etKeteranganGangguanLainnya.text.toString().isEmpty()){
+            binding.etKeteranganGangguanLainnya.error = "Keterangan gangguan lainnya harus diisi"
+            return false
+        }
+        if(binding.etPhTanah.text.toString().isEmpty()){
+            binding.etPhTanah.error = "pH Tanah harus diisi"
+            return false
+        }
+        if(binding.etKondisiAir.text.toString().isEmpty()){
+            binding.etKondisiAir.error = "Kondisi Air harus diisi"
+            return false
+        }
+        if(binding.etPupuk.text.toString().isEmpty()){
+            binding.etPupuk.error = "Pupuk harus diisi"
+            return false
+        }
+        if(binding.etPestisida.text.toString().isEmpty()){
+            binding.etPestisida.error = "Pestisida harus diisi"
+            return false
+        }
+        if(binding.etKeteranganTambahan.text.toString().isEmpty()){
+            binding.etKeteranganTambahan.error = "Keterangan tambahan harus diisi"
+            return false
+        }
         if(binding.spCurahHujan.selectedItemPosition == 0){
             binding.errCurahHujan.visibility = View.VISIBLE
         }
@@ -317,6 +412,18 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
         val keterangan: RequestBody = createPartFromString(
             binding.etKeteranganTambahan.text.toString().takeIf { it.isNotBlank() } ?: "-"
         )
+        var phTanah: RequestBody = createPartFromString(binding.etPhTanah.text.toString())
+        var kondisiAir: RequestBody = createPartFromString(binding.etKondisiAir.text.toString())
+        var pupuk: RequestBody = createPartFromString(binding.etPupuk.text.toString())
+        var pestisida: RequestBody = createPartFromString(binding.etPestisida.text.toString())
+        val gangguanAlam: RequestBody = createPartFromString(binding.spGangguanAlam.selectedItem.toString())
+        val gangguanLainnya: RequestBody = createPartFromString(binding.spGangguanLainnya.selectedItem.toString())
+        val keteranganGangguanAlam: RequestBody = createPartFromString(
+            binding.etKeteranganGangguanAlam.text.toString().takeIf { it.isNotBlank() } ?: "-"
+        )
+        val keteranganGangguanLainnya: RequestBody = createPartFromString(
+            binding.etKeteranganGangguanLainnya.text.toString().takeIf { it.isNotBlank() } ?: "-"
+        )
 
         foto1Part = if (isDok1camera) {
             prepareFilePart("foto1", compressCamera(File(pathDok1)))
@@ -342,13 +449,13 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
             prepareFilePart("foto4", saveBitmapToFile(getBitmapFromView(binding.dok4)))
         }
 
-        if(foto1Part != null && foto2Part != null && foto3Part != null && foto4Part != null && tinggiTanaman != null && kondisitanah != null && warnaDaun != null && curahhujan != null && hama != null && keteranganHama != null && keterangan != null && tanaman_id != null && kodelahan != null){
+        if(foto1Part != null && foto2Part != null && foto3Part != null && foto4Part != null && tinggiTanaman != null && kondisitanah != null && warnaDaun != null && curahhujan != null && hama != null && keteranganHama != null && keterangan != null && tanaman_id != null && kodelahan != null && phTanah != null && kondisiAir != null && pupuk != null && pestisida != null && gangguanAlam != null && gangguanLainnya != null && keteranganGangguanAlam != null && keteranganGangguanLainnya != null){
             AlertDialog.Builder(requireContext())
                 .setTitle("Konfirmasi")
                 .setMessage("Apakah Anda yakin ingin mengirim data?")
                 .setPositiveButton("Ya") { _, _ ->
                     lifecycleScope.launch {
-                        sendDataKembangTanaman(foto1Part, foto2Part, foto3Part, foto4Part, tinggiTanaman, kondisitanah, warnaDaun, curahhujan, hama, keteranganHama, keterangan, tanaman_id, kodelahan)
+                        sendDataKembangTanaman(foto1Part, foto2Part, foto3Part, foto4Part, tinggiTanaman, kondisitanah, warnaDaun, curahhujan, hama, keteranganHama, keterangan, tanaman_id, kodelahan, phTanah, kondisiAir, pupuk, pestisida, gangguanAlam, gangguanLainnya, keteranganGangguanAlam, keteranganGangguanLainnya)
                     }
                 }
                 .setNegativeButton("Tidak", null)
@@ -370,7 +477,15 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
         keteranganHama: RequestBody,
         keterangan: RequestBody,
         tanaman_id: RequestBody,
-        kodelahan: RequestBody
+        kodelahan: RequestBody,
+        phTanah: RequestBody,
+        kondisiAir: RequestBody,
+        pupuk: RequestBody,
+        pestisida: RequestBody,
+        gangguanAlam: RequestBody,
+        gangguanLainnya: RequestBody,
+        keteranganGangguanAlam: RequestBody,
+        keteranganGangguanLainnya: RequestBody
     ) {
         try {
             Loading.show(requireContext())
@@ -384,6 +499,14 @@ class AddDataPerkembanganTanamanFragment : Fragment() {
                 hama,
                 keteranganHama,
                 keterangan,
+                phTanah,
+                kondisiAir,
+                pupuk,
+                pestisida,
+                gangguanAlam,
+                gangguanLainnya,
+                keteranganGangguanAlam,
+                keteranganGangguanLainnya,
                 foto1Part,
                 foto2Part,
                 foto3Part,

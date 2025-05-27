@@ -50,6 +50,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 "reminder" -> {
                     handleReminder(remoteMessage)
                 }
+                "atensi" -> {
+                    handleAtensi(remoteMessage)
+                }
             }
             Log.i("onMessageReceived: ", data["type"].toString())
         }
@@ -74,10 +77,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         val notificationManager = getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(channel)
+        val caller = remoteMessage.data["caller"] ?: ""
 
         val answerIntent = Intent(this, IncomingCallActivity::class.java).apply {
             putExtra("channel", remoteMessage.data["channel"])
             putExtra("token", remoteMessage.data["token"])
+            putExtra("caller", caller)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
 
@@ -99,11 +104,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             declineIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-
         val builder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.logo)
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo))
-            .setContentTitle("Panggilan Masuk")
+            .setContentTitle(caller)
             .setContentText("Klik untuk menjawab panggilan")
             .addAction(R.drawable.baseline_cancel_24, "Tolak", declinePendingIntent)
             .addAction(R.drawable.baseline_call_24, "Jawab", answerPendingIntent)
@@ -186,6 +190,56 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     @RequiresPermission(Manifest.permission.VIBRATE)
+    private fun handleAtensi(remoteMessage: RemoteMessage) {
+        val notificationId = System.currentTimeMillis().toInt()
+        val channelId = "ATENSI_CHANNEL_V21"
+        val channelName = "Atensi Pimpinan"
+
+        val soundUri =
+            (ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.notifupdate).toUri()
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply {
+            setSound(soundUri, AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build())
+            enableVibration(true)
+            vibrationPattern = longArrayOf(0, 250, 250, 250, 250)
+        }
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
+        val intent = Intent(this, DashboardOpsional::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val msg = remoteMessage.data["msg"] ?: ""
+
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.logo)
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo))
+            .setContentTitle(msg)
+            .setContentText("Klik untuk melihat detail")
+            .setStyle(NotificationCompat.BigTextStyle().bigText("Klik untuk melihat detail"))
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setContentIntent(pendingIntent)
+            .setSound(soundUri)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setAutoCancel(false)
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
+
+        NotificationManagerCompat.from(this).notify(notificationId, builder.build())
+    }
+
+    @RequiresPermission(Manifest.permission.VIBRATE)
     private fun handleReminder(remoteMessage: RemoteMessage) {
         val notificationId = System.currentTimeMillis().toInt()
         val channelId = "REMINDER_CHANNEL"
@@ -252,7 +306,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         val notificationManager = getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(channel)
-        val intent = Intent(this, DashboardOpsional::class.java).apply {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = "https://play.google.com/store/apps/details?id=id.creatodidak.kp3k".toUri()
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
@@ -267,8 +322,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setSmallIcon(R.drawable.logo)
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo))
             .setContentTitle("Update Terbaru KP3K")
-            .setContentText(remoteMessage.data["msg"])
-            .setStyle(NotificationCompat.BigTextStyle().bigText(remoteMessage.data["msg"]))
+            .setContentText("Klik untuk mengunduh update")
+            .setStyle(NotificationCompat.BigTextStyle().bigText("Klik untuk mengunduh update"))
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)

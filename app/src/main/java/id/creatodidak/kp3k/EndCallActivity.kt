@@ -17,8 +17,6 @@ class EndCallActivity : AppCompatActivity() {
         val btnBackHome = findViewById<FloatingActionButton>(R.id.btnBackHome)
 
         btnBackHome.setOnClickListener {
-            val i = Intent(this@EndCallActivity, DashboardOpsional::class.java)
-            startActivity(i)
             finish()
         }
     }

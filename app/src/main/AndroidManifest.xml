@@ -43,6 +43,24 @@
         android:windowSoftInputMode="adjustResize"
         tools:targetApi="31">
         <activity
+            android:name=".pimpinan.MonitoringPimpinan"
+            android:exported="false" />
+        <activity
+            android:name=".pimpinan.AddAtensi"
+            android:exported="false" />
+        <activity
+            android:name=".pimpinan.PanggilanVideo"
+            android:exported="false" />
+        <activity
+            android:name=".pamatwil.DashboardPamatwil"
+            android:exported="false" />
+        <activity
+            android:name=".pimpinan.EndCallPimpinan"
+            android:exported="false" />
+        <activity
+            android:name=".pimpinan.PimpinanVideoCall"
+            android:exported="false" />
+        <activity
             android:name=".pimpinan.PetaLahanPimpinan"
             android:exported="false" />
         <activity
@@ -79,18 +97,6 @@
             android:exported="false"
             android:label="@string/title_activity_dashboard_opsional"
             android:theme="@style/Theme.KP3K.NoActionBar" />
-        <activity
-            android:name=".RegisterPetani"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterPolri"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".Register"
-            android:exported="false"
-            android:fitsSystemWindows="true"
-            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Login"
             android:exported="false"

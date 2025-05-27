@@ -10,20 +10,47 @@ data class MDataPerkembangan(
 
 data class MDataPerkembanganItem(
 
+	@field:SerializedName("pupuk")
+	val pupuk: String,
+
 	@field:SerializedName("foto4")
 	val foto4: String,
 
 	@field:SerializedName("keterangan")
 	val keterangan: String,
 
+	@field:SerializedName("kondisiair")
+	val kondisiair: String,
+
 	@field:SerializedName("keteranganhama")
 	val keteranganhama: String,
+
+	@field:SerializedName("pestisida")
+	val pestisida: String,
+
+	@field:SerializedName("keterangangangguanlainnya")
+	val keterangangangguanlainnya: String,
+
+	@field:SerializedName("gangguanalam")
+	val gangguanalam: String,
 
 	@field:SerializedName("tinggitanaman")
 	val tinggitanaman: String,
 
+	@field:SerializedName("alasan")
+	val alasan: String,
+
+	@field:SerializedName("keterangangangguanalam")
+	val keterangangangguanalam: String,
+
 	@field:SerializedName("warnadaun")
 	val warnadaun: String,
+
+	@field:SerializedName("gangguanlainnya")
+	val gangguanlainnya: String,
+
+	@field:SerializedName("ph")
+	val ph: String,
 
 	@field:SerializedName("id")
 	val id: Int,
@@ -53,10 +80,5 @@ data class MDataPerkembanganItem(
 	val foto2: String,
 
 	@field:SerializedName("status")
-	val status: String,
-
-	@field:SerializedName("alasan")
-	val alasan: String
-
-
+	val status: String
 )

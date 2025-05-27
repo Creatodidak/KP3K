@@ -69,6 +69,15 @@ class RevisiDataPerkembanganFragment : Fragment() {
     private var oldHama = ""
     private var oldKeteranganHama = ""
     private var oldKeterangan = ""
+    private var oldPh = ""
+    private var oldKondisiAir = ""
+    private var oldPupuk = ""
+    private var oldPestisida = ""
+    private var oldGangguanAlam = ""
+    private var oldKeteranganGangguanAlam = ""
+    private var oldGangguanLainnya = ""
+    private var oldKeteranganGangguanLainnya = ""
+
     val fileUrl = "${BuildConfig.BASE_URL}file/"
     val args : RevisiDataPerkembanganFragmentArgs by navArgs()
 
@@ -235,6 +244,7 @@ class RevisiDataPerkembanganFragment : Fragment() {
         }
         val listCurahHujan = listOf("PILIH", "RENDAH", "SEDANG", "TINGGI")
         val listSeranganHama = listOf("PILIH", "TANAMAN TERSERANG HAMA", "TANAMAN TIDAK TERSERANG HAMA")
+        val listGangguan = listOf("PILIH", "ADA", "TIDAK ADA")
 
         binding.spCurahHujan.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listCurahHujan)
         binding.spHama.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listSeranganHama)
@@ -267,6 +277,60 @@ class RevisiDataPerkembanganFragment : Fragment() {
             }
 
         }
+        binding.spGangguanAlam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when(position) {
+                    0 -> {
+                        binding.lyKeteranganGangguanAlam.visibility = View.GONE
+                    }
+
+                    1 -> {
+                        binding.lyKeteranganGangguanAlam.visibility = View.VISIBLE
+                    }
+
+                    2 -> {
+                        binding.lyKeteranganGangguanAlam.visibility = View.GONE
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+        binding.spGangguanLainnya.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when(position) {
+                    0 -> {
+                        binding.lyKeteranganGangguanLainnya.visibility = View.GONE
+                    }
+
+                    1 -> {
+                        binding.lyKeteranganGangguanLainnya.visibility = View.VISIBLE
+                    }
+
+                    2 -> {
+                        binding.lyKeteranganGangguanLainnya.visibility = View.GONE
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
         lifecycleScope.launch {
             loadExistData(args.id)
         }
@@ -277,7 +341,7 @@ class RevisiDataPerkembanganFragment : Fragment() {
         Loading.show(requireContext())
         try {
             val result = Client.retrofit.create(Data::class.java).getDataPerkembaganById(id)
-            if(result !== null){
+            if(result !== null ){
 
                 oldTinggiTanaman = result.tinggitanaman
                 oldKondisiTanah = result.kondisitanah
@@ -286,6 +350,15 @@ class RevisiDataPerkembanganFragment : Fragment() {
                 oldHama = result.hama
                 oldKeteranganHama = result.keteranganhama
                 oldKeterangan = result.keterangan
+                oldPh = result.ph
+                oldKondisiAir = result.kondisiair
+                oldPupuk = result.pupuk
+                oldPestisida = result.pestisida
+                oldGangguanAlam = result.gangguanalam
+                oldKeteranganGangguanAlam = result.keterangangangguanalam
+                oldGangguanLainnya = result.gangguanlainnya
+                oldKeteranganGangguanLainnya = result.keterangangangguanlainnya
+
                 binding.etTinggiTanaman.setText(result.tinggitanaman)
                 binding.etKondisiTanah.setText(result.kondisitanah)
                 binding.etWarnaDaun.setText(result.warnadaun)
@@ -306,6 +379,25 @@ class RevisiDataPerkembanganFragment : Fragment() {
                     binding.etKeteranganHama.visibility = View.GONE
                 }
                 binding.etKeteranganTambahan.setText(result.keterangan)
+
+                if(result.gangguanalam == "ADA"){
+                    binding.spGangguanAlam.setSelection(1)
+                    binding.etKeteranganGangguanAlam.setText(result.keterangangangguanalam)
+                    binding.etKeteranganGangguanLainnya.setText(result.keterangangangguanlainnya)
+                }else if(result.gangguanalam == "TIDAK ADA"){
+                    binding.spGangguanAlam.setSelection(2)
+                }
+                if(result.gangguanlainnya == "ADA"){
+                    binding.spGangguanLainnya.setSelection(1)
+                    binding.etKeteranganGangguanLainnya.setText(result.keterangangangguanlainnya)
+                    binding.etKeteranganGangguanAlam.setText(result.keterangangangguanalam)
+                }else if(result.gangguanlainnya == "TIDAK ADA"){
+                    binding.spGangguanLainnya.setSelection(2)
+                }
+                binding.etPhTanah.setText(result.ph)
+                binding.etKondisiAir.setText(result.kondisiair)
+                binding.etPupuk.setText(result.pupuk)
+                binding.etPestisida.setText(result.pestisida)
 
                 Glide.with(requireContext())
                     .load(fileUrl+url(result.foto1.toString()))
@@ -366,6 +458,14 @@ class RevisiDataPerkembanganFragment : Fragment() {
         var hama: RequestBody? = null
         var keteranganhama: RequestBody? = null
         var keterangan: RequestBody? = null
+        var phTanah: RequestBody ? = null
+        var kondisiAir: RequestBody ? = null
+        var pupuk: RequestBody ? = null
+        var pestisida: RequestBody ? = null
+        var gangguanAlam: RequestBody ? = null
+        var gangguanLainnya: RequestBody ? = null
+        var keteranganGangguanAlam: RequestBody ? = null
+        var keteranganGangguanLainnya: RequestBody ? = null
         
         if (isDok1Changed) {
             foto1Part = if (isDok1camera) {
@@ -425,9 +525,41 @@ class RevisiDataPerkembanganFragment : Fragment() {
                 createPartFromString(binding.etKeteranganTambahan.text.toString())
             }
         }
+        if(binding.etPhTanah.text.toString() != oldPh){
+            phTanah = createPartFromString(binding.etPhTanah.text.toString())
+        }
+        if(binding.etKondisiAir.text.toString() != oldKondisiAir){
+            kondisiAir = createPartFromString(binding.etKondisiAir.text.toString())
+        }
+        if(binding.etPupuk.text.toString() != oldPupuk){
+            pupuk = createPartFromString(binding.etPupuk.text.toString())
+        }
+        if(binding.etPestisida.text.toString() != oldPestisida){
+            pestisida = createPartFromString(binding.etPestisida.text.toString())
+        }
+        if(binding.spGangguanAlam.selectedItem.toString() != oldGangguanAlam){
+            gangguanAlam = createPartFromString(binding.spGangguanAlam.selectedItem.toString())
+        }
+        if(binding.spGangguanLainnya.selectedItem.toString() != oldGangguanLainnya){
+            gangguanLainnya = createPartFromString(binding.spGangguanLainnya.selectedItem.toString())
+        }
+        if(binding.etKeteranganGangguanAlam.text.toString() != oldKeteranganGangguanAlam){
+            keteranganGangguanAlam = if(binding.etKeteranganGangguanAlam.text.toString().isEmpty()){
+                createPartFromString("-")
+            }else{
+                createPartFromString(binding.etKeteranganGangguanAlam.text.toString())
+            }
+        }
+        if(binding.etKeteranganGangguanLainnya.text.toString() != oldKeteranganGangguanLainnya){
+            keteranganGangguanLainnya = if(binding.etKeteranganGangguanLainnya.text.toString().isEmpty()){
+                createPartFromString("-")
+            }else{
+                createPartFromString(binding.etKeteranganGangguanLainnya.text.toString())
+            }
+        }
 
 
-        if(foto1Part == null && foto2Part == null && foto3Part == null && foto4Part == null && tinggitanaman == null && kondisitanah == null && warnadaun == null && curahhujan == null && hama == null && keteranganhama == null && keterangan == null){
+        if(foto1Part == null && foto2Part == null && foto3Part == null && foto4Part == null && tinggitanaman == null && kondisitanah == null && warnadaun == null && curahhujan == null && hama == null && keteranganhama == null && keterangan == null && phTanah != null && kondisiAir != null && pupuk != null && pestisida != null && gangguanAlam != null && gangguanLainnya != null && keteranganGangguanAlam != null && keteranganGangguanLainnya != null){
             AlertDialog.Builder(requireContext())
                 .setTitle("Konfirmasi")
                 .setMessage("Tidak ada perubahan data!")
@@ -451,6 +583,14 @@ class RevisiDataPerkembanganFragment : Fragment() {
                             hama,
                             keteranganhama,
                             keterangan,
+                            phTanah,
+                            kondisiAir,
+                            pupuk,
+                            pestisida,
+                            gangguanAlam,
+                            gangguanLainnya,
+                            keteranganGangguanAlam,
+                            keteranganGangguanLainnya,
                             foto1Part,
                             foto2Part,
                             foto3Part,
@@ -472,6 +612,14 @@ class RevisiDataPerkembanganFragment : Fragment() {
         hama: RequestBody?,
         keteranganhama: RequestBody?,
         keterangan: RequestBody?,
+        phTanah: RequestBody?,
+        kondisiAir: RequestBody?,
+        pupuk: RequestBody?,
+        pestisida: RequestBody?,
+        gangguanAlam: RequestBody?,
+        gangguanLainnya: RequestBody?,
+        keteranganGangguanAlam: RequestBody?,
+        keteranganGangguanLainnya: RequestBody?,
         foto1Part: MultipartBody.Part?,
         foto2Part: MultipartBody.Part?,
         foto3Part: MultipartBody.Part?,
@@ -488,6 +636,14 @@ class RevisiDataPerkembanganFragment : Fragment() {
                 hama,
                 keteranganhama,
                 keterangan,
+                phTanah,
+                kondisiAir,
+                pupuk,
+                pestisida,
+                gangguanAlam,
+                gangguanLainnya,
+                keteranganGangguanAlam,
+                keteranganGangguanLainnya,
                 foto1Part,
                 foto2Part,
                 foto3Part,
@@ -562,6 +718,42 @@ class RevisiDataPerkembanganFragment : Fragment() {
         }
         if(binding.imageDok4.isGone){
             binding.errorDok4.visibility = View.VISIBLE
+            return false
+        }
+        if(binding.spGangguanAlam.selectedItemPosition == 0){
+            binding.errGangguanAlam.visibility = View.VISIBLE
+            return false
+        }
+        if(binding.spGangguanAlam.selectedItemPosition == 0 && binding.etKeteranganGangguanAlam.text.toString().isEmpty()){
+            binding.etKeteranganGangguanAlam.error = "Keterangan gangguan alam harus diisi"
+            return false
+        }
+        if(binding.spGangguanLainnya.selectedItemPosition == 0){
+            binding.errGangguanLainnya.visibility = View.VISIBLE
+            return false
+        }
+        if(binding.spGangguanLainnya.selectedItemPosition == 0 && binding.etKeteranganGangguanLainnya.text.toString().isEmpty()){
+            binding.etKeteranganGangguanLainnya.error = "Keterangan gangguan lainnya harus diisi"
+            return false
+        }
+        if(binding.etPhTanah.text.toString().isEmpty()){
+            binding.etPhTanah.error = "pH Tanah harus diisi"
+            return false
+        }
+        if(binding.etKondisiAir.text.toString().isEmpty()){
+            binding.etKondisiAir.error = "Kondisi Air harus diisi"
+            return false
+        }
+        if(binding.etPupuk.text.toString().isEmpty()){
+            binding.etPupuk.error = "Pupuk harus diisi"
+            return false
+        }
+        if(binding.etPestisida.text.toString().isEmpty()){
+            binding.etPestisida.error = "Pestisida harus diisi"
+            return false
+        }
+        if(binding.etKeteranganTambahan.text.toString().isEmpty()){
+            binding.etKeteranganTambahan.error = "Keterangan tambahan harus diisi"
             return false
         }
         return true

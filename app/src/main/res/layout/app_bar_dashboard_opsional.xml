@@ -9,6 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#3a8d4c"
         android:theme="@style/Theme.KP3K.AppBarOverlay">
 
         <LinearLayout
@@ -22,7 +23,7 @@
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_weight="1"
-                android:background="?attr/colorPrimary"
+                android:background="#3a8d4c"
                 app:popupTheme="@style/Theme.KP3K.PopupOverlay" />
 
             <ImageView

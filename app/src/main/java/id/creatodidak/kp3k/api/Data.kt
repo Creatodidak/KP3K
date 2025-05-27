@@ -3,14 +3,15 @@ package id.creatodidak.kp3k.api
 import com.google.gson.annotations.SerializedName
 import id.creatodidak.kp3k.api.model.AddOwner
 import id.creatodidak.kp3k.api.model.BasicResponse
-import id.creatodidak.kp3k.api.model.MBasicData
 import id.creatodidak.kp3k.api.model.MDataPerkembanganItem
 import id.creatodidak.kp3k.api.model.MLahanMitra
 import id.creatodidak.kp3k.api.model.MMyLahan
 import id.creatodidak.kp3k.api.model.MNewOwnerItem
 import id.creatodidak.kp3k.api.model.MRealisasiItem
 import id.creatodidak.kp3k.api.model.MRealisasiPanen
-import id.creatodidak.kp3k.api.model.MRealisasiTanam
+import id.creatodidak.kp3k.api.model.RAtensiItem
+import id.creatodidak.kp3k.api.model.RMyLahanTugasItem
+import id.creatodidak.kp3k.api.model.getAtensiVal
 import id.creatodidak.kp3k.api.model.newLahan
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -26,8 +27,8 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface Data {
-    @GET("/android/basicdata")
-    suspend fun getBasicData(): MBasicData
+    @GET("/android/lahan/mine/{kode}")
+    suspend fun getMyLahanTUgas(@Path("kode") kode: String): List<RMyLahanTugasItem>
 
     @GET("/android/lahantugas/{nrp}")
     suspend fun getMyLahan(@Path("nrp") nrp: String): MMyLahan
@@ -89,10 +90,18 @@ interface Data {
         @Part("tinggitanaman") tinggitanaman: RequestBody,
         @Part("kondisitanah") kondisitanah: RequestBody,
         @Part("warnadaun") warnadaun: RequestBody,
-        @Part("curahhujan") curahhujan : RequestBody,
-        @Part("hama") hama : RequestBody,
-        @Part("keteranganhama") keteranganhama : RequestBody,
-        @Part("keterangan") keterangan : RequestBody,
+        @Part("curahhujan") curahhujan: RequestBody,
+        @Part("hama") hama: RequestBody,
+        @Part("keteranganhama") keteranganhama: RequestBody,
+        @Part("keterangan") keterangan: RequestBody,
+        @Part("ph") ph: RequestBody,
+        @Part("kondisiair") kondisiAir: RequestBody,
+        @Part("pupuk") pupuk: RequestBody,
+        @Part("pestisida") pestisida: RequestBody,
+        @Part("gangguanalam") gangguanAlam: RequestBody,
+        @Part("gangguanlainnya") gangguanLainnya: RequestBody,
+        @Part("keterangangangguanalam") keteranganGangguanAlam: RequestBody,
+        @Part("keterangangangguanlainnya") keteranganGangguanLainnya: RequestBody,
         @Part foto1: MultipartBody.Part,
         @Part foto2: MultipartBody.Part,
         @Part foto3: MultipartBody.Part,
@@ -111,6 +120,14 @@ interface Data {
         @Part("hama") hama : RequestBody? = null,
         @Part("keteranganhama") keteranganhama : RequestBody? = null,
         @Part("keterangan") keterangan : RequestBody? = null,
+        @Part("ph") ph: RequestBody? = null,
+        @Part("kondisiair") kondisiAir: RequestBody? = null,
+        @Part("pupuk") pupuk: RequestBody? = null,
+        @Part("pestisida") pestisida: RequestBody? = null,
+        @Part("gangguanalam") gangguanAlam: RequestBody? = null,
+        @Part("gangguanlainnya") gangguanLainnya: RequestBody? = null,
+        @Part("keterangangangguanalam") keteranganGangguanAlam: RequestBody? = null,
+        @Part("keterangangangguanlainnya") keteranganGangguanLainnya: RequestBody? = null,
         @Part foto1: MultipartBody.Part? = null,
         @Part foto2: MultipartBody.Part? = null,
         @Part foto3: MultipartBody.Part? = null,
@@ -179,6 +196,11 @@ interface Data {
     suspend fun sendLocation(
         @Body request: LocationRequest
     ): Response<ResponseBody>
+
+    @POST("/android/atensi")
+    suspend fun getAtensi(
+        @Body request: getAtensiVal
+    ): List<RAtensiItem>
 
 
 }

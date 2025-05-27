@@ -72,8 +72,17 @@ class VideoCallActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_call)
         token = intent.getStringExtra("token").toString()
+        val caller = intent.getStringExtra("caller")
+        val tvCaller = findViewById<TextView>(R.id.tvNoHp)
+        tvCaller.text = caller
         val sh = getSharedPreferences("session", MODE_PRIVATE)
-        channelName = sh.getString("nohp", "").toString()
+        val role = sh.getString("role", "")
+
+        channelName = if(role.equals("BPKP")){
+            sh.getString("nohp", "").toString()
+        }else{
+            sh.getString("username", "").toString()
+        }
         CallSoundManager.stopSound()
         if (checkPermissions()) {
 //            showToast("Permission Granted")

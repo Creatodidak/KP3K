@@ -3,6 +3,8 @@ package id.creatodidak.kp3k.pimpinan
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -30,7 +32,6 @@ import id.creatodidak.kp3k.api.model.SocketLahanfixItems
 import id.creatodidak.kp3k.helper.Loading
 import id.creatodidak.kp3k.helper.LocationHelperOld
 import kotlinx.coroutines.launch
-import java.lang.Float.parseFloat
 
 class PetaLahanPimpinan : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var googleMap: GoogleMap
@@ -64,7 +65,7 @@ class PetaLahanPimpinan : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var tvAlamat: TextView
     private lateinit var tvLuas: TextView
     private lateinit var ivClose: ImageView
-
+    private lateinit var sh: SharedPreferences
     private val locationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -110,7 +111,10 @@ class PetaLahanPimpinan : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Theme_KP3K_PIMPINAN)
+        sh = getSharedPreferences("session", MODE_PRIVATE)
+        val role = sh.getString("role", "")
+        val kabupaten = sh.getString("kabupaten_id", "")
+
         setContentView(R.layout.activity_peta_lahan_pimpinan)
 
         mapLahanPimpinan = findViewById(R.id.mapLahanPimpinan)
@@ -155,13 +159,77 @@ class PetaLahanPimpinan : AppCompatActivity(), OnMapReadyCallback {
         cachedPersonilIcon = resizeMapIcons(this, R.drawable.polaktif, 80, 80)
         cachedPersonilIconOffline = resizeMapIcons(this, R.drawable.polnonaktif, 80, 80)
 
-        lifecycleScope.launch { loadDataPeta() }
+        if(role.equals("PIMPINAN")){
+            lifecycleScope.launch { loadDataPeta() }
+        }else{
+            lifecycleScope.launch { loadDataPetaWilayah(kabupaten!!) }
+        }
     }
 
     private suspend fun loadDataPeta() {
         Loading.show(this)
         try {
             val res = Client.retrofit.create(DataPimpinan::class.java).getPetaData()
+            val totalLahan = res.dataLahan?.sumOf { it?.lahanfix?.size ?: 0 }
+            checkBoxAll = CheckBox(this).apply {
+                text = "SEMUA ($totalLahan)"
+                isChecked = true
+            }
+            cbKabupaten.addView(checkBoxAll)
+
+            checkBoxAll.setOnCheckedChangeListener { _, isChecked ->
+                checkBoxMap.values.forEach {
+                    it.setOnCheckedChangeListener(null)
+                    it.isChecked = isChecked
+                }
+                updateMapMarkers()
+                checkBoxMap.values.forEach { cb ->
+                    cb.setOnCheckedChangeListener { _, _ -> handleKabupatenCheckboxChange() }
+                }
+            }
+
+            res.dataLahan?.forEach { x ->
+                val namaKab = x?.nama ?: return@forEach
+                val jumlahLahan = x.lahanfix?.size ?: 0
+
+                val cb = CheckBox(this).apply {
+                    text = "$namaKab ($jumlahLahan)"
+                    isChecked = true
+                }
+                cbKabupaten.addView(cb)
+                checkBoxMap[namaKab] = cb
+                cb.setOnCheckedChangeListener { _, _ -> handleKabupatenCheckboxChange() }
+
+                x.lahanfix?.forEach { lahan ->
+                    val lat = lahan?.latitude?.toDoubleOrNull()
+                    val lng = lahan?.longitude?.toDoubleOrNull()
+                    if (lat != null && lng != null) {
+                        myItemList.add(UnifiedItem(LatLng(lat, lng), namaKab, "LAHAN", lahan = lahan))
+                    }
+                }
+            }
+
+            res.dataPersonil?.forEach { x ->
+                x?.personil?.forEach { personil ->
+                    val lat = personil?.tracking?.latitude?.toDoubleOrNull()
+                    val lng = personil?.tracking?.longitude?.toDoubleOrNull()
+                    if (lat != null && lng != null) {
+                        myItemList.add(UnifiedItem(LatLng(lat, lng), personil.nama ?: "Personil", "PERSONIL", personil = personil))
+                    }
+                }
+            }
+
+            updateMapMarkers()
+        } catch (e: Exception) {
+            showErrorDialog("Terjadi kesalahan: ${e.message}")
+        } finally {
+            Loading.hide()
+        }
+    }
+    private suspend fun loadDataPetaWilayah(kabupaten: String) {
+        Loading.show(this)
+        try {
+            val res = Client.retrofit.create(DataPimpinan::class.java).getPetaDataWilayah(kabupaten)
             val totalLahan = res.dataLahan?.sumOf { it?.lahanfix?.size ?: 0 }
             checkBoxAll = CheckBox(this).apply {
                 text = "SEMUA ($totalLahan)"
@@ -245,6 +313,7 @@ class PetaLahanPimpinan : AppCompatActivity(), OnMapReadyCallback {
         googleMap = map
         googleMap.mapType = GoogleMap.MAP_TYPE_HYBRID
         googleMap.uiSettings.isZoomControlsEnabled = true
+        googleMap.uiSettings.isRotateGesturesEnabled = false
 
         clusterManager = ClusterManager(this, googleMap)
         clusterManager.renderer = UnifiedRenderer(this, googleMap, clusterManager, cachedMonoIcon, cachedMultiIcon, cachedPersonilIcon, cachedPersonilIconOffline)
@@ -287,6 +356,13 @@ class PetaLahanPimpinan : AppCompatActivity(), OnMapReadyCallback {
             }else{
                 "Online"
             }
+            val sh = getSharedPreferences("session", MODE_PRIVATE)
+            val jabatan = sh.getString("jabatan", "")
+            lyVideoCall.setOnClickListener {
+                lifecycleScope.launch {
+                    callPersonil(jabatan!!, res.bpkp?.pers?.nohp!!, res.bpkp?.pers?.nama!!, res.bpkp?.pers?.pangkat!!)
+                }
+            }
             cvTopInfo.visibility = LinearLayout.VISIBLE
             cvBottomInfo.visibility = LinearLayout.VISIBLE
             Loading.hide()
@@ -315,6 +391,13 @@ class PetaLahanPimpinan : AppCompatActivity(), OnMapReadyCallback {
                 "Online"
             }
             cvBottomInfo.visibility = LinearLayout.VISIBLE
+            val sh = getSharedPreferences("session", MODE_PRIVATE)
+            val jabatan = sh.getString("jabatan", "")
+            lyVideoCall.setOnClickListener {
+                lifecycleScope.launch {
+                    callPersonil(jabatan!!, res.nohp!!, res.nama!!, res.pangkat!!)
+                }
+            }
             Loading.hide()
         }catch (e: Exception){
             Loading.hide()
@@ -324,6 +407,36 @@ class PetaLahanPimpinan : AppCompatActivity(), OnMapReadyCallback {
                 .setCancelable(false)
                 .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
                 .show()
+        }
+    }
+
+    private suspend fun callPersonil(jabatan: String, nrp: String, nama: String, pangkat: String) {
+        Loading.show(this)
+        try {
+            val res = Client.retrofit.create(DataPimpinan::class.java).callPersonil(DataPimpinan.CallPimpinan(nrp, jabatan, "BPKP"))
+            if(res.token === null){
+                Loading.hide()
+                AlertDialog.Builder(this)
+                    .setTitle("Informasi")
+                    .setMessage("Token Tidak Ditemukan")
+                    .setCancelable(false)
+                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            }else{
+                Loading.hide()
+                val i = Intent(this, PimpinanVideoCall::class.java)
+                i.putExtra("token", res.token)
+                i.putExtra("channel", nrp)
+                i.putExtra("nama", nama)
+                i.putExtra("pangkat", pangkat)
+                startActivity(i)
+            }
+        }catch (e: Exception){
+            Loading.hide()
+            AlertDialog.Builder(this)
+                .setTitle("Informasi")
+                .setMessage("Terjadi kesalahan: ${e.message}")
+                .setCancelable(false)
+                .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
         }
     }
 

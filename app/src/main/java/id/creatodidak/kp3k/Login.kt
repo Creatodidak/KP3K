@@ -121,6 +121,7 @@ class Login : AppCompatActivity() {
                     with(prefs) {
                         putString("token", response.token)
                         putString("jabatan", user.jabatan)
+                        putString("username", usernameET.text.toString())
                         putString("role", user.role)
                         putBoolean("isLoggedIn", true)
                         apply()
@@ -143,6 +144,7 @@ class Login : AppCompatActivity() {
                         putString("kabupaten", user.kabupaten)
                         putString("kabupaten_id", user.kabupatenId)
                         putString("penugasan", user.penugasan)
+                        putString("username", usernameET.text.toString())
 
                         putBoolean("isLoggedIn", true)
                         apply()
@@ -165,6 +167,7 @@ class Login : AppCompatActivity() {
                         putString("kabupaten", user.kabupaten)
                         putString("kabupaten_id", user.kabupatenId)
                         putString("penugasan", user.penugasan)
+                        putString("username", usernameET.text.toString())
 
                         putBoolean("isLoggedIn", true)
                         apply()

@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -25,6 +26,7 @@ import androidx.core.net.toUri
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import id.creatodidak.kp3k.pamatwil.DashboardPamatwil
 import id.creatodidak.kp3k.pimpinan.DashboardPimpinan
 
 class SetPin : AppCompatActivity() {
@@ -70,20 +72,27 @@ class SetPin : AppCompatActivity() {
 
         lupaPin.paintFlags = lupaPin.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         lupaPin.setOnClickListener {
-            val phoneNumber = "6289523468041"
-            val message = "Halo, saya lupa pin...\nNRP saya ${sh.getString("nrp", "")}"
-
-            val url = "https://wa.me/$phoneNumber?text=${Uri.encode(message)}"
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                data = url.toUri()
-                setPackage("com.whatsapp")
-            }
-
-            try {
-                startActivity(intent)
-            } catch (e: Exception) {
-                Toast.makeText(this, "WhatsApp tidak terpasang!", Toast.LENGTH_SHORT).show()
-            }
+//            val phoneNumber = "6289523468041"
+//            val message = "Halo, saya lupa pin...\nNRP saya ${sh.getString("nrp", "")}"
+//
+//            val url = "https://wa.me/$phoneNumber?text=${Uri.encode(message)}"
+//            val intent = Intent(Intent.ACTION_VIEW).apply {
+//                data = url.toUri()
+//                setPackage("com.whatsapp")
+//            }
+//
+//            try {
+//                startActivity(intent)
+//            } catch (e: Exception) {
+//                Toast.makeText(this, "WhatsApp tidak terpasang!", Toast.LENGTH_SHORT).show()
+//            }
+            AlertDialog.Builder(this)
+                .setTitle("Petunjuk")
+                .setMessage("Silahkan Hubungi Admin Bag SDM Polres Anda")
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
         }
     }
 
@@ -135,6 +144,8 @@ class SetPin : AppCompatActivity() {
                 val i = when (role) {
                     "BPKP" -> Intent(this, DashboardOpsional::class.java)
                     "PIMPINAN" -> Intent(this, DashboardPimpinan::class.java)
+                    "PAMATWIL" -> Intent(this, DashboardPamatwil::class.java)
+                    "KAPOLRES" -> Intent(this, DashboardPamatwil::class.java)
                     else -> null
                 }
 
@@ -145,52 +156,79 @@ class SetPin : AppCompatActivity() {
             }
         }   else{
             fabNext.setVisibility(View.VISIBLE)
+            val roles = intent.getStringExtra("role")
+            Log.i("USER ROLE", roles.toString())
             fabNext.setOnClickListener {
                 sh.edit() {
                     putBoolean("isPinSetted", true)
                     putBoolean("isCurrentlyLogedIn", true)
                     putString("pin", pin)
-                }
-                val roles = intent.getStringExtra("role")
-                var nrp : String? = "" ;
-
-                if(!roles.isNullOrEmpty()){
-                    if(roles === "BPKP"){
-                        nrp = sh.getString("nrp", "")
-                    }else{
-                        nrp = sh.getString("username", "")
-                    }
+                    apply()
                 }
 
-                if(nrp !== null){
+                val nrp = if(roles === "BPKP"){
+                    sh.getString("nrp", "")
+                }else if(roles === "PIMPINAN"){
+                    sh.getString("username", "")
+                }else if(roles === "PAMATWIL"){
+                    sh.getString("username", "")
+                }else{
+                    sh.getString("username", "")
+                }
+
                     lifecycleScope.launch {
-                        registerPin(pin, nrp)
+                        Log.d("PIN_DEBUG", "Calling registerPin with $pin and $nrp")
+                        registerPin(pin, nrp!!, roles!!)
                     }
-                }
             }
         }
     }
 
-    private suspend fun registerPin(pin: String, nrp: String) {
+    private suspend fun registerPin(pin: String, nrp: String, roles: String) {
         try {
-            val roles = intent.getStringExtra("role")
+            Log.i("SEND ROLES", roles)
+            val auth = Client.retrofit.create(Auth::class.java)
 
-            if(roles === "BPKP"){
-                Client.retrofit
-                    .create(Auth::class.java)
-                    .registerPin(PINRegister(nrp, pin))
-            }else if(roles === "PIMPINAN"){
-                Client.retrofit
-                    .create(Auth::class.java)
-                    .registerPinPimpinan(Auth.PINRegisterPimpinan(nrp, pin))
-            }else if(roles === "PAMATWIL"){
-                Client.retrofit
-                    .create(Auth::class.java)
-                    .registerPinPamatwil(Auth.PINRegisterPimpinan(nrp, pin))
-            }else if(roles === "KAPOLRES"){
-                Client.retrofit
-                    .create(Auth::class.java)
-                    .registerPinKapolres(Auth.PINRegisterPimpinan(nrp, pin))
+            when (roles) {
+                "BPKP" -> {
+                    val res = auth.registerPin(PINRegister(nrp, pin))
+                    if (res.isSuccessful) {
+                        Log.d("PIN_REGISTER", "PIN registered successfully")
+                    } else {
+                        Log.e("PIN_REGISTER", "Failed: ${res.code()} - ${res.message()}")
+                    }
+                }
+
+                "PIMPINAN" -> {
+                    val res = auth.registerPinPimpinan(Auth.PINRegisterPimpinan(nrp, pin))
+                    if (res.isSuccessful) {
+                        Log.d("PIN_REGISTER", "PIN registered successfully")
+                    } else {
+                        Log.e("PIN_REGISTER", "Failed: ${res.code()} - ${res.message()}")
+                    }
+                }
+
+                "PAMATWIL" -> {
+                    val res = auth.registerPinPamatwil(Auth.PINRegisterPimpinan(nrp, pin))
+                    if (res.isSuccessful) {
+                        Log.d("PIN_REGISTER", "PIN registered successfully")
+                    } else {
+                        Log.e("PIN_REGISTER", "Failed: ${res.code()} - ${res.message()}")
+                    }
+                }
+
+                "KAPOLRES" -> {
+                    val res = auth.registerPinKapolres(Auth.PINRegisterPimpinan(nrp, pin))
+                    if (res.isSuccessful) {
+                        Log.d("PIN_REGISTER", "PIN registered successfully")
+                    } else {
+                        Log.e("PIN_REGISTER", "Failed: ${res.code()} - ${res.message()}")
+                    }
+                }
+
+                else -> {
+                    Log.e("PIN_REGISTER", "Unknown role: $roles")
+                }
             }
             Loading.show(this@SetPin)
 
@@ -208,6 +246,8 @@ class SetPin : AppCompatActivity() {
             val i = when (roles) {
                 "BPKP" -> Intent(this, DashboardOpsional::class.java)
                 "PIMPINAN" -> Intent(this, DashboardPimpinan::class.java)
+                "PAMATWIL" -> Intent(this, DashboardPamatwil::class.java)
+                "KAPOLRES" -> Intent(this, DashboardPamatwil::class.java)
                 else -> null
             }
 

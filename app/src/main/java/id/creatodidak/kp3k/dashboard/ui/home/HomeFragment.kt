@@ -25,10 +25,13 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.yalantis.ucrop.UCrop
 import id.creatodidak.kp3k.BuildConfig
 import id.creatodidak.kp3k.R
+import id.creatodidak.kp3k.adapter.AtensiAdapter
 import id.creatodidak.kp3k.adapter.TargetCapaianAdapter
 import id.creatodidak.kp3k.api.Client
 import id.creatodidak.kp3k.api.Data
 import id.creatodidak.kp3k.api.model.MBasicData
+import id.creatodidak.kp3k.api.model.RAtensiItem
+import id.creatodidak.kp3k.api.model.getAtensiVal
 import id.creatodidak.kp3k.databinding.FragmentHomeBinding
 import id.creatodidak.kp3k.helper.Loading
 import id.creatodidak.kp3k.helper.formatDuaDesimal
@@ -57,38 +60,35 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
+    private lateinit var adapter: AtensiAdapter
+    private var dataAtensi = mutableListOf<RAtensiItem>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedPrefs = requireContext()
-            .getSharedPreferences("session", Context.MODE_PRIVATE)
+        val sharedPrefs = requireContext().getSharedPreferences("session", Context.MODE_PRIVATE)
+
         binding.nama.text = "${sharedPrefs.getString("pangkat", "")} ${sharedPrefs.getString("nama", "")}"
-        binding.tvBPKP.text = "BA PENGGERAK DESA ${sharedPrefs.getString("desa", "")}, KEC. ${sharedPrefs.getString("kecamatan", "")}, KAB. ${sharedPrefs.getString("kabupaten", "")}"
+        binding.tvBPKP.text = "BA PENGGERAK DESA ${sharedPrefs.getString("desa", "")}, KEC. ${sharedPrefs.getString("kecamatan", "")}, KAB. ${sharedPrefs.getString("kabupaten", "")}" // Fix missing closing quote
+
         val BASE_URL = "${BuildConfig.BASE_URL}file/"
         db = AppDatabase.getDatabase(requireContext())
-        if(sharedPrefs.getString("foto", "") === "/personil/img/default.jpg") {
+
+        val foto = sharedPrefs.getString("foto", "")
+        if (foto == "/personil/img/default.jpg") {
             Glide.with(this)
                 .load(R.drawable.user)
                 .circleCrop()
                 .into(binding.fotoProfil)
-        }else{
+        } else {
             Glide.with(this)
-                .load(BASE_URL + sharedPrefs.getString("foto", ""))
+                .load(BASE_URL + foto)
                 .placeholder(R.drawable.logo)
                 .circleCrop()
                 .into(binding.fotoProfil)
         }
-        val tvIsOffline = view.findViewById<TextView>(R.id.tvIsOffline)
 
-        if (isInternetAvailable(requireContext())) {
-            tvIsOffline.visibility = View.GONE
-            lifecycleScope.launch {
-                loadDataFromServer()
-            }
-        } else {
-            tvIsOffline.visibility = View.VISIBLE
-            lifecycleScope.launch {
-                loadDataOffline()
-            }
+        binding.tvGantiFoto.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            pickImageLauncher.launch(intent)
         }
 
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -103,6 +103,7 @@ class HomeFragment : Fragment() {
                 cropImageLauncher.launch(intent)
             }
         }
+
         cropImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val resultUri = UCrop.getOutput(result.data!!)
@@ -117,14 +118,8 @@ class HomeFragment : Fragment() {
             }
         }
 
-        binding.tvGantiFoto.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            pickImageLauncher.launch(intent)
-        }
-
         val youtubePlayerView = binding.youtubePlayerView
         lifecycle.addObserver(youtubePlayerView)
-
         youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 val videoId = "p4OALvMzx9A"
@@ -132,6 +127,48 @@ class HomeFragment : Fragment() {
             }
         })
 
+        adapter = AtensiAdapter(
+            onReadClicked = { id ->
+                simpanIdTerbaca(requireContext(), id)
+                binding.chipGroup.check(R.id.chipBelumDibaca)
+            }
+        )
+
+        binding.rvAtensi.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvAtensi.adapter = adapter
+
+        binding.chipGroup.setOnCheckedStateChangeListener { _, _ ->
+            tampilkanDataSesuaiChip()
+        }
+
+        lifecycleScope.launch {
+            try {
+                val kab = sharedPrefs.getString("kabupatenid", "")
+                val role = sharedPrefs.getString("role", "") ?: ""
+                val response = Client.retrofit.create(Data::class.java).getAtensi(getAtensiVal(role, kab))
+                dataAtensi.clear()
+                dataAtensi.addAll(response)
+
+                binding.chipGroup.check(R.id.chipSemua) // Pindahkan ke sini
+            } catch (e: Exception) {
+                Log.e("HomeFragment", "Error fetching data: ${e.message}")
+            }
+        }
+
+
+    }
+
+    fun tampilkanDataSesuaiChip() {
+        val readlist = ambilIdTerbaca(requireContext())
+        val readIdList = readlist.mapNotNull { it.toIntOrNull() }
+
+        val filtered = when (binding.chipGroup.checkedChipId) {
+            R.id.chipBelumDibaca -> dataAtensi.filter { it.id !in readIdList }
+            R.id.chipSudahDibaca -> dataAtensi.filter { it.id in readIdList }
+            else -> dataAtensi
+        }
+
+        adapter.submitList(filtered)
     }
 
     private suspend fun uploadFotoProfile(uri: Uri) {
@@ -220,75 +257,21 @@ class HomeFragment : Fragment() {
         }
     }
 
+}
 
-    private suspend fun loadDataFromServer() {
-        try {
-            val response = Client.retrofit.create(Data::class.java).getBasicData()
-            val responseJson = Gson().toJson(response)
-            db.basicDataDao().insert(BasicDataEntity(1, responseJson))
-            showData(response)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
+fun simpanIdTerbaca(context: Context, id: Int) {
+    val pref = context.getSharedPreferences("atensi", Context.MODE_PRIVATE)
+    val editor = pref.edit()
 
-    private suspend fun loadDataOffline() {
-        try {
-            val basicData = db.basicDataDao().get()
-           if(basicData != null){
-               val response = Gson().fromJson(basicData.json, MBasicData::class.java)
-               showData(response)
-           }else{
-               Log.i("Offline", "Data tidak ditemukan")
-           }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
+    val existingSet = pref.getStringSet("idTerbaca", mutableSetOf())?.toMutableSet() ?: mutableSetOf()
+    existingSet.add(id.toString()) // convert di sini
 
-    private fun showData(response: MBasicData) {
-        binding.jBpkp.text = "${response.jumlahbpkp} ORANG"
-        binding.jPetaniTerdaftar.text = "${response.jumlahpetani} ORANG"
-        val totalKalbar = response.totalKalbar
+    editor.putStringSet("idTerbaca", existingSet)
+    editor.apply()
+}
 
-        val realisasitanamM = totalKalbar.monokultur.totaltanam / 10000.0  // Ubah ke Double untuk presisi lebih
-        val luasM = totalKalbar.monokultur.luaslahan / 10000.0  // Ubah ke Double
-        val targetPM = totalKalbar.monokultur.totaltargetpanen / 1000.0  // Ubah ke Double
-        val realisasiPM = 0.0  // Ubah ke Double
 
-        val persenTM = if (luasM != 0.0) (realisasitanamM / luasM) * 100 else 0.0  // Tambahkan * 100 untuk persen
-        val persenPM = if (targetPM != 0.0) (realisasiPM / targetPM) * 100 else 0.0  // Tambahkan * 100 untuk persen
-
-        binding.kalbarcapaianTanamMonokultur.text = "Capaian Tanam ${formatDuaDesimal(realisasitanamM)}Ha/${formatDuaDesimal(luasM)}Ha"
-        binding.kalbarpersenCapaianTanamMonokultur.text = "Aktualisasis ${formatDuaDesimal(persenTM)} %"
-        binding.kalbarpbCapaianTanamMonokultur.progress = persenTM.toInt()
-
-        binding.kalbarcapaianPanenMonokultur.text = "Capaian Panen ${realisasiPM}Ton/${targetPM}Ton"
-        binding.kalbaraktualisasiPanenMonokultur.text = "Aktualisasi ${formatDuaDesimal(persenPM)} %"
-        binding.kalbarpbCapaianPanenMonokultur.progress = persenPM.toInt()
-
-        val realisasitanamTumpangsari = totalKalbar.tumpangsari.totaltanam / 10000.0  // Ubah ke Double untuk presisi lebih
-        val luasTumpangsari = totalKalbar.tumpangsari.luaslahan / 10000.0  // Ubah ke Double
-        val targetPTumpangsari = when (val value = totalKalbar.tumpangsari.totaltargetpanen) {
-            is Number -> value.toDouble() / 1000.0
-            is String -> value.toDoubleOrNull()?.div(1000.0) ?: 0.0
-            else -> 0.0
-        }
-        val realisasiPTumpangsari = 0.0  // Ubah ke Double
-
-        val persenTTumpangsari = if (luasTumpangsari != 0.0) (realisasitanamTumpangsari / luasTumpangsari) * 100 else 0.0  // Tambahkan * 100 untuk persen
-        val persenPTumpangsari = if (targetPTumpangsari != 0.0) (realisasiPTumpangsari / targetPTumpangsari) * 100 else 0.0  // Tambahkan * 100 untuk persen
-
-        binding.kalbarcapaianTanamTumpangsari.text = "Capaian Tanam ${formatDuaDesimal(realisasitanamTumpangsari)}Ha/${formatDuaDesimal(luasTumpangsari)}Ha"
-        binding.kalbarpersenCapaianTanamTumpangsari.text = "Aktualisasi ${formatDuaDesimal(persenTTumpangsari)} %"
-        binding.kalbarpbCapaianTanamTumpangsari.progress = persenTTumpangsari.toInt()
-
-        binding.kalbarcapaianPanenTumpangsari.text = "Capaian Panen ${formatDuaDesimal(realisasiPTumpangsari)}Ton/${formatDuaDesimal(targetPTumpangsari)}Ton"
-        binding.kalbaraktualisasiPanenTumpangsari.text = "Aktualisasi ${formatDuaDesimal(persenPTumpangsari)} %"
-        binding.kalbarpbCapaianPanenTumpangsari.progress = persenPTumpangsari.toInt()
-
-        val adapter = TargetCapaianAdapter(response.targetdancapaian)
-        binding.targetDanCapaianRV.layoutManager = LinearLayoutManager(requireContext())
-        binding.targetDanCapaianRV.adapter = adapter
-    }
+fun ambilIdTerbaca(context: Context): Set<String> {
+    val pref = context.getSharedPreferences("atensi", Context.MODE_PRIVATE)
+    return pref.getStringSet("idTerbaca", emptySet()) ?: emptySet()
 }

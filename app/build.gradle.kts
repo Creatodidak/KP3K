@@ -13,10 +13,10 @@ android {
 
     defaultConfig {
         applicationId = "id.creatodidak.kp3k"
-        minSdk = 30
+        minSdk = 26
         targetSdk = 35
-        versionCode = 12
-        versionName = "Alpha-1.5"
+        versionCode = 16
+        versionName = "Alpha-1.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -153,7 +153,8 @@ dependencies {
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     //noinspection UseTomlInstead
     implementation ("com.google.maps.android:android-maps-utils:2.2.3")
-
+    //noinspection UseTomlInstead
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation(libs.androidx.gridlayout)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
