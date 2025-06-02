@@ -4,12 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import id.creatodidak.kp3k.api.model.pimpinan.KabupatenSummaryByMasaTanam
 import id.creatodidak.kp3k.api.model.pimpinan.KabupatenSummaryMonthly
 import id.creatodidak.kp3k.databinding.ItemDataMonitoringBinding
-import id.creatodidak.kp3k.helper.formatDuaDesimal
 import id.creatodidak.kp3k.helper.formatDuaDesimalKoma
-import kotlin.String
 
 class KabupatenAdapterBulan(
     private val data: List<KabupatenSummaryMonthly>

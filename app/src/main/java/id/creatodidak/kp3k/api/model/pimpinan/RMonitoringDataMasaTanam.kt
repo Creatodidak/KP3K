@@ -7,16 +7,16 @@ data class KabupatenSummaryByMasaTanam(
 	val nama: String,
 
 	@field:SerializedName("towner")
-	val towner: Int,
+	val towner: Double,
 
 	@field:SerializedName("tlahan")
-	val tlahan: Int,
+	val tlahan: Double,
 
 	@field:SerializedName("tluaslahan")
-	val tluaslahan: Long,
+	val tluaslahan: Double,
 
 	@field:SerializedName("tproduksi")
-	val tproduksi: Int,
+	val tproduksi: Double,
 
 	@field:SerializedName("data")
 	val data: Map<String, MasaTanamSummary>
@@ -24,11 +24,11 @@ data class KabupatenSummaryByMasaTanam(
 
 data class MasaTanamSummary(
 	@field:SerializedName("totaltanam")
-	val totaltanam: Int,
+	val totaltanam: Double,
 
 	@field:SerializedName("totaltargetpanen")
-	val totaltargetpanen: Int,
+	val totaltargetpanen: Double,
 
 	@field:SerializedName("totalpanen")
-	val totalpanen: Int
+	val totalpanen: Double
 )

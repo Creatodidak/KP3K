@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import id.creatodidak.kp3k.api.model.pimpinan.KabupatenSummaryByMasaTanam
 import id.creatodidak.kp3k.databinding.ItemDataMonitoringBinding
-import id.creatodidak.kp3k.helper.formatDuaDesimal
 import id.creatodidak.kp3k.helper.formatDuaDesimalKoma
 
 class KabupatenAdapter(

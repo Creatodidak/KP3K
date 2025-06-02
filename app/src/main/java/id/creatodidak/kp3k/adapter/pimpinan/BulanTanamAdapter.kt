@@ -6,14 +6,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import id.creatodidak.kp3k.api.model.pimpinan.BulanSummary
-import id.creatodidak.kp3k.api.model.pimpinan.MasaTanamSummary
 import id.creatodidak.kp3k.databinding.ItemDataMonitoringItemBinding
 import id.creatodidak.kp3k.helper.formatDuaDesimalKoma
-import java.lang.Integer.parseInt
 
 class BulanTanamAdapter(
     private val list: List<Pair<String, BulanSummary>>,
-    private val luaslahan: Long
+    private val luaslahan: Double
 ) : RecyclerView.Adapter<BulanTanamAdapter.MasaTanamViewHolder>() {
 
     inner class MasaTanamViewHolder(val binding: ItemDataMonitoringItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -30,7 +28,7 @@ class BulanTanamAdapter(
         holder.binding.tvLuasTanam.text = "${formatDuaDesimalKoma(  summary.totaltanam / 10000.0)} Ha"
         holder.binding.tvLuasLahan.text = "${formatDuaDesimalKoma(  luaslahan / 10000.0)} Ha"
 
-        val persenTanam = (summary.totaltanam.toDouble() * 100) / luaslahan.coerceAtLeast(1)
+        val persenTanam = (summary.totaltanam.toDouble() * 100) / luaslahan.coerceAtLeast(1.0)
         holder.binding.pbTanam.max = 100
         holder.binding.pbTanam.progress = persenTanam.toInt().coerceAtMost(100)
         holder.binding.tvPersenTanam.text = formatDuaDesimalKoma( persenTanam )
@@ -38,7 +36,7 @@ class BulanTanamAdapter(
         holder.binding.tvTargetPanen.text = "${formatDuaDesimalKoma( summary.totaltargetpanen / 1000.0)} Ton"
         holder.binding.tvHasilPanen.text = "${formatDuaDesimalKoma( summary.totalpanen / 1000.0)} Ton"
 
-        val persenPanen = (summary.totalpanen.toDouble() * 100) / summary.totaltargetpanen.coerceAtLeast(1)
+        val persenPanen = (summary.totalpanen.toDouble() * 100) / summary.totaltargetpanen.coerceAtLeast(1.0)
         holder.binding.pbPanen.max = 100
         holder.binding.pbPanen.progress = persenPanen.toInt().coerceAtMost(100)
         holder.binding.tvPersenPanen.text = formatDuaDesimalKoma( persenPanen)

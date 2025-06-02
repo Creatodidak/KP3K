@@ -15,7 +15,7 @@ android {
         applicationId = "id.creatodidak.kp3k"
         minSdk = 26
         targetSdk = 35
-        versionCode = 16
+        versionCode = 17
         versionName = "Alpha-1.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
