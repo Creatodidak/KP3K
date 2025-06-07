@@ -59,6 +59,9 @@ class PanggilanVideo : AppCompatActivity() {
             "KAPOLRES" -> {
                 jenisKontak.add("BINTARA PENGGERAK")
             }
+            "WAKAPOLRES" -> {
+                jenisKontak.add("BINTARA PENGGERAK")
+            }
         }
 
         setContentView(R.layout.activity_panggilan_video)

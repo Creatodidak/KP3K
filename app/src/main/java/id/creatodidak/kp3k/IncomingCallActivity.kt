@@ -13,6 +13,7 @@ import android.view.animation.OvershootInterpolator
 import android.view.animation.TranslateAnimation
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import id.creatodidak.kp3k.service.MyFirebaseMessagingService
 
@@ -26,6 +27,11 @@ class IncomingCallActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_incoming_call)
+
+        val notificationId = intent.getIntExtra("notificationId", 880801)
+        NotificationManagerCompat.from(this).cancel(notificationId)
+        MyFirebaseMessagingService.isCallAnswered = true
+
 
         val acceptButton = findViewById<FloatingActionButton>(R.id.btAccept)
         val declineButton = findViewById<FloatingActionButton>(R.id.btDecline)
