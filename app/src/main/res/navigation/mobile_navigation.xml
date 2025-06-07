@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/nav_ai"
+        android:name="id.creatodidak.kp3k.dashboard.ui.tanyaai.TanyaAiFragment"
+        android:label="Tanya AI"
+        tools:layout="@layout/fragment_tanya_ai"/>
+
+    <fragment
         android:id="@+id/nav_pemiliklahan_ok"
         android:name="id.creatodidak.kp3k.dashboard.ui.pemiliklahan.PemilikLahanFragment"
         android:label="Mitra / Pemilik Lahan"

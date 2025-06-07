@@ -149,6 +149,11 @@ class SetPin : AppCompatActivity() {
                     else -> null
                 }
 
+                if(i === null){
+                    Toast.makeText(this, "Role tidak dikenali: $role", Toast.LENGTH_SHORT).show()
+                    Log.e("SetPin", "Role tidak valid atau Intent null!")
+                }
+
                 startActivity(i)
                 finish()
             }   else{

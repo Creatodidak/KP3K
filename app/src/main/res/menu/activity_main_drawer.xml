@@ -12,10 +12,10 @@
             android:id="@+id/nav_pemiliklahan_ok"
             android:icon="@drawable/baseline_checklist_24"
             android:title="Tugas Saya" />
-        <!--        <item-->
-<!--            android:id="@+id/nav_laporansaya"-->
-<!--            android:icon="@drawable/baseline_menu_book_24"-->
-<!--            android:title="Laporan Saya" />-->
+                <item
+            android:id="@+id/nav_ai"
+            android:icon="@drawable/iconai"
+            android:title="Tanya AI" />
         <item
             android:id="@+id/nav_peta_lahan"
             android:icon="@drawable/baseline_map_24"

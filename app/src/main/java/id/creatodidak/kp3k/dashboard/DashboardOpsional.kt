@@ -131,7 +131,7 @@ class DashboardOpsional : AppCompatActivity() {
         }
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_lahantugas, R.id.nav_laporansaya, R.id.nav_koordinat_finder, R.id.nav_pemiliklahan_ok
+                R.id.nav_home, R.id.nav_lahantugas, R.id.nav_laporansaya, R.id.nav_koordinat_finder, R.id.nav_pemiliklahan_ok, R.id.nav_ai
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

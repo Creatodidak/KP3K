@@ -15,8 +15,8 @@ android {
         applicationId = "id.creatodidak.kp3k"
         minSdk = 26
         targetSdk = 35
-        versionCode = 17
-        versionName = "Alpha-1.7"
+        versionCode = 18
+        versionName = "Release-1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,10 +41,12 @@ android {
                 "proguard-rules.pro"
             )
              buildConfigField("String", "BASE_URL", "\"https://server.resldk.cloud/\"")
+             buildConfigField("String", "AI_URL", "\"https://ai.resldk.cloud/\"")
              buildConfigField("String", "AGORA_ID", "\"6141104f89c84e5f89063dffef241e71\"")
         }
         debug {
-             buildConfigField("String", "BASE_URL", "\"http://36.93.138.110:3011/\"")
+            buildConfigField("String", "BASE_URL", "\"http://36.93.138.110:3011/\"")
+            buildConfigField("String", "AI_URL", "\"http://36.93.138.110:3013/\"")
             signingConfig = signingConfigs.getByName("release")
 //            buildConfigField("String", "BASE_URL", "\"https://server.resldk.cloud/\"")
              buildConfigField("String", "AGORA_ID", "\"6141104f89c84e5f89063dffef241e71\"")
@@ -111,7 +113,7 @@ dependencies {
     //noinspection UseTomlInstead
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     //noinspection UseTomlInstead
-    implementation ("com.google.maps.android:android-maps-utils:2.2.0")
+    implementation ("com.google.maps.android:android-maps-utils:2.2.3")
     //noinspection UseTomlInstead
     implementation ("io.agora.rtc:full-sdk:4.5.2")
     //noinspection UseTomlInstead
@@ -155,6 +157,8 @@ dependencies {
     implementation ("com.google.maps.android:android-maps-utils:2.2.3")
     //noinspection UseTomlInstead
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    //noinspection UseTomlInstead
+    implementation("com.squareup.okhttp3:okhttp-sse:4.12.0")
     implementation(libs.androidx.gridlayout)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)

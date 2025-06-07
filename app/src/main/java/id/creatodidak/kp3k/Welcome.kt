@@ -66,7 +66,6 @@ class Welcome : AppCompatActivity() {
         Manifest.permission.READ_MEDIA_IMAGES,
         Manifest.permission.ACCESS_NETWORK_STATE,
         Manifest.permission.READ_PHONE_STATE,
-        Manifest.permission.USE_FULL_SCREEN_INTENT
     )
     fun checkPermissions() {
         // All required permissions are granted
@@ -85,7 +84,6 @@ class Welcome : AppCompatActivity() {
         Manifest.permission.READ_MEDIA_IMAGES,
         Manifest.permission.ACCESS_NETWORK_STATE,
         Manifest.permission.READ_PHONE_STATE,
-        Manifest.permission.USE_FULL_SCREEN_INTENT
     )
     fun onPermissionsDenied() {
         // Handle the case where permissions are denied
@@ -104,7 +102,6 @@ class Welcome : AppCompatActivity() {
         Manifest.permission.READ_MEDIA_IMAGES,
         Manifest.permission.ACCESS_NETWORK_STATE,
         Manifest.permission.READ_PHONE_STATE,
-        Manifest.permission.USE_FULL_SCREEN_INTENT
 
     )
     fun showRationaleForPermissions(request: PermissionRequest) {
@@ -128,7 +125,6 @@ class Welcome : AppCompatActivity() {
         Manifest.permission.READ_MEDIA_IMAGES,
         Manifest.permission.ACCESS_NETWORK_STATE,
         Manifest.permission.READ_PHONE_STATE,
-        Manifest.permission.USE_FULL_SCREEN_INTENT
     )
     fun onNeverAskAgain() {
         // Handle case when the user selects "Don't ask again" for permissions
