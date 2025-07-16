@@ -33,6 +33,8 @@ googleGmsGoogleServices = "4.4.2"
 firebaseMessaging = "24.1.1"
 firebaseAppdistributionGradle = "5.1.1"
 legacySupportV4 = "1.0.0"
+cardview = "1.0.0"
+recyclerview = "1.4.0"
 
 [libraries]
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCore" }
@@ -78,6 +80,8 @@ socket-io-client = { module = "io.socket:socket.io-client", version.ref = "socke
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 firebase-appdistribution-gradle = { group = "com.google.firebase", name = "firebase-appdistribution-gradle", version.ref = "firebaseAppdistributionGradle" }
 androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
+androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

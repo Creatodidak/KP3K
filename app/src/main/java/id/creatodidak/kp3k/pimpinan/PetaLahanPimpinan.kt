@@ -82,6 +82,9 @@ class PetaLahanPimpinan : AppCompatActivity(), OnMapReadyCallback {
         override fun getPosition(): LatLng = latLng
         override fun getTitle(): String = titleText
         override fun getSnippet(): String? = null
+        override fun getZIndex(): Float? {
+            TODO("Not yet implemented")
+        }
     }
 
     class UnifiedRenderer(

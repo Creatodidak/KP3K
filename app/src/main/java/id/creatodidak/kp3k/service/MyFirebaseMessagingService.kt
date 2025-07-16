@@ -31,11 +31,16 @@ import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.VideoCallActivity
 import id.creatodidak.kp3k.dashboard.DashboardOpsional
 import androidx.core.net.toUri
+import id.creatodidak.kp3k.newversion.DataOwner.DataOwnerDetails
+import id.creatodidak.kp3k.newversion.DataOwner.VerifikasiOwner
+import id.creatodidak.kp3k.newversion.NewDashboard
+import id.creatodidak.kp3k.newversion.dashboard.DashboardKomoditas
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     @RequiresPermission(Manifest.permission.VIBRATE)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.i("onMessageReceived: ", "Message received ${remoteMessage.data}")
         remoteMessage.data.let { data ->
             when (data["type"]) {
                 "incoming_call" -> {
@@ -47,15 +52,71 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 "verifikasi" -> {
                     handleVerifikasi(remoteMessage)
                 }
+                "adminverifikasi" -> {
+                    adminhandleVerifikasi(remoteMessage)
+                }
                 "reminder" -> {
                     handleReminder(remoteMessage)
                 }
                 "atensi" -> {
                     handleAtensi(remoteMessage)
                 }
+                else -> {
+                    handleDefault(remoteMessage)
+                }
             }
             Log.i("onMessageReceived: ", data["type"].toString())
         }
+    }
+
+    @RequiresPermission(Manifest.permission.VIBRATE)
+    private fun handleDefault(remoteMessage: RemoteMessage) {
+        val notificationId = System.currentTimeMillis().toInt()
+        val channelId = "DEFAULT_CHANNEL"
+        val channelName = "DEFAULT CHANNEL"
+
+        val soundUri =
+            (ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.notifupdate).toUri()
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply {
+            setSound(soundUri, AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build())
+            enableVibration(true)
+            vibrationPattern = longArrayOf(0, 250, 250, 250, 250)
+        }
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
+        val intent = Intent(this, NewDashboard::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val msg = remoteMessage.data["msg"] ?: ""
+
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.logo)
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo))
+            .setContentTitle(msg)
+            .setContentText("Klik untuk melihat detail")
+            .setStyle(NotificationCompat.BigTextStyle().bigText("Klik untuk melihat detail"))
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setContentIntent(pendingIntent)
+            .setSound(soundUri)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setAutoCancel(false)
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
+
+        NotificationManagerCompat.from(this).notify(notificationId, builder.build())
     }
 
     @RequiresPermission(Manifest.permission.VIBRATE)
@@ -151,8 +212,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         val notificationManager = getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(channel)
-        val intent = Intent(this, DashboardOpsional::class.java).apply {
+        val idverifikasi = remoteMessage.data["idverifikasi"] ?: ""
+        val komoditasverifikasi = remoteMessage.data["komoditasverifikasi"] ?: ""
+        val intent = Intent(this, DashboardKomoditas::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("komoditas", komoditasverifikasi)
+            putExtra("id", idverifikasi)
         }
 
         val pendingIntent = PendingIntent.getActivity(
@@ -162,8 +228,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        val icon = when(komoditasverifikasi){
+            "jagung" -> R.drawable.ic_jagung_gpt
+            "singkong" -> R.drawable.ic_ubi_gpt
+            "kedelai" -> R.drawable.ic_kedelai_gpt
+            else -> R.drawable.atensi
+        }
+
         val msg = remoteMessage.data["msg"] ?: ""
-        var title = if (msg.contains("ditolak", ignoreCase = true)) {
+        val title = if (msg.contains("ditolak", ignoreCase = true)) {
             "Pengajuan Ditolak!"
         } else {
             "Pengajuan Diterima!"
@@ -171,11 +244,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
         val builder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.logo)
-            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo))
+            .setSmallIcon(icon)
+            .setLargeIcon(BitmapFactory.decodeResource(resources, icon))
             .setContentTitle(title)
-            .setContentText(remoteMessage.data["msg"])
-            .setStyle(NotificationCompat.BigTextStyle().bigText(remoteMessage.data["msg"]))
+            .setContentText("KOMODITAS ${komoditasverifikasi.toUpperCase()}\n\n$msg\n\nKlik untuk melihat detail\"")
+            .setStyle(NotificationCompat.BigTextStyle().bigText("KOMODITAS ${komoditasverifikasi.toUpperCase()}\n\n$msg\n\nKlik untuk melihat detail\""))
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
             .setSound(soundUri)
@@ -188,6 +261,74 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         NotificationManagerCompat.from(this).notify(notificationId, builder.build())
     }
+
+    @RequiresPermission(Manifest.permission.VIBRATE)
+    private fun adminhandleVerifikasi(remoteMessage: RemoteMessage) {
+        val notificationId = System.currentTimeMillis().toInt()
+        val channelId = "ADMIN_VERIFIKASI_CHANNEL"
+        val channelName = "ADMIN_VERIFIKASI_CHANNEL"
+
+        val soundUri = (ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.notif).toUri()
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply {
+            setSound(
+                soundUri,
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build()
+            )
+            enableVibration(true)
+            vibrationPattern = longArrayOf(0, 250, 250, 250, 250)
+        }
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
+
+        val idverifikasi = remoteMessage.data["idverifikasi"] ?: ""
+        val komoditasverifikasi = remoteMessage.data["komoditasverifikasi"] ?: ""
+        val intent = Intent(this, DashboardKomoditas::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("komoditas", komoditasverifikasi)
+            putExtra("id", idverifikasi)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val msg = remoteMessage.data["msg"] ?: ""
+        val title = remoteMessage.data["title"] ?: ""
+        val icon = when(komoditasverifikasi){
+            "jagung" -> R.drawable.ic_jagung_gpt
+            "singkong" -> R.drawable.ic_ubi_gpt
+            "kedelai" -> R.drawable.ic_kedelai_gpt
+            else -> R.drawable.atensi
+        }
+
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(icon)
+            .setLargeIcon(BitmapFactory.decodeResource(resources, icon))
+            .setContentTitle(title)
+            .setContentText("KOMODITAS ${komoditasverifikasi.toUpperCase()}\n\n$msg\n\nKlik untuk melihat detail")
+            .setStyle(NotificationCompat.BigTextStyle().bigText("KOMODITAS ${komoditasverifikasi.toUpperCase()}\n\n$msg\n\nKlik untuk melihat detail"))
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setContentIntent(pendingIntent)
+            .setSound(soundUri)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setAutoCancel(false)
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
+        NotificationManagerCompat.from(this).notify(notificationId, builder.build())
+    }
+
 
     @RequiresPermission(Manifest.permission.VIBRATE)
     private fun handleAtensi(remoteMessage: RemoteMessage) {

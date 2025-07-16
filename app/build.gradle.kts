@@ -45,8 +45,9 @@ android {
              buildConfigField("String", "AGORA_ID", "\"6141104f89c84e5f89063dffef241e71\"")
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"http://36.93.138.110:3011/\"")
-            buildConfigField("String", "AI_URL", "\"http://36.93.138.110:3013/\"")
+            buildConfigField("String", "BASE_URL", "\"http://36.93.138.110:3030/\"")
+            buildConfigField("String", "AI_URL", "\"http://36.93.138.110:3030/agritech/\"")
+//            buildConfigField("String", "AI_URL", "\"https://ai.resldk.cloud/\"")
             signingConfig = signingConfigs.getByName("release")
 //            buildConfigField("String", "BASE_URL", "\"https://server.resldk.cloud/\"")
              buildConfigField("String", "AGORA_ID", "\"6141104f89c84e5f89063dffef241e71\"")
@@ -105,15 +106,17 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.appdistribution.gradle)
     implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.recyclerview)
     kapt(libs.permissionsdispatcher.processor)
     implementation (libs.play.services.location)
     implementation (libs.material.v180)
     implementation (libs.gson)
     implementation (libs.play.services.maps)
     //noinspection UseTomlInstead
-    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.2")
     //noinspection UseTomlInstead
-    implementation ("com.google.maps.android:android-maps-utils:2.2.3")
+    implementation ("com.google.maps.android:android-maps-utils:3.14.0")
     //noinspection UseTomlInstead
     implementation ("io.agora.rtc:full-sdk:4.5.2")
     //noinspection UseTomlInstead
@@ -121,12 +124,13 @@ dependencies {
         exclude(group = "org.json", module = "json")
     }
     //noinspection UseTomlInstead
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
     //noinspection UseTomlInstead
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
     //noinspection UseTomlInstead
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-
+    //noinspection UseTomlInstead
+    implementation("androidx.core:core-splashscreen:1.0.1")
     //noinspection UseTomlInstead
     implementation ("androidx.camera:camera-core:1.4.2")
     //noinspection UseTomlInstead
@@ -138,27 +142,33 @@ dependencies {
     //noinspection UseTomlInstead
     implementation ("androidx.camera:camera-extensions:1.4.2")
     //noinspection UseTomlInstead
-    implementation ("com.google.guava:guava:33.3.1-android")
+    implementation ("com.google.guava:guava:33.4.8-android")
     //noinspection UseTomlInstead
     implementation("androidx.camera:camera-video:1.4.2")
     //noinspection UseTomlInstead
-    implementation ("androidx.room:room-runtime:2.7.1")
+    implementation ("androidx.room:room-runtime:2.7.2")
     //noinspection UseTomlInstead
-    implementation ("androidx.room:room-ktx:2.7.1")
+    implementation ("androidx.room:room-ktx:2.7.2")
     //noinspection UseTomlInstead,KaptUsageInsteadOfKsp
-    kapt ("androidx.room:room-compiler:2.7.1")
+    kapt ("androidx.room:room-compiler:2.7.2")
     //noinspection UseTomlInstead
     implementation ("androidx.biometric:biometric:1.1.0")
     //noinspection UseTomlInstead
-    implementation ("com.github.yalantis:ucrop:2.2.8")
+    implementation ("com.github.yalantis:ucrop:2.2.10")
     //noinspection UseTomlInstead
-    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.2")
     //noinspection UseTomlInstead
-    implementation ("com.google.maps.android:android-maps-utils:2.2.3")
+    implementation ("com.google.maps.android:android-maps-utils:3.14.0")
     //noinspection UseTomlInstead
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     //noinspection UseTomlInstead
+    implementation("com.github.appsfeature:otp-view:1.1")
+    //noinspection UseTomlInstead
     implementation("com.squareup.okhttp3:okhttp-sse:4.12.0")
+    //noinspection UseTomlInstead
+    implementation("com.google.android.play:app-update:2.1.0")
+    //noinspection UseTomlInstead
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
     implementation(libs.androidx.gridlayout)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)

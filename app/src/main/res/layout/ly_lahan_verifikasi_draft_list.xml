@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/ivMapPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="4:3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/bgheader" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
+
+                <!-- Daftar baris data -->
+                <!-- Gunakan pola weightSum 3 dan layout_weight untuk proporsi ruang -->
+
+                <!-- Type -->
+                <TableRow android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:weightSum="3">
+                    <TextView android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Type" />
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp"
+                        android:text=":" />
+                    <TextView android:id="@+id/tvType"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:maxLines="10"
+                        android:ellipsize="none" />
+                </TableRow>
+
+                <!-- Pemilik Lahan -->
+                <TableRow android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:weightSum="3">
+                    <TextView android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Pemilik Lahan" />
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp"
+                        android:text=":" />
+                    <TextView android:id="@+id/tvOwner"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:maxLines="10"
+                        android:ellipsize="none" />
+                </TableRow>
+
+                <!-- Luas -->
+                <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp" android:weightSum="3">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="Luas" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp" android:text=":" />
+                    <TextView android:id="@+id/tvLuas" android:layout_width="0dp" android:layout_weight="2"
+                        android:layout_height="wrap_content" android:maxLines="10" android:ellipsize="none" />
+                </TableRow>
+
+                <!-- Provinsi -->
+                <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp" android:weightSum="3">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="Provinsi" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp" android:text=":" />
+                    <TextView android:id="@+id/tvProvinsi" android:layout_width="0dp" android:layout_weight="2"
+                        android:layout_height="wrap_content" android:maxLines="10" android:ellipsize="none" />
+                </TableRow>
+
+                <!-- Kabupaten -->
+                <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp" android:weightSum="3">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="Kabupaten" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp" android:text=":" />
+                    <TextView android:id="@+id/tvKabupaten" android:layout_width="0dp" android:layout_weight="2"
+                        android:layout_height="wrap_content" android:maxLines="10" android:ellipsize="none" />
+                </TableRow>
+
+                <!-- Kecamatan -->
+                <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp" android:weightSum="3">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="Kecamatan" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp" android:text=":" />
+                    <TextView android:id="@+id/tvKecamatan" android:layout_width="0dp" android:layout_weight="2"
+                        android:layout_height="wrap_content" android:maxLines="10" android:ellipsize="none" />
+                </TableRow>
+
+                <!-- Desa -->
+                <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp" android:weightSum="3">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="Desa" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp" android:text=":" />
+                    <TextView android:id="@+id/tvDesa" android:layout_width="0dp" android:layout_weight="2"
+                        android:layout_height="wrap_content" android:maxLines="10" android:ellipsize="none" />
+                </TableRow>
+
+                <!-- Latitude -->
+                <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp" android:weightSum="3">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="Latitude" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp" android:text=":" />
+                    <TextView android:id="@+id/tvLatitude" android:layout_width="0dp" android:layout_weight="2"
+                        android:layout_height="wrap_content" android:maxLines="10" android:ellipsize="none" />
+                </TableRow>
+
+                <!-- Longitude -->
+                <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp" android:weightSum="3">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="Longitude" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp" android:text=":" />
+                    <TextView android:id="@+id/tvLongitude" android:layout_width="0dp" android:layout_weight="2"
+                        android:layout_height="wrap_content" android:maxLines="10" android:ellipsize="none" />
+                </TableRow>
+
+                <!-- Status -->
+                <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp" android:weightSum="3">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="Status" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp" android:text=":" />
+                    <TextView android:id="@+id/tvStatus" android:layout_width="0dp" android:layout_weight="2"
+                        android:layout_height="wrap_content" android:maxLines="10" android:ellipsize="none" />
+                </TableRow>
+
+                <!-- Diajukan Pada -->
+                <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp" android:weightSum="3">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="Diajukan Pada" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp" android:text=":" />
+                    <TextView android:id="@+id/tvDiajukanPada" android:layout_width="0dp" android:layout_weight="2"
+                        android:layout_height="wrap_content" android:maxLines="10" android:ellipsize="none" />
+                </TableRow>
+
+                <!-- Diverifikasi Pada -->
+                <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp" android:weightSum="3">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="Diverifikasi Pada" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp" android:text=":" />
+                    <TextView android:id="@+id/tvDiverifikasiPada" android:layout_width="0dp" android:layout_weight="2"
+                        android:layout_height="wrap_content" android:maxLines="10" android:ellipsize="none" />
+                </TableRow>
+
+                <!-- Keterangan -->
+                <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp" android:weightSum="3">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="Keterangan" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp" android:text=":" />
+                    <TextView android:id="@+id/tvKeterangan" android:layout_width="0dp" android:layout_weight="2"
+                        android:layout_height="wrap_content" android:maxLines="10" android:ellipsize="none" />
+                </TableRow>
+
+            </TableLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/lyVerifikasi"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btTolakVerifikasiOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/error_bg"
+                    android:text="TOLAK"
+                    app:icon="@drawable/outline_close_24"
+                    app:iconGravity="textEnd"
+                    app:iconSize="24dp" />
+
+                <Button
+                    android:id="@+id/btSetujuiVerifikasiOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:text="SETUJU"
+                    app:icon="@drawable/outline_check_24"
+                    app:iconGravity="textEnd" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyRejectedOD"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btHapusOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/error_bg"
+                    android:text="HAPUS"
+                    app:icon="@drawable/red_trash_can_icon"
+                    app:iconGravity="textEnd"
+                    app:iconSize="24dp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <Button
+                    android:id="@+id/btEditOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/gray_bg"
+                    android:text="PERBAIKI"
+                    app:icon="@drawable/outline_edit_note_24"
+                    app:iconGravity="textEnd"
+                    app:iconSize="24dp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyDraft"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btKirimDataKeServerOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="KIRIM DATA KE SERVER"
+                    app:icon="@drawable/baseline_send_24"
+                    app:iconGravity="textEnd"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <Button
+                    android:id="@+id/btHapusDraftOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/error_bg"
+                    android:text="HAPUS DRAFT OFFLINE"
+                    app:icon="@drawable/red_trash_can_icon"
+                    app:iconGravity="textEnd"
+                    app:iconSize="24dp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
@@ -22,6 +23,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
@@ -78,6 +80,7 @@ class CameraActivity : AppCompatActivity() {
 
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
+    @RequiresApi(Build.VERSION_CODES.R)
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -147,9 +150,7 @@ class CameraActivity : AppCompatActivity() {
         val tvNrp = findViewById<TextView>(R.id.tvNrpCamera)
         val tvTanggal = findViewById<TextView>(R.id.tvTanggalCamera)
 
-        val sh = getSharedPreferences("session", MODE_PRIVATE)
-        val nrp = sh.getString("nrp", "")
-        tvNrp.text = nrp
+        tvNrp.text = getMyNrp(this)
         tvTanggal.text = TimeUtils.getFormattedDateTime()
     }
 

@@ -23,3 +23,29 @@ fun formatDuaDesimalKoma(value: Double): String {
 
     return formatter.format(value)
 }
+
+fun convertToHektar(value: Double): Double {
+    return value / 10_000
+}
+
+fun convertToMeterPersegi(value: Double): Double {
+    return value * 10_000
+}
+
+fun convertToTon(value: Double): Double {
+    return value / 1000
+}
+
+fun convertToKilogram(value: Double): Double {
+    return value * 1000
+}
+
+fun angkaIndonesia(value: Double): String {
+    val rounded = "%.2f".format(Locale.US, value).toDouble() // bulatkan ke 2 digit
+    val symbols = DecimalFormatSymbols(Locale("id", "ID")).apply {
+        groupingSeparator = '.'
+        decimalSeparator = ','
+    }
+    val formatter = DecimalFormat("#,###.##", symbols)
+    return formatter.format(rounded)
+}

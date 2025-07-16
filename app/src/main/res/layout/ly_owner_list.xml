@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/lyShowOwnerDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView36"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="4dp"
+                app:srcCompat="@drawable/ic_owners" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <TextView
+                    android:id="@+id/tvNamaPokOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:textColor="@color/default_bg"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/tvNamaOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvStatusOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:textColor="#5C5D5C"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivCallOD"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="4dp"
+                android:background="@drawable/bg_menu"
+                android:padding="4dp"
+                app:srcCompat="@drawable/baseline_call_24" />
+            <ImageView
+                android:id="@+id/ivEditOD"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="4dp"
+                android:background="@drawable/bg_menu"
+                android:padding="6dp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/pencil_color_icon" />
+
+            <ImageView
+                android:id="@+id/ivOpenMenuOD"
+                android:layout_width="20dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="8dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/outline_more_vert_24" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lyActionOD"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvHapusOD"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#F30202"
+                    android:padding="4dp"
+                    android:text="HAPUS"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    tools:ignore="TextContrastCheck" />
+
+                <TextView
+                    android:id="@+id/tvEditOD"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#5F5D5D"
+                    android:padding="4dp"
+                    android:text="EDIT"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvBatalOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Batal"
+                android:textAlignment="center"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btKirimDataKeServerOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="KIRIM DATA KE SERVER"
+                app:icon="@drawable/baseline_send_24"
+                app:iconGravity="textEnd" />
+
+            <Button
+                android:id="@+id/btHapusDraftOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/error_bg"
+                android:text="HAPUS DRAFT OFFLINE"
+                app:icon="@drawable/red_trash_can_icon"
+                app:iconGravity="textEnd"
+                app:iconSize="24dp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider11"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="?android:attr/listDivider" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

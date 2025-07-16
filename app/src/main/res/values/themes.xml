@@ -10,6 +10,9 @@
         <item name="android:fontFamily">@font/workregular</item>
         <item name="colorSecondary">#3a8d4c</item>
         <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
     <style name="Theme.KP3K.PIMPINAN" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here -->
@@ -74,6 +77,11 @@
     <style name="Theme.KP3K.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.KP3K.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.KP3K.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/default_bg</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/logo_new_round</item>
+    </style>
 
 
 </resources>

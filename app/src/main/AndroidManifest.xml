@@ -10,20 +10,13 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
@@ -32,14 +25,125 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fitsSystemWindows="true"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/logo_launcher2"
+        android:icon="@mipmap/logo_new"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/logo_launcher2_round"
+        android:roundIcon="@mipmap/logo_new_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KP3K"
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="adjustResize"
         tools:targetApi="31">
+        <activity
+            android:name=".newversion.DataTanaman.VerifikasiTanaman"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataTanaman.ShowDataTanamanByCategory"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataTanaman.RejectedTanaman"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataTanaman.EditTanaman"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataTanaman.DraftTanaman"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataTanaman.DataTanamanDetails"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataTanaman.AddTanaman"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.dashboard.DataTanaman"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.Maps.ShowSingleDataOnMap"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataLahan.DataLahanDetails"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.dashboard.Hotspots"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataLahan.EditLahan"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".newversion.DataLahan.AddLahan"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".newversion.DataLahan.VerifikasiLahan"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataLahan.RejectedLahan"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataLahan.DraftLahan"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataLahan.ShowDataLahanByCategory"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.dashboard.DataLahan"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataOwner.RejectedOwner"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataOwner.VerifikasiOwner"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataOwner.DraftOwner"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.DataOwner.DataOwnerCreateEdit"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".newversion.DataOwner.DataOwnerDetails"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.dashboard.DataOwner"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.dashboard.DashboardKomoditas"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.setting.Account"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.setting.Setting"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.dashboard.DashboardBPKP"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.auth.LoginWithPinOrBiometric"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".newversion.auth.NewSetPin"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".newversion.NewDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.PreStart"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.VerifikasiOTP"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".newversion.NewLogin"
+            android:exported="false" />
+        <activity
+            android:name=".NewWelcome"
+            android:exported="false" />
         <activity
             android:name=".pimpinan.MonitoringPimpinan"
             android:exported="false" />
