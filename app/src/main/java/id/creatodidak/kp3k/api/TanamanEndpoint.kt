@@ -8,6 +8,7 @@ import id.creatodidak.kp3k.api.RequestClass.TanamanIdRequest
 import id.creatodidak.kp3k.api.RequestClass.TanamanIdsRequest
 import id.creatodidak.kp3k.api.RequestClass.UpdateDataTanam
 import id.creatodidak.kp3k.api.RequestClass.VerifikasiRequest
+import id.creatodidak.kp3k.api.newModel.DefaultResponse
 import id.creatodidak.kp3k.api.newModel.LahanCreateUpdateResponse
 import id.creatodidak.kp3k.api.newModel.TanamanCreateUpdateResponse
 import id.creatodidak.kp3k.api.newModel.TanamanResponseItem
@@ -59,7 +60,7 @@ interface TanamanEndpoint {
     @DELETE("/tanaman/delete/{id}")
     suspend fun deleteTanamanById(
         @Path("id") id: Int
-    ): Response<ResponseBody>
+    ): Response<DefaultResponse>
 
     @POST("/tanaman/add")
     suspend fun addTanaman(

@@ -1,11 +1,12 @@
 package id.creatodidak.kp3k.newversion
 
 import android.Manifest
+import android.app.AlarmManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -15,13 +16,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.FirebaseMessaging
 import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.helper.Loading
 import id.creatodidak.kp3k.newversion.auth.NewSetPin
-import kotlinx.coroutines.launch
-import kotlin.collections.contains
 
 class PreStart : AppCompatActivity() {
     private val requiredPermissions = mutableListOf(
@@ -38,7 +36,6 @@ class PreStart : AppCompatActivity() {
     }
 
     private var role: String? = null
-
     private lateinit var permissionButtons: Map<String, TextView>
 
     private val requestPermissionLauncher = registerForActivityResult(
@@ -59,7 +56,6 @@ class PreStart : AppCompatActivity() {
             insets
         }
 
-
         permissionButtons = mapOf(
             Manifest.permission.ACCESS_FINE_LOCATION to findViewById(R.id.allow_ACCESS_FINE_LOCATION),
             Manifest.permission.ACCESS_COARSE_LOCATION to findViewById(R.id.allow_ACCESS_COARSE_LOCATION),
@@ -68,16 +64,28 @@ class PreStart : AppCompatActivity() {
             Manifest.permission.READ_PHONE_STATE to findViewById(R.id.allow_READ_PHONE_STATE),
             Manifest.permission.POST_NOTIFICATIONS to findViewById(R.id.allow_POST_NOTIFICATIONS),
             Manifest.permission.READ_MEDIA_IMAGES to findViewById(R.id.allow_READ_MEDIA_IMAGES),
+            Manifest.permission.SCHEDULE_EXACT_ALARM to findViewById(R.id.allow_SCHEDULE_EXACT_ALARM),
         )
 
-        // Atur click listener tiap izin
+        // Set listener izin normal
         permissionButtons.forEach { (perm, button) ->
-            button.setOnClickListener {
-                requestPermissionLauncher.launch(arrayOf(perm))
+            if (perm == Manifest.permission.SCHEDULE_EXACT_ALARM && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                button.setOnClickListener {
+                    val alarmManager = getSystemService(AlarmManager::class.java)
+                    if (!alarmManager.canScheduleExactAlarms()) {
+                        val intent = Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(this, "Izin sudah diberikan", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {
+                button.setOnClickListener {
+                    requestPermissionLauncher.launch(arrayOf(perm))
+                }
             }
 
-            val granted = ContextCompat.checkSelfPermission(this, perm) == PackageManager.PERMISSION_GRANTED
-            updateButtonStatus(perm, granted)
+            updateButtonStatus(perm, checkPermissionStatus(perm))
         }
 
         val sh = getSharedPreferences("USER_DATA", MODE_PRIVATE)
@@ -88,18 +96,29 @@ class PreStart : AppCompatActivity() {
             if (fcmtoken != null) {
                 startActivity(Intent(this@PreStart, NewSetPin::class.java))
                 finish()
-            }else{
+            } else {
                 loadFcmToken()
             }
         }
 
-        val btnContinue = findViewById<Button>(R.id.btnContinue)
-        btnContinue.setOnClickListener {
+        findViewById<Button>(R.id.btnContinue).setOnClickListener {
             if (areAllPermissionsGranted()) {
                 loadFcmToken()
             } else {
                 Toast.makeText(this, "Harap berikan semua izin terlebih dahulu.", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun checkPermissionStatus(permission: String): Boolean {
+        return when (permission) {
+            Manifest.permission.SCHEDULE_EXACT_ALARM -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    val alarmManager = getSystemService(AlarmManager::class.java)
+                    alarmManager.canScheduleExactAlarms()
+                } else true
+            }
+            else -> ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
         }
     }
 
@@ -122,9 +141,16 @@ class PreStart : AppCompatActivity() {
     }
 
     private fun areAllPermissionsGranted(): Boolean {
-        return requiredPermissions.all {
+        val normalPermissionsGranted = requiredPermissions.all {
             ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
         }
+
+        val alarmGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = getSystemService(AlarmManager::class.java)
+            alarmManager.canScheduleExactAlarms()
+        } else true
+
+        return normalPermissionsGranted && alarmGranted
     }
 
     private fun loadFcmToken() {
@@ -144,6 +170,4 @@ class PreStart : AppCompatActivity() {
                 }
             }
     }
-
-
 }

@@ -20,6 +20,7 @@ import id.creatodidak.kp3k.database.Dao.WilayahDao
 import id.creatodidak.kp3k.database.DatabaseInstance
 import id.creatodidak.kp3k.database.Entity.LahanEntity
 import id.creatodidak.kp3k.database.Entity.OwnerEntity
+import id.creatodidak.kp3k.helper.Loading
 import id.creatodidak.kp3k.helper.RoleHelper
 import id.creatodidak.kp3k.helper.askUser
 import id.creatodidak.kp3k.helper.getMyLevel
@@ -124,6 +125,7 @@ class RejectedLahan : AppCompatActivity() {
     }
 
     private suspend fun deleteData(data: LahanEntity){
+        Loading.show(this)
         try {
             val result = withContext(Dispatchers.IO){
                 Client.retrofit.create(LahanEndpoint::class.java).deleteLahan(data.id.toString())
@@ -149,6 +151,8 @@ class RejectedLahan : AppCompatActivity() {
                     loadData()
                 }
             }
+        }finally {
+            Loading.hide()
         }
     }
 

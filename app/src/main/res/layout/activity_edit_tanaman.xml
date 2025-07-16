@@ -6,5 +6,199 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".newversion.DataTanaman.EditTanaman">
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/default_bg"
+        android:orientation="vertical"
+        android:paddingVertical="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:text="EDIT DATA REALISASI TANAM"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvKeteranganKomoditas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:text="TextView"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6"
+        tools:ignore="SpeakableTextPresentCheck">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingBottom="100dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etLuas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Luas Tanam (m2)"
+                    android:inputType="number|numberSigned"
+                    android:singleLine="true"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvConvertHektar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="4dp"
+                android:text="= Ha"
+                android:textColor="@color/default_bg"
+                android:textStyle="bold|italic" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etTanggalTanam"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tanggal Tanam"
+                    android:inputType="number|numberSigned"
+                    android:singleLine="true"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPrediksiPanen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Perkiraan Hasil Panen (KG)"
+                    android:inputType="number|numberSigned"
+                    android:singleLine="true"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvConvertTon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="4dp"
+                android:text="= Ton"
+                android:textColor="@color/default_bg"
+                android:textStyle="bold|italic" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPerkiraanTanggalPanen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Perkiraan Tanggal Panen"
+                    android:inputType="number|numberSigned"
+                    android:singleLine="true"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etVarietas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Varietas Bibit"
+                    android:inputType="text|textCapCharacters"
+                    android:singleLine="true"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp"
+                android:background="@drawable/bg_rounded_border_gray"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="Sumber Bibit" />
+
+                <Spinner
+                    android:id="@+id/spSumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etKeteranganSumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Keterangan Sumber Bibit"
+                    android:inputType="text|textLongMessage|textMultiLine"
+                    android:singleLine="false"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btnKirimData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="KIRIM DATA"
+                app:icon="@drawable/baseline_send_24"
+                app:iconGravity="textEnd" />
+
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

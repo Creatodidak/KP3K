@@ -70,5 +70,5 @@ data class UpdateDataTanam(
     @SerializedName("submitter") val submitter: String?,
     @SerializedName("role") val role: String,
     @SerializedName("kabupatenId") val kabupatenId: String,
-    @SerializedName("tanamanke") val tanamanke: String
+    @SerializedName("tanamanke") val tanamanke: String?
 )

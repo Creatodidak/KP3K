@@ -1,7 +1,11 @@
 package id.creatodidak.kp3k
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,6 +13,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
@@ -114,9 +119,23 @@ private fun checkForUpdate() {
         }, 3000)
     }
 
+    private val stopAlarmReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == "ACTION_STOP_ALARM") {
+                finishAffinity() // Tutup semua activity
+            }
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onResume() {
         super.onResume()
         // Jika proses update tertunda, lanjutkan
+        registerReceiver(
+            stopAlarmReceiver,
+            IntentFilter("ACTION_STOP_ALARM"),
+            Context.RECEIVER_NOT_EXPORTED
+        )
+
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             if (
                 appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS &&
@@ -131,4 +150,12 @@ private fun checkForUpdate() {
             }
         }
     }
+
+
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(stopAlarmReceiver)
+    }
+
 }

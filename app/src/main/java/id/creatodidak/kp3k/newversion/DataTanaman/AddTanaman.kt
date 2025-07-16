@@ -677,8 +677,6 @@ class AddTanaman : AppCompatActivity() {
             showError(this@AddTanaman, "Error", "${e.message}") {
                 finish()
             }
-        }finally {
-            Loading.hide()
         }
     }
 

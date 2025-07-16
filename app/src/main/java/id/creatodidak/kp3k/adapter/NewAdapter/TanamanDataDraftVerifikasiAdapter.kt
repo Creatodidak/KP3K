@@ -95,7 +95,7 @@ class TanamanDataDraftVerifikasiAdapter(
         h.tvStatus.text = tanaman.status
         h.tvCreateAt.text = formatTanggalKeIndonesia(tanaman.createAt.toIsoString()).toUpperCase(Locale.ROOT)
 
-        if(tanaman.status.contains("OFFLINE")){
+        if(tanaman.status == "OFFLINECREATE"){
             val foto1 = File(tanaman.foto1)
             val foto2 = File(tanaman.foto2)
             val foto3 = File(tanaman.foto3)
@@ -122,11 +122,11 @@ class TanamanDataDraftVerifikasiAdapter(
                 .placeholder(R.drawable.notfound)
                 .into(h.iv4)
         }else{
-            val onlineUrl = "${BASE_URL}media"
-            val foto1 = onlineUrl + tanaman.foto1
-            val foto2 = onlineUrl + tanaman.foto2
-            val foto3 = onlineUrl + tanaman.foto3
-            val foto4 = onlineUrl + tanaman.foto4
+            val foto1 = "${BASE_URL}media${tanaman.foto1}"
+            val foto2 = "${BASE_URL}media${tanaman.foto2}"
+            val foto3 = "${BASE_URL}media${tanaman.foto3}"
+            val foto4 = "${BASE_URL}media${tanaman.foto4}"
+
             Glide.with(h.itemView.context)
                 .load(foto1)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

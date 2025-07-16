@@ -1,6 +1,7 @@
 package id.creatodidak.kp3k.database.Dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import id.creatodidak.kp3k.database.Entity.TanamanEntity
@@ -33,4 +34,16 @@ interface TanamanDao {
 
     @Query("SELECT * FROM TanamanEntity WHERE komoditas = :komoditas AND lahan_id IN (:lahanids) AND status = 'UNVERIFIED'")
     suspend fun getUnverifiedTanamanByLahanIds(komoditas: String, lahanids: List<Int>): List<TanamanEntity>?
+
+    @Query("SELECT * FROM TanamanEntity WHERE komoditas = :komoditas AND lahan_id IN (:lahanids) AND status = 'REJECTED'")
+    suspend fun getRejectedTanamanByLahanIds(komoditas: String, lahanids: List<Int>): List<TanamanEntity>?
+
+    @Delete
+    suspend fun delete(tanamanEntity: TanamanEntity)
+
+    @Query("DELETE FROM TanamanEntity WHERE id = :id")
+    suspend fun deleteById(id: Int)
+
+    @Query("SELECT * FROM TanamanEntity WHERE id = :id")
+    suspend fun getById(id: Int): TanamanEntity?
 }
