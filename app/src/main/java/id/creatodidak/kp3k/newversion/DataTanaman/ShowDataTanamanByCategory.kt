@@ -110,7 +110,9 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
         val updateAt: Date,
         val submitter: String,
         val tanamanke: String
-    )
+    ){
+        override fun toString(): String = showCaseName
+    }
     
     private lateinit var db : AppDatabase
     private lateinit var dbLahan : LahanDao

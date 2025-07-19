@@ -10,6 +10,7 @@ data class PanenEntity(
     val tanaman_id: Int,
     val jumlahpanen: String,
     val luaspanen: String,
+    val tanggalpanen: Date = Date(),
     val keterangan: String?,
     val analisa: String?,
     val foto1: String = "/media/default.jpg",

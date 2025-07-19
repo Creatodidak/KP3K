@@ -26,7 +26,7 @@ interface TanamanDao {
     @Insert(onConflict = androidx.room.OnConflictStrategy.REPLACE)
     suspend fun insertSingle(tanamanResponse: TanamanEntity)
 
-    @Query("SELECT * FROM TanamanEntity WHERE komoditas = :komoditas AND lahan_id = :lahan_id AND status = 'VERIFIED'")
+    @Query("SELECT * FROM TanamanEntity WHERE komoditas = :komoditas AND lahan_id = :lahan_id AND status = 'VERIFIED' ORDER BY masaTanam DESC, id ASC")
     suspend fun getTanamanByLahanId(komoditas: String, lahan_id: Int): List<TanamanEntity>?
 
     @Query("SELECT * FROM TanamanEntity WHERE komoditas = :komoditas AND lahan_id IN (:lahanids)")

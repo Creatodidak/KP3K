@@ -19,6 +19,9 @@ data class PanenResponseItem(
 	@field:SerializedName("jumlahpanen")
 	val jumlahpanen: String? = null,
 
+	@field:SerializedName("tanggalpanen")
+	val tanggalpanen: String? = null,
+
 	@field:SerializedName("analisa")
 	val analisa: String? = null,
 

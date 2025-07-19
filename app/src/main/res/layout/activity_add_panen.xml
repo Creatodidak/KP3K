@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".newversion.DataPanen.AddPanen">
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/default_bg"
+        android:orientation="vertical"
+        android:paddingVertical="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:text="TAMBAH REALISASI PANEN BARU"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvKeteranganKomoditas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:text="TextView"
+            android:textColor="@color/white" />
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6"
+        tools:ignore="SpeakableTextPresentCheck">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingBottom="100dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp"
+                android:background="@drawable/bg_rounded_border_gray"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="Pilih Pemilik Lahan" />
+
+                <Spinner
+                    android:id="@+id/spOwner"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp"
+                android:background="@drawable/bg_rounded_border_gray"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="Pilih Lahan" />
+
+                <Spinner
+                    android:id="@+id/spTypeLahan"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyTanaman"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp"
+                android:background="@drawable/bg_rounded_border_gray"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="Pilih Tanaman" />
+
+                <Spinner
+                    android:id="@+id/spTanaman"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etLuasPanen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Luas Panen (m2)"
+                        android:inputType="number|numberSigned"
+                        android:singleLine="true"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tvConvertHektar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="= Ha"
+                    android:textColor="@color/default_bg"
+                    android:textStyle="bold|italic" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTanggalPanen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Tanggal Panen"
+                        android:inputType="number|numberSigned"
+                        android:singleLine="true"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etJumlahPanen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Hasil Panen (KG)"
+                        android:inputType="number|numberSigned"
+                        android:singleLine="true"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tvConvertTon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="= Ton"
+                    android:textColor="@color/default_bg"
+                    android:textStyle="bold|italic" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etKeterangan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Keterangan"
+                        android:inputType="text|textLongMessage|textMultiLine"
+                        android:singleLine="false"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dokumentasi 1" />
+
+                    <TextView
+                        android:id="@+id/errorDok1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dokumentasi Harus Dipilih!"
+                        android:textColor="#E60505"
+                        android:visibility="gone" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/dok1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/imageDok1"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/bgpaparan"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintDimensionRatio="4:3"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/watermarks1"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@id/imageDok1"
+                            app:layout_constraintEnd_toEndOf="@id/imageDok1"
+                            app:layout_constraintStart_toStartOf="@id/imageDok1"
+                            app:layout_constraintTop_toTopOf="@id/imageDok1">
+
+                            <ImageView
+                                android:id="@+id/imageView21"
+                                android:layout_width="48dp"
+                                android:layout_height="0dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                app:layout_constraintDimensionRatio="h,1:1"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/poldakalbar" />
+
+                            <ImageView
+                                android:id="@+id/imageView22"
+                                android:layout_width="48dp"
+                                android:layout_height="0dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                app:layout_constraintDimensionRatio="h,1:1"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/logo" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayout41"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:orientation="vertical"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent">
+
+                                <TextView
+                                    android:id="@+id/textView38"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="©Ketahanan Pangan Presisi Polda Kalbar"
+                                    android:textColor="@color/white"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvNrpCamera1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/robinson"
+                                android:text="00000000"
+                                android:textColor="#43FFFFFF"
+                                android:textSize="48sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <Button
+                        android:id="@+id/buttonPilihDok1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/gray_bg"
+                        android:text="PILIH DOKUMENTASI"
+                        app:icon="@drawable/add_image_photo_icon"
+                        app:iconGravity="textEnd" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dokumentasi 2" />
+
+                    <TextView
+                        android:id="@+id/errorDok2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dokumentasi Harus Dipilih!"
+                        android:textColor="#E60505"
+                        android:visibility="gone" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/dok2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/imageDok2"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/bgpaparan"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintDimensionRatio="4:3"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/watermarks2"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@id/imageDok2"
+                            app:layout_constraintEnd_toEndOf="@id/imageDok2"
+                            app:layout_constraintStart_toStartOf="@id/imageDok2"
+                            app:layout_constraintTop_toTopOf="@id/imageDok2">
+
+                            <ImageView
+                                android:id="@+id/imageView212"
+                                android:layout_width="48dp"
+                                android:layout_height="0dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                app:layout_constraintDimensionRatio="h,1:1"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/poldakalbar" />
+
+                            <ImageView
+                                android:id="@+id/imageView222"
+                                android:layout_width="48dp"
+                                android:layout_height="0dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                app:layout_constraintDimensionRatio="h,1:1"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/logo" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutds4"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:orientation="vertical"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent">
+
+                                <TextView
+                                    android:id="@+id/textView382"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="©Ketahanan Pangan Presisi Polda Kalbar"
+                                    android:textColor="@color/white"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvNrpCamera2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/robinson"
+                                android:text="00000000"
+                                android:textColor="#43FFFFFF"
+                                android:textSize="48sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <Button
+                        android:id="@+id/buttonPilihDok2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/gray_bg"
+                        android:text="PILIH DOKUMENTASI"
+                        app:icon="@drawable/add_image_photo_icon"
+                        app:iconGravity="textEnd" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dokumentasi 3" />
+
+                    <TextView
+                        android:id="@+id/errorDok3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dokumentasi Harus Dipilih!"
+                        android:textColor="#E60505"
+                        android:visibility="gone" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/dok3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/imageDok3"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/bgpaparan"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintDimensionRatio="4:3"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/watermarks3"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@id/imageDok3"
+                            app:layout_constraintEnd_toEndOf="@id/imageDok3"
+                            app:layout_constraintStart_toStartOf="@id/imageDok3"
+                            app:layout_constraintTop_toTopOf="@id/imageDok3">
+
+                            <ImageView
+                                android:id="@+id/imageView213"
+                                android:layout_width="48dp"
+                                android:layout_height="0dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                app:layout_constraintDimensionRatio="h,1:1"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/poldakalbar" />
+
+                            <ImageView
+                                android:id="@+id/imageView223"
+                                android:layout_width="48dp"
+                                android:layout_height="0dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                app:layout_constraintDimensionRatio="h,1:1"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/logo" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayout43"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:orientation="vertical"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent">
+
+                                <TextView
+                                    android:id="@+id/textView383"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="©Ketahanan Pangan Presisi Polda Kalbar"
+                                    android:textColor="@color/white"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvNrpCamera3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/robinson"
+                                android:text="00000000"
+                                android:textColor="#43FFFFFF"
+                                android:textSize="48sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <Button
+                        android:id="@+id/buttonPilihDok3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/gray_bg"
+                        android:text="PILIH DOKUMENTASI"
+                        app:icon="@drawable/add_image_photo_icon"
+                        app:iconGravity="textEnd" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dokumentasi 4" />
+
+                    <TextView
+                        android:id="@+id/errorDok4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dokumentasi Harus Dipilih!"
+                        android:textColor="#E60404"
+                        android:visibility="gone" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/dok4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/imageDok4"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/bgpaparan"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintDimensionRatio="4:3"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/watermarks4"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@id/imageDok4"
+                            app:layout_constraintEnd_toEndOf="@id/imageDok4"
+                            app:layout_constraintStart_toStartOf="@id/imageDok4"
+                            app:layout_constraintTop_toTopOf="@id/imageDok4">
+
+                            <ImageView
+                                android:id="@+id/imageView214"
+                                android:layout_width="48dp"
+                                android:layout_height="0dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                app:layout_constraintDimensionRatio="h,1:1"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/poldakalbar" />
+
+                            <ImageView
+                                android:id="@+id/imageView224"
+                                android:layout_width="48dp"
+                                android:layout_height="0dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                app:layout_constraintDimensionRatio="h,1:1"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/logo" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayout44"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:orientation="vertical"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent">
+
+                                <TextView
+                                    android:id="@+id/textView384"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="©Ketahanan Pangan Presisi Polda Kalbar"
+                                    android:textColor="@color/white"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvNrpCamera"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/robinson"
+                                android:text="00000000"
+                                android:textColor="#43FFFFFF"
+                                android:textSize="48sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <Button
+                        android:id="@+id/buttonPilihDok4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/gray_bg"
+                        android:text="PILIH DOKUMENTASI"
+                        app:icon="@drawable/add_image_photo_icon"
+                        app:iconGravity="textEnd" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnKirimData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="KIRIM DATA"
+                    app:icon="@drawable/baseline_send_24"
+                    app:iconGravity="textEnd" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

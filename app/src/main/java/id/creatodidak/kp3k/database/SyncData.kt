@@ -173,6 +173,7 @@ suspend fun syncDataFromServer(ctx: Context){
                             tanaman_id = it.tanamanId!!,
                             jumlahpanen = it.jumlahpanen!!,
                             luaspanen = it.luaspanen!!,
+                            tanggalpanen = parseIsoDate(it.tanggalpanen!!) ?: Date(),
                             keterangan = it.keterangan!!,
                             komoditas = it.komoditas!!,
                             analisa = it.analisa!!,

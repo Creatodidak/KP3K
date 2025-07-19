@@ -42,6 +42,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun ownerDao(): OwnerDao
     abstract fun draftOwnerDao(): DraftOwnerDao
     abstract fun panenDao(): PanenDao
+    abstract fun draftPanenDao(): DraftPanenDao
 
     abstract fun draftTanamanDao(): DraftTanamanDao
     abstract fun tanamanDao(): TanamanDao

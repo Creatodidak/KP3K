@@ -132,6 +132,12 @@ class DashboardKomoditas : AppCompatActivity() {
             i.putExtra("komoditas", komoditas)
             startActivity(i)
         }
+
+        ivPanen.setOnClickListener {
+            val i = Intent(this@DashboardKomoditas, DataPanen::class.java)
+            i.putExtra("komoditas", komoditas)
+            startActivity(i)
+        }
     }
 
     private fun formatAlamat(vararg parts: String?): String {

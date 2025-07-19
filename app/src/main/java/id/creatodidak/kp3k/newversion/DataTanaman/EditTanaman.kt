@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -78,7 +79,7 @@ class EditTanaman : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        WindowCompat.setDecorFitsSystemWindows(window, true)
         window.statusBarColor = getColor(R.color.default_bg)
         db = DatabaseInstance.getDatabase(this)
         komoditas = intent.getStringExtra("komoditas").toString()
