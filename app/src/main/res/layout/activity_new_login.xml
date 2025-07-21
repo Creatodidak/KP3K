@@ -82,7 +82,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Username/NRP"
-                            android:minHeight="50dp" />
+                            android:inputType="text|textCapCharacters"
+                            android:minHeight="50dp"
+                            android:textAllCaps="true"
+                            tools:ignore="SpeakableTextPresentCheck" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -98,7 +101,8 @@
                             android:layout_height="wrap_content"
                             android:hint="Password"
                             android:inputType="text|textPassword"
-                            android:minHeight="50dp" />
+                            android:minHeight="50dp"
+                            tools:ignore="SpeakableTextPresentCheck" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button

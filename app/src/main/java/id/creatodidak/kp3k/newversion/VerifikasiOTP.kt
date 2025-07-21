@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.otpview.OTPListener
 import com.otpview.OTPTextView
 import id.creatodidak.kp3k.R
@@ -26,6 +27,8 @@ import id.creatodidak.kp3k.api.newModel.NewLoginRequest
 import id.creatodidak.kp3k.api.newModel.OTPRequest
 import id.creatodidak.kp3k.api.newModel.OTPResponse
 import id.creatodidak.kp3k.helper.Loading
+import id.creatodidak.kp3k.helper.showError
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.time.Duration
 import java.time.Instant
@@ -65,7 +68,9 @@ class VerifikasiOTP : AppCompatActivity() {
             }
 
             override fun onOTPComplete(otp: String) {
-                cekOTP(otp)
+                lifecycleScope.launch {
+                    cekOTP(otp)
+                }
             }
         }
 
@@ -111,117 +116,100 @@ class VerifikasiOTP : AppCompatActivity() {
         finish()
     }
 
-    private fun cekOTP(otp: String) {
+    private suspend fun cekOTP(otp: String) {
         Loading.show(this@VerifikasiOTP)
-
-        val call = Client.retrofit.create(NewAuth::class.java)
-            .cekOTP(
-                OTPRequest(
-                    sharedPref.getString("USERNAME", "")!!,
-                    otp
+        try {
+            val response = Client.retrofit.create(NewAuth::class.java)
+                .cekOTP(
+                    OTPRequest(
+                        sharedPref.getString("USERNAME", "")!!,
+                        otp
+                    )
                 )
-            )
 
-        call.enqueue(object : retrofit2.Callback<OTPResponse> {
-            override fun onResponse(
-                call: retrofit2.Call<OTPResponse>,
-                response: retrofit2.Response<OTPResponse>
-            ) {
-                Loading.hide()
+            if (response.isSuccessful && response.body() != null) {
+                val res = response.body()
+                val data = res?.data!!
+                val sh = getSharedPreferences("USER_DATA", MODE_PRIVATE).edit()
+                with(sh) {
+                    putBoolean("IS_LOGGED_IN", true)
+                    putString("LAST_LOGIN", Instant.now().toString())
+                    putString("LAST_LOGIN_ROLE", data.role)
 
-                if (response.isSuccessful && response.body() != null) {
-                    val res = response.body()
-                    val data = res?.data!!
-                    val sh = getSharedPreferences("USER_DATA", MODE_PRIVATE).edit()
-                    with(sh) {
-                        putBoolean("IS_LOGGED_IN", true)
-                        putString("LAST_LOGIN", Instant.now().toString())
-                        putString("LAST_LOGIN_ROLE", data.role)
+                    putInt("id", data.id ?: -1)
+                    putString("nrp", data.nrp ?: "")
+                    putString("nohp", data.nohp ?: "")
+                    putString("jabatan", data.jabatan ?: "")
+                    putString("pangkat", data.pangkat ?: "")
+                    putString("foto", data.foto ?: "")
+                    putString("role", data.role ?: "")
+                    putString("status", data.status ?: "")
+                    putInt("satkerId", data.satkerId ?: -1)
+                    putInt("desaBinaanId", data.desaBinaanId ?: -1)
+                    putString("password", data.password ?: "")
+                    putString("passwordiv", data.passwordiv ?: "")
+                    putString("nama", data.nama ?: "")
 
-                        putInt("id", data.id ?: -1)
-                        putString("nrp", data.nrp ?: "")
-                        putString("nohp", data.nohp ?: "")
-                        putString("jabatan", data.jabatan ?: "")
-                        putString("pangkat", data.pangkat ?: "")
-                        putString("foto", data.foto ?: "")
-                        putString("role", data.role ?: "")
-                        putString("status", data.status ?: "")
-                        putInt("satkerId", data.satkerId ?: -1)
-                        putInt("desaBinaanId", data.desaBinaanId ?: -1)
-                        putString("password", data.password ?: "")
-                        putString("passwordiv", data.passwordiv ?: "")
-                        putString("nama", data.nama ?: "")
+                    // Satker (nested object)
+                    putString("satker_nama", data.satker?.nama ?: "")
+                    putString("satker_kode", data.satker?.kode ?: "")
+                    putString("satker_level", data.satker?.level ?: "")
+                    putInt("satker_id", data.satker?.id ?: -1)
+                    putInt("satker_kabupatenId", data.satker?.kabupatenId ?: -1)
+                    putInt("satker_provinsiId", data.satker?.provinsiId ?: -1)
 
-                        // Satker (nested object)
-                        putString("satker_nama", data.satker?.nama ?: "")
-                        putString("satker_kode", data.satker?.kode ?: "")
-                        putString("satker_level", data.satker?.level ?: "")
-                        putInt("satker_id", data.satker?.id ?: -1)
-                        putInt("satker_kabupatenId", data.satker?.kabupatenId ?: -1)
-                        putInt("satker_provinsiId", data.satker?.provinsiId ?: -1)
+                    // Parent Satker
+                    putString("satker_parent_nama", data.satker?.parent?.nama ?: "")
+                    putString("satker_parent_level", data.satker?.parent?.level ?: "")
 
-                        // Parent Satker
-                        putString("satker_parent_nama", data.satker?.parent?.nama ?: "")
-                        putString("satker_parent_level", data.satker?.parent?.level ?: "")
+                    //Parent of Parent Satker
+                    putString("satkerparent_parent_nama", data.satker?.parent?.parent?.nama ?: "")
+                    putString("satkerparent_parent_level", data.satker?.parent?.parent?.level ?: "")
 
-                        //Parent of Parent Satker
-                        putString("satkerparent_parent_nama", data.satker?.parent?.parent?.nama ?: "")
-                        putString("satkerparent_parent_level", data.satker?.parent?.parent?.level ?: "")
+                    // Desa Binaan
+                    putString("desa_nama", data.desaBinaan?.nama ?: "")
+                    putInt("desa_id", data.desaBinaan?.id ?: -1)
+                    putInt("desa_kecamatanId", data.desaBinaan?.kecamatanId ?: -1)
 
-                        // Desa Binaan
-                        putString("desa_nama", data.desaBinaan?.nama ?: "")
-                        putInt("desa_id", data.desaBinaan?.id ?: -1)
-                        putInt("desa_kecamatanId", data.desaBinaan?.kecamatanId ?: -1)
+                    // Kecamatan
+                    putString("kecamatan_nama", data.desaBinaan?.kecamatan?.nama ?: "")
+                    putInt("kecamatan_id", data.desaBinaan?.kecamatan?.id ?: -1)
 
-                        // Kecamatan
-                        putString("kecamatan_nama", data.desaBinaan?.kecamatan?.nama ?: "")
-                        putInt("kecamatan_id", data.desaBinaan?.kecamatan?.id ?: -1)
+                    // Kabupaten
+                    putString("kabupaten_nama", data.desaBinaan?.kecamatan?.kabupaten?.nama ?: "")
+                    putInt("kabupaten_id", data.desaBinaan?.kecamatan?.kabupaten?.id ?: -1)
 
-                        // Kabupaten
-                        putString("kabupaten_nama", data.desaBinaan?.kecamatan?.kabupaten?.nama ?: "")
-                        putInt("kabupaten_id", data.desaBinaan?.kecamatan?.kabupaten?.id ?: -1)
+                    // Provinsi
+                    putString("provinsi_nama", data.desaBinaan?.kecamatan?.kabupaten?.provinsi?.nama ?: "")
+                    putInt("provinsi_id", data.desaBinaan?.kecamatan?.kabupaten?.provinsi?.id ?: -1)
 
-                        // Provinsi
-                        putString("provinsi_nama", data.desaBinaan?.kecamatan?.kabupaten?.provinsi?.nama ?: "")
-                        putInt("provinsi_id", data.desaBinaan?.kecamatan?.kabupaten?.provinsi?.id ?: -1)
-
-                        apply()
-                    }
-
-                    val sharedPreferencesEditor = getSharedPreferences("LOGIN_STATE", MODE_PRIVATE).edit()
-                    sharedPreferencesEditor.clear()
-                    sharedPreferencesEditor.apply()
-
-                    val intent = Intent(this@VerifikasiOTP, PreStart::class.java)
-                    startActivity(intent)
-                    finish()
-                } else {
-                    val errorJson = response.errorBody()?.string()
-                    val msg = try {
-                        val json = JSONObject(errorJson ?: "")
-                        json.optString("msg", "Error")
-                    } catch (e: Exception) {
-                        "Error: ${e.message}"
-                    }
-
-                    showAlert(msg)
+                    apply()
                 }
-            }
 
-            override fun onFailure(call: retrofit2.Call<OTPResponse>, t: Throwable) {
-                Loading.hide()
-                Log.e("OTPError", t.message.toString())
-                showAlert("Terjadi kesalahan jaringan: ${t.message}")
-            }
-        })
-    }
+                val sharedPreferencesEditor = getSharedPreferences("LOGIN_STATE", MODE_PRIVATE).edit()
+                sharedPreferencesEditor.clear()
+                sharedPreferencesEditor.apply()
 
-    private fun showAlert(message: String) {
-        AlertDialog.Builder(this)
-            .setTitle("OTP Error")
-            .setMessage(message)
-            .setPositiveButton("OK", null)
-            .show()
+                val intent = Intent(this@VerifikasiOTP, PreStart::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                val errorJson = response.errorBody()?.string()
+                val msg = try {
+                    val json = JSONObject(errorJson ?: "")
+                    json.optString("msg", "Error")
+                } catch (e: Exception) {
+                    "Error: ${e.message}"
+                }
+
+                showError(this, "Error", msg)
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+            showError(this, "Error", e.message.toString())
+        }finally {
+            Loading.hide()
+        }
     }
 
     override fun onDestroy() {

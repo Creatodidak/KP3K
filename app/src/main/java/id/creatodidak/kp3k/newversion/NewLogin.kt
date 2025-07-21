@@ -1,11 +1,14 @@
 package id.creatodidak.kp3k.newversion
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -24,10 +27,14 @@ import id.creatodidak.kp3k.api.NewAuth
 import id.creatodidak.kp3k.api.newModel.LoginResponse
 import id.creatodidak.kp3k.api.newModel.NewLoginRequest
 import id.creatodidak.kp3k.helper.Loading
+import id.creatodidak.kp3k.helper.showError
+import id.creatodidak.kp3k.helper.showSuccess
+import id.creatodidak.kp3k.helper.toIsoString
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.time.Duration
 import java.time.Instant
+import java.util.Date
 
 class NewLogin : AppCompatActivity() {
     private val roles = listOf<String>("PILIH ROLE", "SUPER ADMIN", "PJU POLDA", "PAMATWIL", "PJU POLRES", "KAPOLSEK", "ADMIN POLDA", "ADMIN POLRES", "ADMINPOLSEK", "PERSONIL POLDA", "BINTARA PENGGERAK", "PERSONIL POLRES", "PERSONIL POLSEK")
@@ -90,26 +97,19 @@ class NewLogin : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                if (position == 0) {
-                    inputUsername.isEnabled = false
-                    inputPassword.isEnabled = false
-                }else{
-                    inputUsername.isEnabled = true
-                    inputPassword.isEnabled = true
-                }
+                val isValidSelection = position != 0
+                inputUsername.isEnabled = isValidSelection
+                inputPassword.isEnabled = isValidSelection
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
             }
-
         }
+
 
         buttonLogin.setOnClickListener {
             if(isFormValid()){
-                if (spinnerRole.selectedItemPosition in listOf(1, 2, 3)) {
-                    startLogin()
-                } else {
+                lifecycleScope.launch {
                     startLogin()
                 }
             }else{
@@ -118,27 +118,71 @@ class NewLogin : AppCompatActivity() {
         }
     }
 
-    private fun startLogin() {
+    private suspend fun startLogin() {
         Loading.show(this@NewLogin)
+        try {
+            val sh = getSharedPreferences("LOGIN_STATE", MODE_PRIVATE).edit()
+            Log.i("ROLE", spinnerRole.selectedItem.toString())
+            if(spinnerRole.selectedItem.toString() in setOf("PJU POLDA", "PAMATWIL", "PJU POLRES", "KAPOLSEK")){
+                val response = Client.retrofit.create(NewAuth::class.java)
+                    .loginPejabat(
+                        NewAuth.PejabatLoginRequest(
+                            inputUsername.text.toString(),
+                            inputPassword.text.toString()
+                        )
+                    )
 
-        val call = Client.retrofit.create(NewAuth::class.java)
-            .login(
-                NewLoginRequest(
-                    inputUsername.text.toString(),
-                    inputPassword.text.toString()
-                )
-            )
+                if(response.isSuccessful && response.body() !== null && response.body()!!.data !== null){
+                    val data = response.body()!!.data!!
+                    val sh = getSharedPreferences("USER_DATA", MODE_PRIVATE).edit()
+                    with(sh) {
+                        putBoolean("IS_LOGGED_IN", true)
+                        putString("LAST_LOGIN", Instant.now().toString())
+                        putString("LAST_LOGIN_ROLE", data.role)
 
-        call.enqueue(object : retrofit2.Callback<LoginResponse> {
-            override fun onResponse(
-                call: retrofit2.Call<LoginResponse>,
-                response: retrofit2.Response<LoginResponse>
-            ) {
-                Loading.hide()
+                        putInt("id", data.id ?: -1)
+                        putString("nrp", data.nrp ?: "")
+                        putString("jabatan", data.jabatan ?: "")
+                        putString("role", data.role ?: "")
+                        putString("status", data.status ?: "")
+                        putInt("satkerId", data.satkerId ?: -1)
+                        putString("password", data.password ?: "")
+                        putString("passwordiv", data.passwordiv ?: "")
+                        putString("username", data.username ?: "")
+                        putInt("wilayah", data.wilayah ?: -1)
 
+                        // Satker (nested object)
+                        putString("satker_nama", data.satker?.nama ?: "")
+                        putString("satker_kode", data.satker?.kode ?: "")
+                        putString("satker_level", data.satker?.level ?: "")
+                        putInt("satker_id", data.satker?.id ?: -1)
+                        putInt("satker_kabupatenId", data.satker?.kabupatenId ?: -1)
+                        putInt("satker_provinsiId", data.satker?.provinsiId ?: -1)
+                        // Parent Satker
+                        putString("satker_parent_nama", data.satker?.parent?.nama ?: "")
+                        putString("satker_parent_level", data.satker?.parent?.level ?: "")
+                        //Parent of Parent Satker
+                        putString("satkerparent_parent_nama", data.satker?.parent?.parent?.nama ?: "")
+                        putString("satkerparent_parent_level", data.satker?.parent?.parent?.level ?: "")
+                        apply()
+                    }
+
+                    showSuccess(this, "Login Berhasil", "Proses Login Berhasil!"){
+                        val intent = Intent(this@NewLogin, PreStart::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
+            }else{
+                val response = Client.retrofit.create(NewAuth::class.java)
+                    .login(
+                        NewLoginRequest(
+                            inputUsername.text.toString(),
+                            inputPassword.text.toString()
+                        )
+                    )
                 if (response.isSuccessful) {
                     val res = response.body()
-                    val sh = getSharedPreferences("LOGIN_STATE", MODE_PRIVATE).edit()
                     with(sh) {
                         putBoolean("RECENTLY_LOGIN", true)
                         putString("LAST_LOGIN", res?.createdAt)
@@ -147,15 +191,18 @@ class NewLogin : AppCompatActivity() {
                         apply()
                     }
 
-                    val intent = Intent(this@NewLogin, VerifikasiOTP::class.java)
-                    startActivity(intent)
-                    finish()
+                    showSuccess(this, "Login Berhasil", "Proses Login Berhasil!"){
+                        val intent = Intent(this@NewLogin, VerifikasiOTP::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                 } else {
                     val errorJson = response.errorBody()?.string()
                     val msg = try {
                         val json = JSONObject(errorJson ?: "")
                         json.optString("msg", "Login gagal")
                     } catch (e: Exception) {
+                        e.printStackTrace()
                         "Login gagal"
                     }
 
@@ -176,13 +223,13 @@ class NewLogin : AppCompatActivity() {
                     }
                 }
             }
+        }catch (e: Exception){
+            e.printStackTrace()
+            showError(this, "Error", e.message.toString())
+        }finally {
+            Loading.hide()
+        }
 
-            override fun onFailure(call: retrofit2.Call<LoginResponse>, t: Throwable) {
-                Loading.hide()
-                Log.e("LoginError", t.message.toString())
-                showAlert("Terjadi kesalahan jaringan: ${t.message}")
-            }
-        })
     }
 
 

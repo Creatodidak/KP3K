@@ -20,6 +20,7 @@ import id.creatodidak.kp3k.BuildConfig.BASE_URL
 import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.database.syncDataFromServer
 import id.creatodidak.kp3k.helper.RoleHelper
+import id.creatodidak.kp3k.helper.isPejabat
 import id.creatodidak.kp3k.newversion.setting.Account
 import id.creatodidak.kp3k.newversion.setting.Setting
 import kotlinx.coroutines.launch
@@ -54,7 +55,8 @@ class DashboardBPKP : AppCompatActivity() {
         val menu_gudang = findViewById<ImageView>(R.id.menu_gudang)
         val menu_koperasi = findViewById<ImageView>(R.id.menu_koperasi)
 
-        tvNama.text = sh.getString("nama", "")
+        tvNama.text = if(isPejabat(this)) sh.getString("username", "") else sh.getString("nama", "")
+        tvNrp.visibility = if(!isPejabat(this)) View.VISIBLE else View.GONE
         tvNrp.text = sh.getString("pangkat", "")+"/"+sh.getString("nrp", "")
 
         val jabatan = sh.getString("jabatan", "")
@@ -79,12 +81,14 @@ class DashboardBPKP : AppCompatActivity() {
             }
         }
 
-        Glide.with(this)
-            .load(BASE_URL+"media"+sh.getString("foto", ""))
-            .placeholder(R.drawable.outline_account_circle_24)
-            .circleCrop()
-            .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.ALL)
-            .into(ivProfilPhoto)
+        if(!isPejabat(this)){
+            Glide.with(this)
+                .load(BASE_URL+"media"+sh.getString("foto", ""))
+                .placeholder(R.drawable.outline_account_circle_24)
+                .circleCrop()
+                .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.ALL)
+                .into(ivProfilPhoto)
+        }
 
 
         if(role.equals("BPKP")){
