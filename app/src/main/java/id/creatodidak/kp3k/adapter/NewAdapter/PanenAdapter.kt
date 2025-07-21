@@ -11,6 +11,8 @@ import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.helper.angkaIndonesia
 import id.creatodidak.kp3k.helper.convertToHektar
 import id.creatodidak.kp3k.helper.convertToTon
+import id.creatodidak.kp3k.helper.formatTanggalKeIndonesia
+import id.creatodidak.kp3k.helper.toIsoString
 import id.creatodidak.kp3k.newversion.DataPanen.ShowDataPanenByCategory.NewPanenEntity
 
 class PanenAdapter(
@@ -41,7 +43,6 @@ class PanenAdapter(
     override fun getItemCount(): Int = data.size
 
     override fun onBindViewHolder(h: ViewHolder, position: Int) {
-        val m2 = R.string.meterpersegi
         val panen = data[position]
         val layoutParams = h.cvData.layoutParams as ViewGroup.MarginLayoutParams
         if (position == 0) {
@@ -58,10 +59,11 @@ class PanenAdapter(
         h.tvTitle.text = "${panen.showCaseName}"
         h.tvRincianTanaman.text = "Tanaman Ke - ${panen.tanaman?.tanamanke} Masa Tanam Ke - ${panen.tanaman?.masatanam}"
         h.tvLahanWithOwner.text = "(${panen.lahan?.type?.name}) ${panen.owner?.nama} - ${panen.owner?.nama_pok}"
-        h.tvLuasPanen.text = "${panen.luaspanen}$m2/${angkaIndonesia(convertToHektar(panen.luaspanen.toDouble()))}Hektar"
-        h.tvProduksi.text = "${panen.jumlahpanen}Kg/${angkaIndonesia(convertToTon(panen.jumlahpanen.toDouble()))}Ton"
+        h.tvLuasPanen.text = "Luas Panen ${panen.luaspanen}m²/${angkaIndonesia(convertToHektar(panen.luaspanen.toDouble()))}Hektar"
+        h.tvProduksi.text = "Total Panen ${panen.jumlahpanen}Kg/${angkaIndonesia(convertToTon(panen.jumlahpanen.toDouble()))}Ton"
         h.tvPersenProduksi.text = "Tercapai ${angkaIndonesia(persentasePanen)}% dari Target Panen ${angkaIndonesia(targetPanen)}Kg"
-
+        h.tvTypeLahan.text = "Dipanen Pada ${formatTanggalKeIndonesia(panen.tanggalpanen.toIsoString())}"
+        h.tvLuasLahan.visibility = View.GONE
         h.btRincian.setOnClickListener {
             onRincianClick(panen)
         }

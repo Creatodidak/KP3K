@@ -56,6 +56,7 @@ class DataPanen : AppCompatActivity() {
     private lateinit var cvByPolsek: CardView
     private lateinit var cvByLahanOwner: CardView
     private lateinit var cvByLahan: CardView
+    private lateinit var cvByTanaman: CardView
     private lateinit var svDataRealisasiPanen: ScrollView
     private lateinit var swlDataRealisasiPanen: SwipeRefreshLayout
     private lateinit var lyDraft: LinearLayout
@@ -88,6 +89,7 @@ class DataPanen : AppCompatActivity() {
         cvByPolsek = findViewById(R.id.cvDataPanenByPolsek)
         cvByLahanOwner = findViewById(R.id.cvDataPanenByLahanOwner)
         cvByLahan = findViewById(R.id.cvDataPanenByLahan)
+        cvByTanaman = findViewById(R.id.cvDataPanenByTanaman)
         lyDraft = findViewById(R.id.lyDraft)
         tvDraft = findViewById(R.id.tvDraft)
         lyUnverified = findViewById(R.id.lyUnverified)
@@ -206,6 +208,13 @@ class DataPanen : AppCompatActivity() {
             i.putExtra("kategori", "lahan")
             startActivity(i)
         }
+        cvByTanaman.setOnClickListener {
+            val i = Intent(this, ShowDataPanenByCategory::class.java)
+            i.putExtra("komoditas", komoditas)
+            i.putExtra("kategori", "tanaman")
+            startActivity(i)
+        }
+
         lyDraft.setOnClickListener {
             val i = Intent(this, DraftPanen::class.java)
             i.putExtra("komoditas", komoditas)

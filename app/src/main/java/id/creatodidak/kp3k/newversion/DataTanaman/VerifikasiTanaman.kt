@@ -43,13 +43,11 @@ import kotlin.collections.forEach
 
 class VerifikasiTanaman : AppCompatActivity() {
     private lateinit var db : AppDatabase
-    private lateinit var dbOwner: OwnerDao
-    private lateinit var dbWilayah: WilayahDao
     private lateinit var komoditas : String
     private lateinit var tvKeteranganKomoditas : TextView
     private lateinit var totalData : TextView
     private lateinit var rvVerifikasi : RecyclerView
-    private var datas = mutableListOf<ShowDataTanamanByCategory.NewTanamanEntity>()
+    private var datas = mutableListOf<NewTanamanEntity>()
     private lateinit var adapter : TanamanDataDraftVerifikasiAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -146,7 +144,8 @@ class VerifikasiTanaman : AppCompatActivity() {
         tanaman.forEach {
             val lahan = lahans.find { lahan -> lahan.id == it.lahan_id }
             val owner = owners.find{owner -> lahan?.owner_id == owner.id}
-            val jumlahPanen = db.panenDao().getPanenByTanamanId(it.id)
+            val dataPanen = db.panenDao().getPanenByTanamanId(it.id)
+            val jumlahPanen = if(dataPanen.isNullOrEmpty()) 0.0 else dataPanen.sumOf { it.jumlahpanen.toDoubleOrNull() ?: 0.0 }
             newTanaman.add(
                 NewTanamanEntity(
                     it.id,
@@ -155,7 +154,7 @@ class VerifikasiTanaman : AppCompatActivity() {
                     "Lahan Ke - ${lahan?.lahanke} (${lahan?.type?.name}) Milik ${owner?.nama} - ${owner?.nama_pok}",
                     lahan?.type?: TypeLahan.MONOKULTUR,
                     lahan?.luas.toString(),
-                    jumlahPanen?.jumlahpanen.toString(),
+                    jumlahPanen.toString(),
                     it.masatanam,
                     it.luastanam,
                     it.tanggaltanam,

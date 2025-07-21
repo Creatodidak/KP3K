@@ -29,6 +29,9 @@ interface TanamanDao {
     @Query("SELECT * FROM TanamanEntity WHERE komoditas = :komoditas AND lahan_id = :lahan_id AND status = 'VERIFIED' ORDER BY masaTanam DESC, id ASC")
     suspend fun getTanamanByLahanId(komoditas: String, lahan_id: Int): List<TanamanEntity>?
 
+    @Query("SELECT * FROM TanamanEntity WHERE komoditas = :komoditas AND lahan_id = :lahan_id AND masatanam = :masatanam AND status = 'VERIFIED' ORDER BY masaTanam DESC, id ASC")
+    suspend fun getTanamanByLahanIdAndMasaTanam(komoditas: String, lahan_id: Int, masatanam: String): List<TanamanEntity>?
+
     @Query("SELECT * FROM TanamanEntity WHERE komoditas = :komoditas AND lahan_id IN (:lahanids)")
     suspend fun getTanamanByLahanIds(komoditas: String, lahanids: List<Int>): List<TanamanEntity>?
 
@@ -46,4 +49,8 @@ interface TanamanDao {
 
     @Query("SELECT * FROM TanamanEntity WHERE id = :id")
     suspend fun getById(id: Int): TanamanEntity?
+
+    @Query("SELECT * FROM TanamanEntity WHERE id = :id AND masatanam = :masatanam")
+    suspend fun getByIdAndMasaTanam(id: Int, masatanam: String): TanamanEntity?
+
 }

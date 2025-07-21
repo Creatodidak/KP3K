@@ -176,7 +176,7 @@ suspend fun syncDataFromServer(ctx: Context){
                             tanggalpanen = parseIsoDate(it.tanggalpanen!!) ?: Date(),
                             keterangan = it.keterangan!!,
                             komoditas = it.komoditas!!,
-                            analisa = it.analisa!!,
+                            analisa = it.analisa,
                             foto1 = it.foto1!!,
                             foto2 = it.foto2!!,
                             foto3 = it.foto3!!,

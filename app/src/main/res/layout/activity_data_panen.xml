@@ -403,6 +403,36 @@
                             tools:ignore="UseAppTint" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvDataPanenByTanaman"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="15dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="DATA BERDASARKAN TANAMAN"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/bg_menu"
+                            app:srcCompat="@drawable/baseline_chevron_right_24"
+                            tools:ignore="UseAppTint" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
         </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

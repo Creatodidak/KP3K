@@ -6,5 +6,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".newversion.DataPanen.DraftPanen">
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/error_bg"
+        android:orientation="vertical"
+        android:paddingVertical="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:text="DRAFT REALISASI PANEN"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvKeteranganKomoditas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:text=""
+            android:textColor="@color/white" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/totalData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/bg_menu"
+        android:textColor="@color/white"
+        android:padding="4dp"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDraft"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/totalData" />
 </androidx.constraintlayout.widget.ConstraintLayout>

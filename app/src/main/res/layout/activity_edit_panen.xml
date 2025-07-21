@@ -5,6 +5,151 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".newversion.DataPanen.EditPanen">
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/default_bg"
+        android:orientation="vertical"
+        android:paddingVertical="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:text="EDIT DATA REALISASI PANEN"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvKeteranganKomoditas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:text="TextView"
+            android:textColor="@color/white" />
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6"
+        tools:ignore="SpeakableTextPresentCheck">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingBottom="100dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/lyForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etLuasPanen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Luas Panen (m2)"
+                        android:inputType="number|numberSigned"
+                        android:singleLine="true"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tvConvertHektar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="= Ha"
+                    android:textColor="@color/default_bg"
+                    android:textStyle="bold|italic" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTanggalPanen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Tanggal Panen"
+                        android:inputType="number|numberSigned"
+                        android:singleLine="true"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etJumlahPanen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Hasil Panen (KG)"
+                        android:inputType="number|numberSigned"
+                        android:singleLine="true"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tvConvertTon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="= Ton"
+                    android:textColor="@color/default_bg"
+                    android:textStyle="bold|italic" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etKeterangan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Keterangan"
+                        android:inputType="text|textLongMessage|textMultiLine"
+                        android:singleLine="false"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnKirimData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="KIRIM DATA"
+                    app:icon="@drawable/baseline_send_24"
+                    app:iconGravity="textEnd" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

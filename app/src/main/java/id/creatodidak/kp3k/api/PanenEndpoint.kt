@@ -19,22 +19,22 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface PanenEndpoint {
-    @POST("/panen/bypanenid")
+    @POST("/panen/bytanamanid")
     suspend fun getAllPanenOnLahan(
         @Body request: PanenIdRequest
     ): Response<List<PanenResponseItem>>
 
-    @POST("/panen/bypanenids")
+    @POST("/panen/bytanamanids")
     suspend fun getAllPanenOnLahans(
         @Body request: PanenIdsRequest
     ): Response<List<PanenResponseItem>>
 
-    @POST("/panen/bypanenid/bytanggalpanen")
+    @POST("/panen/bytanamanid/bytanggalpanen")
     suspend fun getAllPanenOnLahanByTanggalPanen(
         @Body request: PanenByTanggalPanenRequest
     ): Response<List<PanenResponseItem>>
 
-    @POST("/panen/bypanenid/bytanggalpanenrange")
+    @POST("/panen/bytanamanid/bytanggalpanenrange")
     suspend fun getAllPanenOnLahanByTanggalPanenRange(
         @Body request: PanenByTanggalPanenRangeRequest
     ): Response<List<PanenResponseItem>>

@@ -527,8 +527,11 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
 
         swipeRefreshLayout.setOnRefreshListener {
             lifecycleScope.launch {
-                loadFilter()
-                if(defId != null) loadData(defId!!)
+                if(defId != null) {
+                    loadData(defId!!)
+                }else{
+                    loadFilter()
+                }
             }
         }
     }
@@ -1036,6 +1039,7 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
         groupedByMasaTanam.forEach { (masaTanamKe, tanamanList) ->
             tanamanList.forEachIndexed { index, it ->
                 val dataPanen = db.panenDao().getPanenByTanamanId(it.id)
+                val jumlahPanen = if(dataPanen.isNullOrEmpty()) 0.0 else dataPanen.sumOf { it.jumlahpanen.toDoubleOrNull() ?: 0.0 }
                 newList.add(
                     NewTanamanEntity(
                         it.id,
@@ -1044,7 +1048,7 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
                         lahan.showCaseName,
                         lahan.type,
                         lahan.luas,
-                        dataPanen?.jumlahpanen.toString(),
+                        jumlahPanen.toString(),
                         it.masatanam,
                         it.luastanam,
                         it.tanggaltanam,
@@ -1227,8 +1231,11 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
-            loadFilter()
-            if(defId != null) loadData(defId!!)
+            if(defId != null) {
+                loadData(defId!!)
+            }else{
+                loadFilter()
+            }
         }
     }
 }

@@ -194,10 +194,10 @@ class DashboardKomoditas : AppCompatActivity() {
     }
 
     private suspend fun loadOfflineData(){
-        val dataOwner = dbOwner.getAllByKomoditas(komoditas)
-        val dataLahan = dbLahan.getAll(komoditas)
-        val dataTanaman = dbTanaman.getAll(komoditas)
-        val dataPanen = dbPanen.getAll(komoditas)
+        val dataOwner = dbOwner.getAllByKomoditas(komoditas).filter { it.status == "VERIFIED" }
+        val dataLahan = dbLahan.getAll(komoditas).filter { it.status == "VERIFIED" }
+        val dataTanaman = dbTanaman.getAll(komoditas).filter { it.status == "VERIFIED" }
+        val dataPanen = dbPanen.getAll(komoditas).filter { it.status == "VERIFIED" }
 
         withContext(Dispatchers.Main){
             swlDashboardKomoditas.isRefreshing = false

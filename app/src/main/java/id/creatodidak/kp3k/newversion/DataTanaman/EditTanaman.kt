@@ -1,11 +1,9 @@
 package id.creatodidak.kp3k.newversion.DataTanaman
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
@@ -15,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import id.creatodidak.kp3k.R
@@ -42,7 +39,6 @@ import id.creatodidak.kp3k.helper.showCustomDatePicker
 import id.creatodidak.kp3k.helper.showError
 import id.creatodidak.kp3k.helper.showSuccess
 import id.creatodidak.kp3k.helper.toIsoString
-import id.creatodidak.kp3k.newversion.DataLahan.ShowDataLahanByCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

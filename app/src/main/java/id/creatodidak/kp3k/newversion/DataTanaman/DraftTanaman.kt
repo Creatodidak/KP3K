@@ -185,7 +185,8 @@ class DraftTanaman : AppCompatActivity() {
         tanaman.forEach {
             val lahan = lahans.find { lahan -> lahan.id == it.lahan_id }
             val owner = owners.find{owner -> lahan?.owner_id == owner.id}
-            val jumlahPanen = db.panenDao().getPanenByTanamanId(it.id)
+            val dataPanen = db.panenDao().getPanenByTanamanId(it.id)
+            val jumlahPanen = if(dataPanen.isNullOrEmpty()) 0.0 else dataPanen.sumOf { it.jumlahpanen.toDoubleOrNull() ?: 0.0 }
             val id = if(it.status == "OFFLINECREATE") it.id else it.currentId!!
             newTanaman.add(
                 NewTanamanEntity(
@@ -195,7 +196,7 @@ class DraftTanaman : AppCompatActivity() {
                     "Lahan Ke - ${lahan?.lahanke} (${lahan?.type?.name}) Milik ${owner?.nama} - ${owner?.nama_pok}",
                     lahan?.type?: TypeLahan.MONOKULTUR,
                     lahan?.luas.toString(),
-                    jumlahPanen?.jumlahpanen.toString(),
+                    jumlahPanen.toString(),
                     it.masatanam,
                     it.luastanam,
                     it.tanggaltanam,

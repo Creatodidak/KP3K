@@ -36,4 +36,13 @@ interface DraftPanenDao {
 
     @Query("SELECT id FROM panendraftentity ORDER BY id DESC LIMIT 1")
     suspend fun getLastId(): Int?
+
+    @Query("DELETE FROM panendraftentity WHERE id = :id")
+    suspend fun deleteDraftById(id: Int): Int
+
+    @Query("DELETE FROM panendraftentity WHERE currentId = :id")
+    suspend fun deleteDraftByCurrentId(id: Int): Int
+
+    @Query("UPDATE panendraftentity SET foto1 = :foto1, foto2 = :foto2, foto3 = :foto3, foto4 = :foto4 WHERE id = :id")
+    suspend fun updateFoto(id: Int, foto1: String, foto2: String, foto3: String, foto4: String): Int
 }
