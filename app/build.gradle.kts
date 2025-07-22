@@ -41,11 +41,13 @@ android {
                 "proguard-rules.pro"
             )
              buildConfigField("String", "BASE_URL", "\"https://server.resldk.cloud/\"")
+            buildConfigField("String", "SOCKETURL", "\"http://36.93.138.110:3042/\"")
              buildConfigField("String", "AI_URL", "\"https://ai.resldk.cloud/\"")
              buildConfigField("String", "AGORA_ID", "\"6141104f89c84e5f89063dffef241e71\"")
         }
         debug {
             buildConfigField("String", "BASE_URL", "\"http://36.93.138.110:3030/\"")
+            buildConfigField("String", "SOCKETURL", "\"http://36.93.138.110:3042/\"")
             buildConfigField("String", "AI_URL", "\"http://36.93.138.110:3030/agritech/\"")
 //            buildConfigField("String", "AI_URL", "\"https://ai.resldk.cloud/\"")
             signingConfig = signingConfigs.getByName("release")

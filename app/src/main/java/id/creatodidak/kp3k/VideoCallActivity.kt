@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceView
+import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -54,6 +55,12 @@ class VideoCallActivity : AppCompatActivity() {
                 val i = Intent(this@VideoCallActivity, EndCallActivity::class.java)
                 startActivity(i)
                 finish()
+                window.clearFlags(
+                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                )
             }
         }
 
@@ -64,6 +71,12 @@ class VideoCallActivity : AppCompatActivity() {
             val i = Intent(this@VideoCallActivity, EndCallActivity::class.java)
             startActivity(i)
             finish()
+            window.clearFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+            )
         }
     }
 
@@ -71,6 +84,12 @@ class VideoCallActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_call)
+        window.addFlags(
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+        )
         token = intent.getStringExtra("token").toString()
         val caller = intent.getStringExtra("caller")
         val tvCaller = findViewById<TextView>(R.id.tvNoHp)
@@ -100,6 +119,12 @@ class VideoCallActivity : AppCompatActivity() {
             val i = Intent(this@VideoCallActivity, EndCallActivity::class.java)
             startActivity(i)
             finish()
+            window.clearFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+            )
         }
 
         brtSwitchCamera.setOnClickListener {

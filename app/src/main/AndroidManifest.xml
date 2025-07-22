@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
         android:allowBackup="true"
@@ -35,6 +36,18 @@
         android:windowSoftInputMode="adjustResize"
         tools:targetApi="31">
         <activity
+            android:name=".newversion.VideoCall.IncomingCallWaiting"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.dashboard.VideoCall"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.VideoCall.HostVideoCall"
+            android:exported="false" />
+        <activity
+            android:name=".newversion.VideoCall.ClientVideoCall"
+            android:exported="false" />
+        <activity
             android:name=".newversion.dashboard.DataPanen"
             android:exported="false" />
         <activity
@@ -48,8 +61,8 @@
             android:exported="false" />
         <activity
             android:name=".newversion.DataPanen.EditPanen"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".newversion.DataPanen.DraftPanen"
             android:exported="false" />
@@ -58,8 +71,8 @@
             android:exported="false" />
         <activity
             android:name=".newversion.DataPanen.AddPanen"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".newversion.DataTanaman.VerifikasiTanaman"
             android:exported="false" />
@@ -71,8 +84,8 @@
             android:exported="false" />
         <activity
             android:name=".newversion.DataTanaman.EditTanaman"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".newversion.DataTanaman.DraftTanaman"
             android:exported="false" />
@@ -81,8 +94,8 @@
             android:exported="false" />
         <activity
             android:name=".newversion.DataTanaman.AddTanaman"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".newversion.dashboard.DataTanaman"
             android:exported="false" />
@@ -241,7 +254,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- AgoraService (gabung deklarasinya jadi satu) -->
+        </activity>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -253,6 +266,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+
+        <receiver android:name=".service.NotificationClickReceiver" android:exported="true" />
 
         <receiver
             android:name=".service.AlarmReceiver"

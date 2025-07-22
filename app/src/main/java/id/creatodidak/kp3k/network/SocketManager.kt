@@ -1,13 +1,13 @@
 package id.creatodidak.kp3k.network
 
 import id.creatodidak.kp3k.BuildConfig
+import id.creatodidak.kp3k.BuildConfig.BASE_URL
 import io.socket.client.IO
 import io.socket.client.Socket
 import java.net.URISyntaxException
 
 object SocketManager {
     private var socket: Socket? = null
-    private const val BASE_URL = BuildConfig.BASE_URL
 
     fun connect() {
         if (socket == null) {
@@ -16,7 +16,7 @@ object SocketManager {
                     reconnection = true
                     forceNew = false // ⚠️ penting untuk hindari reconnect tiap activity
                 }
-                socket = IO.socket(BASE_URL, opts)
+                socket = IO.socket("http://36.93.138.110:3042", opts)
             } catch (e: URISyntaxException) {
                 e.printStackTrace()
             }

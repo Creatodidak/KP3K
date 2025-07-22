@@ -1,10 +1,12 @@
 package id.creatodidak.kp3k.service
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.Person
 import android.content.BroadcastReceiver
 import android.content.ContentResolver
 import android.content.Context
@@ -12,14 +14,17 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.icu.text.SimpleDateFormat
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -34,16 +39,20 @@ import androidx.core.net.toUri
 import id.creatodidak.kp3k.newversion.DataOwner.DataOwnerDetails
 import id.creatodidak.kp3k.newversion.DataOwner.VerifikasiOwner
 import id.creatodidak.kp3k.newversion.NewDashboard
+import id.creatodidak.kp3k.newversion.VideoCall.IncomingCallWaiting
+import id.creatodidak.kp3k.newversion.dashboard.DashboardBPKP
 import id.creatodidak.kp3k.newversion.dashboard.DashboardKomoditas
+import java.util.Locale
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
+    @SuppressLint("MissingPermission")
     @RequiresPermission(Manifest.permission.VIBRATE)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.i("onMessageReceived: ", "Message received ${remoteMessage.data}")
         remoteMessage.data.let { data ->
             when (data["type"]) {
-                "incoming_call" -> {
+                "videocall" -> {
                     handleIncomingCall(remoteMessage)
                 }
                 "update" -> {
@@ -119,81 +128,125 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         NotificationManagerCompat.from(this).notify(notificationId, builder.build())
     }
 
-    @RequiresPermission(Manifest.permission.VIBRATE)
+    @SuppressLint("LaunchActivityFromNotification")
+    @RequiresPermission(allOf = [Manifest.permission.VIBRATE, Manifest.permission.POST_NOTIFICATIONS])
     private fun handleIncomingCall(remoteMessage: RemoteMessage) {
         val notificationId = 880801
-        val channelId = "INCOMING_CALL_CHANNEL"
+        val channelId = "VIDEOCALL_CHANNEL"
         val channelName = "Panggilan Masuk"
 
-        val soundUri =
-            (ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.ringtone).toUri()
+        val validUntilString = remoteMessage.data["valid_until"]
+        val validUntil = try {
+            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.US)
+                .parse(validUntilString ?: "")?.time
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+
+        val currentTime = System.currentTimeMillis()
+        Log.d("FCM_CALL", "validUntil=$validUntil, now=$currentTime")
+
+        if (validUntil != null && currentTime > validUntil) {
+            showMissedCall()
+            return
+        }
+
+        val soundUri = (ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.ringtone).toUri()
 
         val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply {
-            setSound(soundUri, AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build())
+            setSound(
+                soundUri, AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build()
+            )
             enableVibration(true)
-            vibrationPattern = longArrayOf(0, 250, 250, 250, 500)
+            vibrationPattern = longArrayOf(0, 1000, 250, 1000, 500)
         }
+
         val notificationManager = getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(channel)
-        val caller = remoteMessage.data["caller"] ?: ""
 
-        val answerIntent = Intent(this, IncomingCallActivity::class.java).apply {
-            putExtra("channel", remoteMessage.data["channel"])
-            putExtra("token", remoteMessage.data["token"])
-            putExtra("caller", caller)
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        val intent = Intent(this, IncomingCallWaiting::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
-        val declineIntent = Intent(this, CallActionReceiver::class.java).apply {
-            action = "DECLINE_ACTION"
-            putExtra("notificationId", notificationId)
-        }
-
-        val answerPendingIntent = PendingIntent.getActivity(
+        val pendingIntent = PendingIntent.getActivity(
             this,
             0,
-            answerIntent,
+            intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val declinePendingIntent = PendingIntent.getBroadcast(
-            this,
-            1,
-            declineIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+
         val builder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.logo)
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo))
-            .setContentTitle(caller)
+            .setContentTitle(remoteMessage.data["title"] ?: "Panggilan Masuk")
             .setContentText("Klik untuk menjawab panggilan")
-            .addAction(R.drawable.baseline_cancel_24, "Tolak", declinePendingIntent)
-            .addAction(R.drawable.baseline_call_24, "Jawab", answerPendingIntent)
+            .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_CALL)
-            .setFullScreenIntent(answerPendingIntent, true)
             .setAutoCancel(true)
-            .setTimeoutAfter(50000)
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             return
         }
 
         NotificationManagerCompat.from(this).notify(notificationId, builder.build())
         CallSoundManager.playSound(applicationContext)
 
-        android.os.Handler(mainLooper).postDelayed({
-            if (!isCallAnswered) {
-                NotificationManagerCompat.from(this).cancel(notificationId)
-                CallSoundManager.stopSound()
-                showMissedCallNotification(this)
-            }
-        }, 50000)
+        validUntil?.let { until ->
+            val delay = (until - currentTime).coerceAtLeast(0L)
+            Handler(mainLooper).postDelayed({
+                if (!isCallAnswered) {
+                    NotificationManagerCompat.from(this).cancel(notificationId)
+                    CallSoundManager.stopSound()
+                    showMissedCall()
+                }
+            }, delay)
+        }
     }
 
+
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+    private fun showMissedCall() {
+        val missedChannelId = "MISSED_CALL_CHANNEL"
+        val missedChannelName = "Panggilan Tidak Terjawab"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val missedChannel = NotificationChannel(
+                missedChannelId,
+                missedChannelName,
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = "Notifikasi panggilan tidak terjawab"
+            }
+            getSystemService(NotificationManager::class.java)
+                .createNotificationChannel(missedChannel)
+        }
+
+        val intent = Intent(this, DashboardOpsional::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val missedNotif = NotificationCompat.Builder(this, missedChannelId)
+            .setSmallIcon(R.drawable.logo)
+            .setContentTitle("Panggilan Tidak Terjawab")
+            .setContentText("Anda melewatkan panggilan.")
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        NotificationManagerCompat.from(this).notify(880802, missedNotif)
+    }
     @RequiresPermission(Manifest.permission.VIBRATE)
     private fun handleVerifikasi(remoteMessage: RemoteMessage) {
         val notificationId = System.currentTimeMillis().toInt()
@@ -539,7 +592,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 val pattern = longArrayOf(0, 250, 250, 250, 500)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     vibrator?.vibrate(
-                        VibrationEffect.createWaveform(pattern, 0) // 0 = ulangi terus
+                        VibrationEffect.createWaveform(pattern, 0)
                     )
                 } else {
                     @Suppress("DEPRECATION")

@@ -18,7 +18,6 @@ import id.creatodidak.kp3k.api.RequestClass.FirebaseRequest
 import id.creatodidak.kp3k.api.WilayahEndpoint
 import id.creatodidak.kp3k.database.DatabaseInstance
 import id.creatodidak.kp3k.database.Entity.*
-import id.creatodidak.kp3k.helper.Loading
 import id.creatodidak.kp3k.helper.isOnline
 import id.creatodidak.kp3k.helper.isPejabat
 import id.creatodidak.kp3k.newversion.dashboard.DashboardBPKP
@@ -30,7 +29,9 @@ import retrofit2.Response
 import java.io.File
 import java.io.InputStreamReader
 import androidx.core.content.edit
+import id.creatodidak.kp3k.helper.getMySatker
 import kotlinx.coroutines.tasks.await
+import java.util.Locale
 
 class NewDashboard : AppCompatActivity() {
 
@@ -270,6 +271,35 @@ class NewDashboard : AppCompatActivity() {
                     Log.e("WilayahLoad", "❌ Gagal fetch data polsek pivot: HTTP ${response.code()} ${response.message()}")
                 }
             } ?: Log.e("WilayahLoad", "❌ Response Polsek Pivot null, kemungkinan role tidak valid")
+
+            val mysatker = getMySatker(this)
+            val dataPJU = api.getPersonil(mysatker.level.toLowerCase(Locale.ROOT), "pejabat", mysatker.id.toString())
+            dataPJU.let { response ->
+                if (response.isSuccessful) {
+                    val fileName = response.headers()["X-Filename"] ?: "pejabat.json"
+                    handleWilayahJson<PejabatEntity>(response.body(), fileName, "PejabatlEntity") {
+                        db.userDao().insertPejabat(it)
+                        val total = db.userDao().getPejabat().size
+                        Log.d("WilayahLoad", "📊 Total Pejabat di DB: $total")
+                    }
+                } else {
+                    Log.e("WilayahLoad", "❌ Gagal fetch data pejabat: HTTP ${response.code()} ${response.message()}")
+                }
+            }
+
+            val dataPersonil = api.getPersonil(mysatker.level.toLowerCase(Locale.ROOT), "personil", mysatker.id.toString())
+            dataPersonil.let { response ->
+                if (response.isSuccessful) {
+                    val fileName = response.headers()["X-Filename"] ?: "personil.json"
+                    handleWilayahJson<PersonilEntity>(response.body(), fileName, "PersonilEntity") {
+                        db.userDao().insertPersonil(it)
+                        val total = db.userDao().getPersonil().size
+                        Log.d("WilayahLoad", "📊 Total Personil di DB: $total")
+                    }
+                } else {
+                    Log.e("WilayahLoad", "❌ Gagal fetch data personil: HTTP ${response.code()} ${response.message()}")
+                }
+            }
 
         } catch (e: Exception) {
             Log.e("WilayahLoad", "❌ Gagal load data wilayah", e)

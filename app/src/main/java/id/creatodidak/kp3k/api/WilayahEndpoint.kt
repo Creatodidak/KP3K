@@ -55,4 +55,11 @@ interface WilayahEndpoint {
         @Path("type") type: String,
         @Path("nrp") nrp: String
     ): Response<ResponseBody>
+
+    @GET("/polri/satkerpersonil/{level}/{type}/{id}")
+    suspend fun getPersonil(
+        @Path("level") level: String,
+        @Path("type") type: String,
+        @Path("id") id: String
+    ): Response<ResponseBody>
 }

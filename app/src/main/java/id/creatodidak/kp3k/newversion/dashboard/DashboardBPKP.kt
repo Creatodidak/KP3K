@@ -20,13 +20,24 @@ import id.creatodidak.kp3k.BuildConfig.BASE_URL
 import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.database.syncDataFromServer
 import id.creatodidak.kp3k.helper.RoleHelper
+import id.creatodidak.kp3k.helper.getMyNrp
+import id.creatodidak.kp3k.helper.isCanVideoCall
+import id.creatodidak.kp3k.helper.isOnline
 import id.creatodidak.kp3k.helper.isPejabat
+import id.creatodidak.kp3k.helper.showError
+import id.creatodidak.kp3k.network.SocketManager
+import id.creatodidak.kp3k.newversion.VideoCall.ClientVideoCall
+import id.creatodidak.kp3k.newversion.VideoCall.HostVideoCall
+import id.creatodidak.kp3k.newversion.VideoCall.IncomingCallWaiting
 import id.creatodidak.kp3k.newversion.setting.Account
 import id.creatodidak.kp3k.newversion.setting.Setting
+import io.socket.client.Socket
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class DashboardBPKP : AppCompatActivity() {
     private lateinit var sh : SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -54,10 +65,13 @@ class DashboardBPKP : AppCompatActivity() {
         val menu_alsintan = findViewById<ImageView>(R.id.menu_alsintan)
         val menu_gudang = findViewById<ImageView>(R.id.menu_gudang)
         val menu_koperasi = findViewById<ImageView>(R.id.menu_koperasi)
+        val menu_videocall = findViewById<ImageView>(R.id.menu_videocall)
+        menu_videocall.visibility = if (isCanVideoCall(this)) View.VISIBLE else View.GONE
 
-        tvNama.text = if(isPejabat(this)) sh.getString("username", "") else sh.getString("nama", "")
-        tvNrp.visibility = if(!isPejabat(this)) View.VISIBLE else View.GONE
-        tvNrp.text = sh.getString("pangkat", "")+"/"+sh.getString("nrp", "")
+        tvNama.text =
+            if (isPejabat(this)) sh.getString("username", "") else sh.getString("nama", "")
+        tvNrp.visibility = if (!isPejabat(this)) View.VISIBLE else View.GONE
+        tvNrp.text = sh.getString("pangkat", "") + "/" + sh.getString("nrp", "")
 
         val jabatan = sh.getString("jabatan", "")
         when (sh.getString("satker_level", "")) {
@@ -66,12 +80,14 @@ class DashboardBPKP : AppCompatActivity() {
                 val persSatker = "$jabatan $polda"
                 tvSatkerPers.text = persSatker
             }
+
             "POLRES" -> {
                 val polres = "POLRES " + sh.getString("satker_nama", "")
                 val polda = "POLDA " + sh.getString("satker_parent_nama", "")
                 val persSatker = "$jabatan $polres $polda"
                 tvSatkerPers.text = persSatker
             }
+
             "POLSEK" -> {
                 val polsek = "POLSEK " + sh.getString("satker_nama", "")
                 val polres = "POLRES " + sh.getString("satker_parent_nama", "")
@@ -81,9 +97,9 @@ class DashboardBPKP : AppCompatActivity() {
             }
         }
 
-        if(!isPejabat(this)){
+        if (!isPejabat(this)) {
             Glide.with(this)
-                .load(BASE_URL+"media"+sh.getString("foto", ""))
+                .load(BASE_URL + "media" + sh.getString("foto", ""))
                 .placeholder(R.drawable.outline_account_circle_24)
                 .circleCrop()
                 .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.ALL)
@@ -91,9 +107,18 @@ class DashboardBPKP : AppCompatActivity() {
         }
 
 
-        if(role.equals("BPKP")){
-            tvRole.text = role+" DESA "+sh.getString("desa_nama", "")+" KEC. "+sh.getString("kecamatan_nama", "")+" KAB. "+sh.getString("kabupaten_nama", "")+" "+sh.getString("provinsi_nama", "")
-        }else{
+        if (role.equals("BPKP")) {
+            tvRole.text = role + " DESA " + sh.getString(
+                "desa_nama",
+                ""
+            ) + " KEC. " + sh.getString(
+                "kecamatan_nama",
+                ""
+            ) + " KAB. " + sh.getString("kabupaten_nama", "") + " " + sh.getString(
+                "provinsi_nama",
+                ""
+            )
+        } else {
             tvRole.text = role
         }
 
@@ -134,34 +159,49 @@ class DashboardBPKP : AppCompatActivity() {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
 
-//        swlDashboard.setOnRefreshListener {
-//            lifecycleScope.launch {
-//                loadDataFromServer(role!!)
-//            }
-//        }
-//
-//        lifecycleScope.launch {
-//            loadDataFromServer(role!!)
-//        }
+        menu_videocall.setOnClickListener {
+            if(isOnline(this)){
+                val i = Intent(this, VideoCall::class.java)
+                startActivity(i)
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }else{
+                showError(this, "Akses Terbatas", "Tidak ada koneksi internet")
+            }
+        }
+
+            connectToSocket()
     }
-//
-//    private suspend fun loadDataFromServer(role : String){
-//        swlDashboard.isRefreshing = true
-//        nsvDashboard.visibility = View.GONE
-//        try {
-//            syncDataFromServer(this)
-//        }catch (e : Exception){
-//            e.printStackTrace()
-//        }finally {
-//            swlDashboard.isRefreshing = false
-//            nsvDashboard.visibility = View.VISIBLE
-//        }
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        lifecycleScope.launch {
-//            loadDataFromServer(sh.getString("role", "")!!)
-//        }
-//    }
+
+    private fun connectToSocket() {
+        try {
+            val socket = SocketManager.getSocket()
+
+            if (!socket.connected()) {
+                socket.connect()
+                Log.i("SOCKET", "Connecting...")
+            }
+
+            socket.on(Socket.EVENT_CONNECT) {
+                val nrp = getMyNrp(this@DashboardBPKP)
+
+                socket.emit("register", JSONObject().apply {
+                    put("nrp", nrp)
+                })
+                Log.i("SOCKET", "✅ Connected")
+            }
+
+            socket.on(Socket.EVENT_CONNECT_ERROR) {
+                Log.e("SOCKET", "❌ Connect Error: ${it.firstOrNull()}")
+            }
+
+            socket.on(Socket.EVENT_DISCONNECT) {
+                Log.w("SOCKET", "⚠️ Socket Disconnected")
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("SOCKET", "❌ Exception: ${e.message}")
+        }
+    }
+
 }

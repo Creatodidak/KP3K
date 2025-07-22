@@ -13,13 +13,9 @@ data class RoleData(
 )
 
 data class SatkerData(
+    @SerializedName("id") val id: Int,
+    @SerializedName("nama") val nama: String,
     @SerializedName("level") val level: String,
-    @SerializedName("polda") val polda: String?,
-    @SerializedName("poldaId") val poldaId: String?,
-    @SerializedName("polres") val polres: String?,
-    @SerializedName("polresId") val polresId: String?,
-    @SerializedName("polsek") val polsek: String?,
-    @SerializedName("polsekId") val polsekId: String?
 )
 
 suspend fun RoleHelper(ctx: Context): RoleData {
@@ -100,4 +96,35 @@ fun getMyKabId(ctx: Context) : String{
 fun getMySatkerId(ctx: Context) : Int{
     val sh = ctx.getSharedPreferences("USER_DATA", MODE_PRIVATE)
     return sh.getInt("satker_id", 0)
+}
+
+fun getMyWilayah(ctx: Context) : Int{
+    val sh = ctx.getSharedPreferences("USER_DATA", MODE_PRIVATE)
+    return sh.getInt("wilayah", 0)
+}
+
+fun getMyUsername(ctx: Context) : String{
+    val sh = ctx.getSharedPreferences("USER_DATA", MODE_PRIVATE)
+    return sh.getString("username", "").orEmpty()
+}
+
+fun getMySatker(ctx: Context) : SatkerData{
+    val sh = ctx.getSharedPreferences("USER_DATA", MODE_PRIVATE)
+    val id = sh.getInt("satker_id", 0)
+    val level = sh.getString("satker_level", "")
+    val nama = sh.getString("satker_nama", "")
+    return SatkerData(id, nama!!, level!!)
+}
+fun isCanVideoCall(ctx: Context): Boolean {
+    val sh = ctx.getSharedPreferences("USER_DATA", MODE_PRIVATE)
+    val role = sh.getString("role", "")
+    return when(role){
+        in setOf("PJUPOLDA", "PAMATWIL", "SUPERADMIN") -> true
+        "PJUPOLRES" -> {
+            !getMyUsername(ctx).contains("KABAG")
+        }
+        else -> {
+            getMyNrp(ctx) == "98070129"
+        }
+    }
 }

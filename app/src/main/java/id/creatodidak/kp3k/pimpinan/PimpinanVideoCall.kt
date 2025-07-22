@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.SurfaceView
+import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -66,6 +67,12 @@ class PimpinanVideoCall : AppCompatActivity() {
                 stopWaitingSound()
                 startActivity(Intent(this@PimpinanVideoCall, EndCallPimpinan::class.java))
                 finish()
+                window.clearFlags(
+                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                )
             }
         }
 
@@ -75,6 +82,12 @@ class PimpinanVideoCall : AppCompatActivity() {
                 stopWaitingSound()
                 startActivity(Intent(this@PimpinanVideoCall, EndCallPimpinan::class.java))
                 finish()
+                window.clearFlags(
+                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                )
             }
         }
     }
@@ -87,6 +100,13 @@ class PimpinanVideoCall : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        window.clearFlags(
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+        )
+
 
         token = intent.getStringExtra("token").toString()
         channelName = intent.getStringExtra("channel").toString()
@@ -111,6 +131,12 @@ class PimpinanVideoCall : AppCompatActivity() {
             val i = Intent(this@PimpinanVideoCall, EndCallPimpinan::class.java)
             startActivity(i)
             finish()
+            window.clearFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+            )
         }
 
         brtSwitchCamera.setOnClickListener {
@@ -185,6 +211,12 @@ class PimpinanVideoCall : AppCompatActivity() {
             stopWaitingSound()
             startActivity(Intent(this, EndCallPimpinan::class.java))
             finish()
+            window.clearFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+            )
         }
         callTimeoutHandler?.postDelayed(callTimeoutRunnable!!, 60_000)
     }

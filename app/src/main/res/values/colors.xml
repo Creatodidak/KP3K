@@ -11,4 +11,5 @@
     <color name="error_bg">#CF0C27</color>
     <color name="yellow_bg">#CFAF0C</color>
     <color name="gray_bg">#474646</color>
+    <color name="dark_gray">#141414</color>
 </resources>

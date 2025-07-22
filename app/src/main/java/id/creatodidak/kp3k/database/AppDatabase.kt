@@ -3,8 +3,6 @@ package id.creatodidak.kp3k.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import id.creatodidak.kp3k.database.Dao.*
 import id.creatodidak.kp3k.database.Entity.*
 import id.creatodidak.kp3k.helper.Converters
@@ -29,6 +27,8 @@ import id.creatodidak.kp3k.helper.Converters
         DesaEntity::class,
         SatkerEntity::class,
         PolsekPivotEntity::class,
+        PejabatEntity::class,
+        PersonilEntity::class
     ],
     version = 1,
     exportSchema = false
@@ -47,4 +47,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun draftTanamanDao(): DraftTanamanDao
     abstract fun tanamanDao(): TanamanDao
     abstract fun wilayahDao(): WilayahDao
+    abstract fun userDao() : UserDao
 }
