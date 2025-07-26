@@ -40,6 +40,7 @@ import id.creatodidak.kp3k.database.Entity.KabupatenEntity
 import id.creatodidak.kp3k.database.Entity.KecamatanEntity
 import id.creatodidak.kp3k.database.Entity.LahanEntity
 import id.creatodidak.kp3k.database.Entity.OwnerEntity
+import id.creatodidak.kp3k.database.Entity.PanenEntity
 import id.creatodidak.kp3k.database.Entity.ProvinsiEntity
 import id.creatodidak.kp3k.database.Entity.SatkerEntity
 import id.creatodidak.kp3k.database.Entity.TanamanEntity
@@ -52,6 +53,7 @@ import id.creatodidak.kp3k.helper.TypeLahan
 import id.creatodidak.kp3k.helper.TypeOwner
 import id.creatodidak.kp3k.helper.angkaIndonesia
 import id.creatodidak.kp3k.helper.askUser
+import id.creatodidak.kp3k.helper.calculateStat
 import id.creatodidak.kp3k.helper.convertToHektar
 import id.creatodidak.kp3k.helper.convertToTon
 import id.creatodidak.kp3k.helper.enableDragAndSnap
@@ -60,6 +62,7 @@ import id.creatodidak.kp3k.helper.generateMasaTanamList
 import id.creatodidak.kp3k.helper.getMyLevel
 import id.creatodidak.kp3k.helper.getMySatkerId
 import id.creatodidak.kp3k.helper.isCanCRUD
+import id.creatodidak.kp3k.helper.mapToNewPanenList
 import id.creatodidak.kp3k.helper.onlyMonthYearEquals
 import id.creatodidak.kp3k.helper.onlyYearEquals
 import id.creatodidak.kp3k.helper.showCustomDatePicker
@@ -127,6 +130,7 @@ class ShowDataPanenByCategory : AppCompatActivity() {
     private lateinit var tvDataFilter: TextView
     private lateinit var rvDataPanen: RecyclerView
     private lateinit var tvTotalData: TextView
+    private lateinit var tvMasaTanam: TextView
 
     private lateinit var fabAddData: FloatingActionButton
     private lateinit var fabDownloadData: FloatingActionButton
@@ -151,12 +155,39 @@ class ShowDataPanenByCategory : AppCompatActivity() {
     private lateinit var ownerAdapter: ArrayAdapter<OwnerEntity>
     private lateinit var lahanAdapter: ArrayAdapter<NewLahanEntity>
     private lateinit var tanamanAdapter: ArrayAdapter<ShowDataTanamanByCategory.NewTanamanEntity>
+
+    private lateinit var allCard: LinearLayout
+    private lateinit var allCardCategory: LinearLayout
+    lateinit var tvTotalJumlahPanen: TextView
+    lateinit var tvTotalLuasPanen: TextView
+    lateinit var tvTotalTargetPanen: TextView
+    lateinit var tvPersenCapaianPanen: TextView
+
+    lateinit var tvTotalJumlahPanenMonokultur: TextView
+    lateinit var tvTotalLuasPanenMonokultur: TextView
+    lateinit var tvTotalTargetPanenMonokultur: TextView
+    lateinit var tvPersenCapaianPanenMonokultur: TextView
+
+    lateinit var tvTotalJumlahPanenTumpangsari: TextView
+    lateinit var tvTotalLuasPanenTumpangsari: TextView
+    lateinit var tvTotalTargetPanenTumpangsari: TextView
+    lateinit var tvPersenCapaianPanenTumpangsari: TextView
+
+    lateinit var tvTotalJumlahPanenPbph: TextView
+    lateinit var tvTotalLuasPanenPbph: TextView
+    lateinit var tvTotalTargetPanenPbph: TextView
+    lateinit var tvPersenCapaianPanenPbph: TextView
+
+    lateinit var tvTotalJumlahPanenPerhutananSosial: TextView
+    lateinit var tvTotalLuasPanenPerhutananSosial: TextView
+    lateinit var tvTotalTargetPanenPerhutananSosial: TextView
+    lateinit var tvPersenCapaianPanenPerhutananSosial: TextView
     
     private lateinit var lyFab: LinearLayout
     private lateinit var panenAdapter: PanenAdapter
     private var defId : Int? = null
 
-    private val filterDataBy = listOf("TAMPILKAN SEMUA", "TANGGAL PANEN", "BULAN PANEN", "TAHUN PANEN", "KUARTAL PANEN", "MASA TANAM", "RENTANG TANGGAL")
+    private val filterDataBy = mutableListOf<String>()
     private lateinit var filterDataByAdapter: ArrayAdapter<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -192,6 +223,7 @@ class ShowDataPanenByCategory : AppCompatActivity() {
         rvDataPanen = findViewById(R.id.rvDataPanen)
         fabAddData = findViewById(R.id.fabAddData)
         fabDownloadData = findViewById(R.id.fabDownloadData)
+        tvMasaTanam = findViewById(R.id.tvMasaTanam)
         lyFab = findViewById(R.id.lyFab)
         provAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, defProv)
         provAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -212,6 +244,35 @@ class ShowDataPanenByCategory : AppCompatActivity() {
         filterDataByAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, filterDataBy)
         filterDataByAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
+        allCard = findViewById(R.id.allCard)
+        allCardCategory = findViewById(R.id.allCardCategory)
+
+        tvTotalJumlahPanen = findViewById(R.id.tvTotalJumlahPanen)
+        tvTotalLuasPanen = findViewById(R.id.tvTotalLuasPanen)
+        tvTotalTargetPanen = findViewById(R.id.tvTotalTargetPanen)
+        tvPersenCapaianPanen = findViewById(R.id.tvPersenCapaianPanen)
+
+        tvTotalJumlahPanenMonokultur = findViewById(R.id.tvTotalJumlahPanenMonokultur)
+        tvTotalLuasPanenMonokultur = findViewById(R.id.tvTotalLuasPanenMonokultur)
+        tvTotalTargetPanenMonokultur = findViewById(R.id.tvTotalTargetPanenMonokultur)
+        tvPersenCapaianPanenMonokultur = findViewById(R.id.tvPersenCapaianPanenMonokultur)
+
+        tvTotalJumlahPanenTumpangsari = findViewById(R.id.tvTotalJumlahPanenTumpangsari)
+        tvTotalLuasPanenTumpangsari = findViewById(R.id.tvTotalLuasPanenTumpangsari)
+        tvTotalTargetPanenTumpangsari = findViewById(R.id.tvTotalTargetPanenTumpangsari)
+        tvPersenCapaianPanenTumpangsari = findViewById(R.id.tvPersenCapaianPanenTumpangsari)
+
+        tvTotalJumlahPanenPbph = findViewById(R.id.tvTotalJumlahPanenPbph)
+        tvTotalLuasPanenPbph = findViewById(R.id.tvTotalLuasPanenPbph)
+        tvTotalTargetPanenPbph = findViewById(R.id.tvTotalTargetPanenPbph)
+        tvPersenCapaianPanenPbph = findViewById(R.id.tvPersenCapaianPanenPbph)
+
+        tvTotalJumlahPanenPerhutananSosial = findViewById(R.id.tvTotalJumlahPanenPerhutananSosial)
+        tvTotalLuasPanenPerhutananSosial = findViewById(R.id.tvTotalLuasPanenPerhutananSosial)
+        tvTotalTargetPanenPerhutananSosial = findViewById(R.id.tvTotalTargetPanenPerhutananSosial)
+        tvPersenCapaianPanenPerhutananSosial = findViewById(R.id.tvPersenCapaianPanenPerhutananSosial)
+
+        allCard.visibility = View.GONE
         lyFab.enableDragAndSnap()
 
         etTanggalStart.inputType = InputType.TYPE_NULL
@@ -312,6 +373,16 @@ class ShowDataPanenByCategory : AppCompatActivity() {
                 panenAdapter.notifyDataSetChanged()
                 tvTotalData.text = "Menunggu data.."
 
+                if(position > 0){
+                    allCardCategory.visibility = View.GONE
+                }else{
+                    if(kategori in listOf("lahan", "tanaman")){
+                        allCardCategory.visibility = View.GONE
+                    }else{
+                        allCardCategory.visibility = View.VISIBLE
+                    }
+                }
+
                 when(position){
                     0 -> {
                         filteredListPanen.clear()
@@ -323,6 +394,7 @@ class ShowDataPanenByCategory : AppCompatActivity() {
                         filteredListPanen.addAll(listPanen)
                         panenAdapter.notifyDataSetChanged()
                         tvTotalData.text = "${filteredListPanen.size} Data Ditemukan"
+                        updateDataCard()
                     }
                     1 -> {
 
@@ -348,6 +420,7 @@ class ShowDataPanenByCategory : AppCompatActivity() {
                                 filteredListPanen.addAll(newFilteredData)
                                 panenAdapter.notifyDataSetChanged()
                                 tvTotalData.text = "${filteredListPanen.size} Data Ditemukan"
+                                updateDataCard()
                             }
                         }
                     }
@@ -369,6 +442,7 @@ class ShowDataPanenByCategory : AppCompatActivity() {
                                 filteredListPanen.addAll(newFilteredData)
                                 panenAdapter.notifyDataSetChanged()
                                 tvTotalData.text = "${filteredListPanen.size} Data Ditemukan"
+                                updateDataCard()
                             }
                         }
                     }
@@ -390,6 +464,7 @@ class ShowDataPanenByCategory : AppCompatActivity() {
                                 filteredListPanen.addAll(newFilteredData)
                                 panenAdapter.notifyDataSetChanged()
                                 tvTotalData.text = "${filteredListPanen.size} Data Ditemukan"
+                                updateDataCard()
                             }
                         }
                     }
@@ -431,6 +506,7 @@ class ShowDataPanenByCategory : AppCompatActivity() {
                         lyMasaTanam.visibility = View.VISIBLE
                         spMasaTanam.visibility = View.VISIBLE
 
+                        tvMasaTanam.text = "Pilih Masa Tanam"
                         val masaTanamList = mutableListOf<MasaTanam>()
                         masaTanamList.add(MasaTanam(0, "0", "PILIH MASA TANAM"))
                         masaTanamList.addAll(generateMasaTanamList(listPanen.mapNotNull { it.tanaman }))
@@ -452,6 +528,7 @@ class ShowDataPanenByCategory : AppCompatActivity() {
                                     filteredListPanen.addAll(newFilteredData)
                                     panenAdapter.notifyDataSetChanged()
                                     tvTotalData.text = "${filteredListPanen.size} Data Ditemukan"
+                                    updateDataCard()
                                 }
                             }
 
@@ -505,6 +582,76 @@ class ShowDataPanenByCategory : AppCompatActivity() {
                             }
                         }
                     }
+                    7 -> {
+                        Toast.makeText(this@ShowDataPanenByCategory, "Pilih Jenis Lahan!", Toast.LENGTH_SHORT).show()
+                        datePickers.visibility = View.GONE
+                        lyMasaTanam.visibility = View.VISIBLE
+                        spMasaTanam.visibility = View.VISIBLE
+                        val jenisLahanList = listOf("PILIH JENIS LAHAN", "MONOKULTUR", "TUMPANGSARI", "PBPH", "PERHUTANAN SOSIAL")
+                        val adapter = ArrayAdapter(this@ShowDataPanenByCategory, android.R.layout.simple_spinner_item, jenisLahanList)
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        spMasaTanam.adapter = adapter
+
+                        tvMasaTanam.text = "Pilih Jenis Lahan"
+                        spMasaTanam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                when(position){
+                                    0 -> {
+                                        filteredListPanen.clear()
+                                        panenAdapter.notifyDataSetChanged()
+                                        tvTotalData.text = "${filteredListPanen.size} Data Ditemukan"
+                                        updateDataCard()
+                                    }
+                                    1 -> {
+                                        filteredListPanen.clear()
+                                        panenAdapter.notifyDataSetChanged()
+                                        val newFilteredData = listPanen.filter { it.lahan?.type == TypeLahan.MONOKULTUR }
+                                        filteredListPanen.addAll(newFilteredData)
+                                        panenAdapter.notifyDataSetChanged()
+                                        tvTotalData.text = "${filteredListPanen.size} Data Ditemukan"
+                                        updateDataCard()
+                                    }
+                                    2 -> {
+                                        filteredListPanen.clear()
+                                        panenAdapter.notifyDataSetChanged()
+                                        val newFilteredData = listPanen.filter { it.lahan?.type == TypeLahan.TUMPANGSARI }
+                                        filteredListPanen.addAll(newFilteredData)
+                                        panenAdapter.notifyDataSetChanged()
+                                        tvTotalData.text = "${filteredListPanen.size} Data Ditemukan"
+                                        updateDataCard()
+                                    }
+                                    3 -> {
+                                        filteredListPanen.clear()
+                                        panenAdapter.notifyDataSetChanged()
+                                        val newFilteredData = listPanen.filter { it.lahan?.type == TypeLahan.PBPH }
+                                        filteredListPanen.addAll(newFilteredData)
+                                        panenAdapter.notifyDataSetChanged()
+                                        tvTotalData.text = "${filteredListPanen.size} Data Ditemukan"
+                                        updateDataCard()
+                                    }
+                                    4 -> {
+                                        filteredListPanen.clear()
+                                        panenAdapter.notifyDataSetChanged()
+                                        val newFilteredData = listPanen.filter { it.lahan?.type == TypeLahan.PERHUTANANSOSIAL }
+                                        filteredListPanen.addAll(newFilteredData)
+                                        panenAdapter.notifyDataSetChanged()
+                                        tvTotalData.text = "${filteredListPanen.size} Data Ditemukan"
+                                        updateDataCard()
+                                    }
+                                }
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                TODO("Not yet implemented")
+                            }
+
+                        }
+                    }
                 }
             }
 
@@ -520,6 +667,11 @@ class ShowDataPanenByCategory : AppCompatActivity() {
             }
         }
 
+        if(isCanCRUD(this)){
+            fabAddData.visibility = View.VISIBLE
+        }else{
+            fabAddData.visibility = View.GONE
+        }
         fabAddData.setOnClickListener {
             val i = Intent(this, AddPanen::class.java)
             i.putExtra("komoditas", komoditas)
@@ -914,6 +1066,15 @@ class ShowDataPanenByCategory : AppCompatActivity() {
                 tanamanAdapter.notifyDataSetChanged()
             }
         }
+        if(kategori in listOf("lahan", "tanaman")){
+            val fd = listOf("TAMPILKAN SEMUA", "TANGGAL PANEN", "BULAN PANEN", "TAHUN PANEN", "KUARTAL PANEN", "MASA TANAM", "RENTANG TANGGAL")
+            filterDataBy.addAll(fd)
+            filterDataByAdapter.notifyDataSetChanged()
+        }else{
+            val fd = listOf("TAMPILKAN SEMUA", "TANGGAL PANEN", "BULAN PANEN", "TAHUN PANEN", "KUARTAL PANEN", "MASA TANAM", "RENTANG TANGGAL", "JENIS LAHAN")
+            filterDataBy.addAll(fd)
+            filterDataByAdapter.notifyDataSetChanged()
+        }
     }
 
     private suspend fun getLahanByOwner(id: Int): List<NewLahanEntity> {
@@ -1159,6 +1320,8 @@ class ShowDataPanenByCategory : AppCompatActivity() {
                 rvDataPanen.visibility = View.GONE
                 fabDownloadData.visibility = View.GONE
             }
+
+            updateDataCard()
         }catch (e: Exception){
             e.printStackTrace()
             showError(this, "Error", e.message.toString())
@@ -1248,6 +1411,48 @@ class ShowDataPanenByCategory : AppCompatActivity() {
         filteredListPanen.addAll(newFilteredData)
         panenAdapter.notifyDataSetChanged()
         tvTotalData.text = "${filteredListPanen.size} Data Ditemukan"
+        updateDataCard()
+    }
+
+    private fun updateDataCard() {
+        val newList = filteredListPanen
+        if(newList.isEmpty()){
+            allCard.visibility = View.GONE
+        }else {
+            allCard.visibility = View.VISIBLE
+            val total = calculateStat(newList)
+            val mono = calculateStat(newList.filter { it.lahan?.type == TypeLahan.MONOKULTUR })
+            val tumpang = calculateStat(newList.filter { it.lahan?.type == TypeLahan.TUMPANGSARI })
+            val pbph = calculateStat(newList.filter { it.lahan?.type == TypeLahan.PBPH })
+            val sosial =
+                calculateStat(newList.filter { it.lahan?.type == TypeLahan.PERHUTANANSOSIAL })
+
+            // Set TextView
+            tvTotalJumlahPanen.text = total.jumlah
+            tvTotalLuasPanen.text = total.luas
+            tvTotalTargetPanen.text = total.target
+            tvPersenCapaianPanen.text = total.capaian
+
+            tvTotalJumlahPanenMonokultur.text = mono.jumlah
+            tvTotalLuasPanenMonokultur.text = mono.luas
+            tvTotalTargetPanenMonokultur.text = mono.target
+            tvPersenCapaianPanenMonokultur.text = mono.capaian
+
+            tvTotalJumlahPanenTumpangsari.text = tumpang.jumlah
+            tvTotalLuasPanenTumpangsari.text = tumpang.luas
+            tvTotalTargetPanenTumpangsari.text = tumpang.target
+            tvPersenCapaianPanenTumpangsari.text = tumpang.capaian
+
+            tvTotalJumlahPanenPbph.text = pbph.jumlah
+            tvTotalLuasPanenPbph.text = pbph.luas
+            tvTotalTargetPanenPbph.text = pbph.target
+            tvPersenCapaianPanenPbph.text = pbph.capaian
+
+            tvTotalJumlahPanenPerhutananSosial.text = sosial.jumlah
+            tvTotalLuasPanenPerhutananSosial.text = sosial.luas
+            tvTotalTargetPanenPerhutananSosial.text = sosial.target
+            tvPersenCapaianPanenPerhutananSosial.text = sosial.capaian
+        }
     }
 
     override fun onResume() {

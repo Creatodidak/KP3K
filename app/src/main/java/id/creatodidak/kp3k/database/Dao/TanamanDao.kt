@@ -35,6 +35,9 @@ interface TanamanDao {
     @Query("SELECT * FROM TanamanEntity WHERE komoditas = :komoditas AND lahan_id IN (:lahanids)")
     suspend fun getTanamanByLahanIds(komoditas: String, lahanids: List<Int>): List<TanamanEntity>?
 
+    @Query("SELECT * FROM TanamanEntity WHERE id = :id")
+    suspend fun getTanamanById(id: Int): TanamanEntity
+
     @Query("SELECT * FROM TanamanEntity WHERE komoditas = :komoditas AND lahan_id IN (:lahanids) AND status = 'UNVERIFIED'")
     suspend fun getUnverifiedTanamanByLahanIds(komoditas: String, lahanids: List<Int>): List<TanamanEntity>?
 

@@ -7,8 +7,6 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +18,6 @@ import com.google.android.material.textfield.TextInputEditText
 import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.api.Client
 import id.creatodidak.kp3k.api.PanenEndpoint
-import id.creatodidak.kp3k.api.RequestClass.InsertDataPanen
 import id.creatodidak.kp3k.api.RequestClass.UpdateDataPanen
 import id.creatodidak.kp3k.database.AppDatabase
 import id.creatodidak.kp3k.database.DatabaseInstance
@@ -210,7 +207,7 @@ class EditPanen : AppCompatActivity() {
 
     private fun getAnalisa(data: PanenDraftEntity){
         try {
-            val req = "Analisa singkat panen ${komoditas} varietas ${selectedTanaman!!.varietas}. Tanam: ${formatTanggalKeIndonesia(selectedTanaman!!.tanggaltanam.toIsoString())}, ${angkaIndonesia(convertToHektar(selectedTanaman!!.luastanam.toDouble()))}Ha. Target: ${angkaIndonesia(convertToTon(selectedTanaman!!.prediksipanen.toDouble()))}t. Panen: ${formatTanggalKeIndonesia(data.tanggalpanen.toIsoString())}, ${angkaIndonesia(convertToHektar(data.luaspanen.toDouble()))}Ha, ${angkaIndonesia(convertToTon(data.jumlahpanen.toDouble()))}t."
+            val req = "Analisa singkat panen ${komoditas} varietas ${selectedTanaman!!.varietas}. Tanam: ${formatTanggalKeIndonesia(selectedTanaman!!.tanggaltanam.toIsoString())}, ${angkaIndonesia(convertToHektar(selectedTanaman!!.luastanam.toDouble()))}Ha. Target: ${angkaIndonesia(convertToTon(selectedTanaman!!.prediksipanen.toDouble()))}t. Panen: ${formatTanggalKeIndonesia(data.tanggalpanen.toIsoString())}, ${angkaIndonesia(convertToHektar(data.luaspanen.toDouble()))}Ha, ${angkaIndonesia(convertToTon(data.jumlahpanen.toDouble()))}t. Keterangan: ${data.keterangan}"
 
 
             LoadAI.show(this, req) { analisa, status ->

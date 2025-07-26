@@ -7,12 +7,15 @@ import id.creatodidak.kp3k.api.Client
 import id.creatodidak.kp3k.api.LahanEndpoint
 import id.creatodidak.kp3k.api.OwnerEndpoint
 import id.creatodidak.kp3k.api.PanenEndpoint
+import id.creatodidak.kp3k.api.PerkembanganEndpoint
 import id.creatodidak.kp3k.api.RequestClass.PanenIdsRequest
+import id.creatodidak.kp3k.api.RequestClass.PerkembanganIdsRequest
 import id.creatodidak.kp3k.api.RequestClass.TanamanIdsRequest
 import id.creatodidak.kp3k.api.TanamanEndpoint
 import id.creatodidak.kp3k.database.Entity.LahanEntity
 import id.creatodidak.kp3k.database.Entity.OwnerEntity
 import id.creatodidak.kp3k.database.Entity.PanenEntity
+import id.creatodidak.kp3k.database.Entity.PerkembanganEntity
 import id.creatodidak.kp3k.database.Entity.TanamanEntity
 import id.creatodidak.kp3k.helper.IsGapki
 import id.creatodidak.kp3k.helper.Loading
@@ -57,6 +60,7 @@ suspend fun syncDataFromServer(ctx: Context){
         val lahanDao = db.lahanDao()
         val tanamanDao = db.tanamanDao()
         val panenDao = db.panenDao()
+        val perkembanganDao = db.perkembanganDao()
 
 
         val owner = Client.retrofit.create(OwnerEndpoint::class.java).getAllOwner(type,
@@ -191,6 +195,48 @@ suspend fun syncDataFromServer(ctx: Context){
                 }
 
                 data?.let{panenDao.insertAll(it)}
+            }
+
+            db.perkembanganDao().deleteOnlineData()
+            val perkembangan = Client.retrofit.create(PerkembanganEndpoint::class.java).getAllPerkembanganOnLahans(
+                PerkembanganIdsRequest(tanamanIdList))
+
+            if(perkembangan.isSuccessful && perkembangan.body() != null && perkembangan.body()?.isNotEmpty() == true){
+                val data = perkembangan.body()?.map { item ->
+                    item.let {
+                        PerkembanganEntity(
+                            id = it.id!!,
+                            tanaman_id = it.tanamanId!!,
+                            tinggitanaman = it.tinggitanaman!!,
+                            kondisitanah = it.kondisitanah!!,
+                            warnadaun = it.warnadaun!!,
+                            curahhujan = it.curahhujan!!,
+                            ph = it.ph!!,
+                            kondisiair = it.kondisiair!!,
+                            pupuk = it.pupuk!!,
+                            pestisida = it.pestisida!!,
+                            hama = it.hama!!,
+                            keteranganhama = it.keteranganhama,
+                            gangguanalam = it.gangguanalam!!,
+                            keterangangangguanalam = it.keterangangangguanalam,
+                            gangguanlainnya = it.gangguanlainnya!!,
+                            keterangangangguanlainnya = it.keterangangangguanlainnya,
+                            keterangan = it.keterangan!!,
+                            rekomendasi = it.rekomendasi,
+                            foto1 = it.foto1!!,
+                            foto2 = it.foto2!!,
+                            foto3 = it.foto3!!,
+                            foto4 = it.foto4!!,
+                            status = it.status!!,
+                            alasan = it.alasan,
+                            createAt = parseIsoDate(it.createAt) ?: Date(),
+                            updateAt = parseIsoDate(it.updateAt!!) ?: Date(),
+                            submitter = it.submitter!!
+                        )
+                    }
+                }
+
+                data?.let{perkembanganDao.insertAll(it)}
             }
         }
 

@@ -41,7 +41,7 @@ class Converters {
     fun sumberToString(value: SumberBibit?): String? = value?.name
 }
 
-enum class TypeLahan { MONOKULTUR, TUMPANGSARI }
+enum class TypeLahan { MONOKULTUR, TUMPANGSARI, PBPH, PERHUTANANSOSIAL }
 enum class MediaType { IMAGE, VIDEO, AUDIO }
 enum class TypeOwner { PRIBADI, PEMDES, PEMDA, PEMPROV, PERUSAHAAN, POKTAN, KWT }
 enum class IsGapki { YA, TIDAK }

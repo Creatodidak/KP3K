@@ -166,6 +166,48 @@
                         android:paddingStart="4dp"
                         android:textColor="@color/error_bg" />
                 </LinearLayout>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardBackgroundColor="@color/default_bg"
+                app:cardCornerRadius="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="4dp">
+
+                    <ImageView
+                        android:id="@+id/imageView34"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="4dp"
+                        app:srcCompat="@drawable/baseline_info_24"
+                        tools:ignore="UseAppTint" />
+
+                    <TextView
+                        android:id="@+id/textView30"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Rangkuman Data"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divider10"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="?android:attr/listDivider"
+                    android:backgroundTint="@color/white" />
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -176,7 +218,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:padding="8dp">
+                        android:padding="4dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -205,7 +247,7 @@
                                     android:text="-"
                                     android:textAlignment="center"
                                     android:textColor="@color/default_bg"
-                                    android:textSize="24sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -213,7 +255,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Titik"
                                     android:textAlignment="center"
-                                    android:textSize="10sp" />
+                                    android:textSize="8sp" />
                             </LinearLayout>
 
                             <View
@@ -235,7 +277,7 @@
                                     android:text="-"
                                     android:textAlignment="center"
                                     android:textColor="@color/default_bg"
-                                    android:textSize="24sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -243,7 +285,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Hektar"
                                     android:textAlignment="center"
-                                    android:textSize="10sp" />
+                                    android:textSize="8sp" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -266,7 +308,7 @@
                                     android:text="-"
                                     android:textAlignment="center"
                                     android:textColor="@color/default_bg"
-                                    android:textSize="24sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -274,7 +316,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Tertanam"
                                     android:textAlignment="center"
-                                    android:textSize="10sp" />
+                                    android:textSize="8sp" />
                             </LinearLayout>
 
                             <View
@@ -296,7 +338,7 @@
                                     android:text="-"
                                     android:textAlignment="center"
                                     android:textColor="@color/default_bg"
-                                    android:textSize="24sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -304,7 +346,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Hektar Tertanam"
                                     android:textAlignment="center"
-                                    android:textSize="10sp" />
+                                    android:textSize="8sp" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -322,7 +364,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:padding="8dp">
+                        android:padding="4dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -351,7 +393,7 @@
                                     android:text="-"
                                     android:textAlignment="center"
                                     android:textColor="@color/default_bg"
-                                    android:textSize="24sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -359,7 +401,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Titik"
                                     android:textAlignment="center"
-                                    android:textSize="10sp" />
+                                    android:textSize="8sp" />
                             </LinearLayout>
 
                             <View
@@ -381,7 +423,7 @@
                                     android:text="-"
                                     android:textAlignment="center"
                                     android:textColor="@color/default_bg"
-                                    android:textSize="24sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -389,7 +431,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Hektar"
                                     android:textAlignment="center"
-                                    android:textSize="10sp" />
+                                    android:textSize="8sp" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -411,7 +453,7 @@
                                     android:text="-"
                                     android:textAlignment="center"
                                     android:textColor="@color/default_bg"
-                                    android:textSize="24sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -419,7 +461,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Tertanam"
                                     android:textAlignment="center"
-                                    android:textSize="10sp" />
+                                    android:textSize="8sp" />
                             </LinearLayout>
 
                             <View
@@ -441,7 +483,7 @@
                                     android:text="-"
                                     android:textAlignment="center"
                                     android:textColor="@color/default_bg"
-                                    android:textSize="24sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -449,7 +491,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Hektar Tertanam"
                                     android:textAlignment="center"
-                                    android:textSize="10sp" />
+                                    android:textSize="8sp" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -467,7 +509,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:padding="8dp">
+                        android:padding="4dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -496,7 +538,7 @@
                                     android:text="-"
                                     android:textAlignment="center"
                                     android:textColor="@color/default_bg"
-                                    android:textSize="24sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -504,7 +546,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Titik"
                                     android:textAlignment="center"
-                                    android:textSize="10sp" />
+                                    android:textSize="8sp" />
                             </LinearLayout>
 
                             <View
@@ -527,7 +569,7 @@
                                     android:text="-"
                                     android:textAlignment="center"
                                     android:textColor="@color/default_bg"
-                                    android:textSize="24sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -535,7 +577,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Hektar"
                                     android:textAlignment="center"
-                                    android:textSize="10sp" />
+                                    android:textSize="8sp" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -557,7 +599,7 @@
                                     android:text="-"
                                     android:textAlignment="center"
                                     android:textColor="@color/default_bg"
-                                    android:textSize="24sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -565,7 +607,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Tertanam"
                                     android:textAlignment="center"
-                                    android:textSize="10sp" />
+                                    android:textSize="8sp" />
                             </LinearLayout>
 
                             <View
@@ -587,7 +629,7 @@
                                     android:text="-"
                                     android:textAlignment="center"
                                     android:textColor="@color/default_bg"
-                                    android:textSize="24sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -595,7 +637,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Hektar Tertanam"
                                     android:textAlignment="center"
-                                    android:textSize="10sp" />
+                                    android:textSize="8sp" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -603,6 +645,297 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="15dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="4dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_menu"
+                            android:padding="4dp"
+                            android:text="Total Lahan PBPH"
+                            android:textColor="@color/white"
+                            android:textSize="10sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvTotalJumlahLahanPbph"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="-"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/default_bg"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Titik"
+                                    android:textAlignment="center"
+                                    android:textSize="8sp" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="2dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginHorizontal="4dp"
+                                android:background="?android:attr/listDivider" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvTotalLuasLahanPbph"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="-"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/default_bg"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Hektar"
+                                    android:textAlignment="center"
+                                    android:textSize="8sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvTotalJumlahLahanTertanamPersenPbph"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="-"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/default_bg"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Tertanam"
+                                    android:textAlignment="center"
+                                    android:textSize="8sp" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="2dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginHorizontal="4dp"
+                                android:background="?android:attr/listDivider" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvTotalLuasLahanTertanamHektarPbph"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="-"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/default_bg"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Hektar Tertanam"
+                                    android:textAlignment="center"
+                                    android:textSize="8sp" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="15dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="4dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_menu"
+                            android:padding="4dp"
+                            android:text="Total Lahan Perhutanan Sosial"
+                            android:textColor="@color/white"
+                            android:textSize="10sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvTotalJumlahLahanPerhutananSosial"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="-"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/default_bg"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Titik"
+                                    android:textAlignment="center"
+                                    android:textSize="8sp" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="2dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginHorizontal="4dp"
+                                android:background="?android:attr/listDivider" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvTotalLuasLahanPerhutananSosial"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="-"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/default_bg"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Hektar"
+                                    android:textAlignment="center"
+                                    android:textSize="8sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvTotalJumlahLahanTertanamPersenPerhutananSosial"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="-"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/default_bg"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Tertanam"
+                                    android:textAlignment="center"
+                                    android:textSize="8sp" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="2dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginHorizontal="4dp"
+                                android:background="?android:attr/listDivider" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvTotalLuasLahanTertanamHektarPerhutananSosial"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="-"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/default_bg"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Hektar Tertanam"
+                                    android:textAlignment="center"
+                                    android:textSize="8sp" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+            </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvDataLahanByProvinsi"
                     android:layout_width="match_parent"

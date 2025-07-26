@@ -168,6 +168,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
 
                         <TextView
+                            android:id="@+id/tvMasaTanam"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
@@ -180,6 +181,448 @@
                             tools:ignore="TouchTargetSizeCheck" />
                     </LinearLayout>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/allCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        app:cardCornerRadius="15dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="4dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/bg_menu"
+                                android:padding="4dp"
+                                android:text="Total Realisasi Tanam"
+                                android:textColor="@color/white"
+                                android:textSize="10sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvTotalJumlahTanaman"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="-"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Tanaman"
+                                        android:textAlignment="center"
+                                        android:textSize="8sp" />
+                                </LinearLayout>
+
+                                <View
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginHorizontal="4dp"
+                                    android:background="?android:attr/listDivider" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvTotalLuasTanaman"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="-"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Hektar"
+                                        android:textAlignment="center"
+                                        android:textSize="8sp" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:id="@+id/allCardCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            app:cardCornerRadius="15dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:padding="4dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
+                                    android:background="@drawable/bg_menu"
+                                    android:padding="4dp"
+                                    android:text="Total Realisasi Tanam Monokultur"
+                                    android:textColor="@color/white"
+                                    android:textSize="10sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahTanamanMonokultur"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Tanaman"
+                                            android:textAlignment="center"
+                                            android:textSize="8sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasTanamanMonokultur"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="8sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            app:cardCornerRadius="15dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:padding="4dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
+                                    android:background="@drawable/bg_menu"
+                                    android:padding="4dp"
+                                    android:text="Total Realisasi Tanam Tumpang Sari"
+                                    android:textColor="@color/white"
+                                    android:textSize="10sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahTanamanTumpangsari"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Tanaman"
+                                            android:textAlignment="center"
+                                            android:textSize="8sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:id="@+id/divider9"
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasTanamanTumpangsari"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="8sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            app:cardCornerRadius="15dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:padding="4dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
+                                    android:background="@drawable/bg_menu"
+                                    android:padding="4dp"
+                                    android:text="Total Realisasi Tanam PBPH"
+                                    android:textColor="@color/white"
+                                    android:textSize="10sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahTanamanPbph"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Tanaman"
+                                            android:textAlignment="center"
+                                            android:textSize="8sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasTanamanPbph"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="8sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            app:cardCornerRadius="15dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:padding="4dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
+                                    android:background="@drawable/bg_menu"
+                                    android:padding="4dp"
+                                    android:text="Total Realisasi Tanam Perhutanan Sosial"
+                                    android:textColor="@color/white"
+                                    android:textSize="10sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahTanamanPerhutananSosial"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Tanaman"
+                                            android:textAlignment="center"
+                                            android:textSize="8sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasTanamanPerhutananSosial"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="8sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+                </LinearLayout>
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -232,6 +675,7 @@
             android:clickable="true"
             android:visibility="visible"
             app:backgroundTint="@color/gray_bg"
+            app:elevation="0dp"
             app:maxImageSize="32dp"
             app:srcCompat="@drawable/cloud_data_download_icon"
             tools:ignore="SpeakableTextPresentCheck" />
@@ -243,6 +687,7 @@
             android:layout_margin="8dp"
             android:clickable="true"
             android:visibility="visible"
+            app:elevation="0dp"
             app:maxImageSize="32dp"
             app:srcCompat="@drawable/baseline_add_24"
             tools:ignore="SpeakableTextPresentCheck" />

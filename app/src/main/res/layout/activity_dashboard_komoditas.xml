@@ -71,425 +71,6 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="15dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:padding="4dp">
-
-                            <ImageView
-                                android:id="@+id/imageView34"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_marginEnd="4dp"
-                                android:tint="@color/default_bg"
-                                app:srcCompat="@drawable/baseline_info_24"
-                                tools:ignore="UseAppTint" />
-
-                            <TextView
-                                android:id="@+id/textView30"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Rangkuman Data"
-                                android:textColor="@color/default_bg"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <View
-                            android:id="@+id/divider10"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="?android:attr/listDivider" />
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
-                            app:cardCornerRadius="15dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/bg_menu"
-                                    android:padding="4dp"
-                                    android:text="Pemilik Lahan"
-                                    android:textColor="@color/white"
-                                    android:textSize="10sp" />
-
-                                <TextView
-                                    android:id="@+id/tvTotalOwner"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="-"
-                                    android:textColor="@color/default_bg"
-                                    android:textSize="24sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Orang"
-                                    android:textSize="10sp" />
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
-                            app:cardCornerRadius="15dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/bg_menu"
-                                    android:padding="4dp"
-                                    android:text="Total Lahan"
-                                    android:textColor="@color/white"
-                                    android:textSize="10sp" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:orientation="vertical">
-
-                                        <TextView
-                                            android:id="@+id/tvTotalJumlahLahan"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:text="-"
-                                            android:textAlignment="center"
-                                            android:textColor="@color/default_bg"
-                                            android:textSize="24sp"
-                                            android:textStyle="bold" />
-
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:text="Titik"
-                                            android:textAlignment="center"
-                                            android:textSize="10sp" />
-                                    </LinearLayout>
-
-                                    <View
-                                        android:layout_width="2dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginHorizontal="4dp"
-                                        android:background="?android:attr/listDivider" />
-
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:orientation="vertical">
-
-                                        <TextView
-                                            android:id="@+id/tvTotalLuasLahan"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:text="-"
-                                            android:textAlignment="center"
-                                            android:textColor="@color/default_bg"
-                                            android:textSize="24sp"
-                                            android:textStyle="bold" />
-
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:text="Hektar"
-                                            android:textAlignment="center"
-                                            android:textSize="10sp" />
-                                    </LinearLayout>
-                                </LinearLayout>
-
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
-                            app:cardCornerRadius="15dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/bg_menu"
-                                    android:padding="4dp"
-                                    android:text="Total Lahan Monokultur"
-                                    android:textColor="@color/white"
-                                    android:textSize="10sp" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:orientation="vertical">
-
-                                        <TextView
-                                            android:id="@+id/tvTotalJumlahLahanMonokultur"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:text="-"
-                                            android:textAlignment="center"
-                                            android:textColor="@color/default_bg"
-                                            android:textSize="24sp"
-                                            android:textStyle="bold" />
-
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:text="Titik"
-                                            android:textAlignment="center"
-                                            android:textSize="10sp" />
-                                    </LinearLayout>
-
-                                    <View
-                                        android:layout_width="2dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginHorizontal="4dp"
-                                        android:background="?android:attr/listDivider" />
-
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:orientation="vertical">
-
-                                        <TextView
-                                            android:id="@+id/tvTotalLuasLahanMonokultur"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:text="-"
-                                            android:textAlignment="center"
-                                            android:textColor="@color/default_bg"
-                                            android:textSize="24sp"
-                                            android:textStyle="bold" />
-
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:text="Hektar"
-                                            android:textAlignment="center"
-                                            android:textSize="10sp" />
-                                    </LinearLayout>
-                                </LinearLayout>
-
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
-                            app:cardCornerRadius="15dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/bg_menu"
-                                    android:padding="4dp"
-                                    android:text="Total Lahan Tumpang Sari"
-                                    android:textColor="@color/white"
-                                    android:textSize="10sp" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:orientation="vertical">
-
-                                        <TextView
-                                            android:id="@+id/tvTotalJumlahLahanTumpangsari"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:text="-"
-                                            android:textAlignment="center"
-                                            android:textColor="@color/default_bg"
-                                            android:textSize="24sp"
-                                            android:textStyle="bold" />
-
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:text="Titik"
-                                            android:textAlignment="center"
-                                            android:textSize="10sp" />
-                                    </LinearLayout>
-
-                                    <View
-                                        android:id="@+id/divider9"
-                                        android:layout_width="2dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginHorizontal="4dp"
-                                        android:background="?android:attr/listDivider" />
-
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:orientation="vertical">
-
-                                        <TextView
-                                            android:id="@+id/tvTotalLuasLahanTumpangsari"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:text="-"
-                                            android:textAlignment="center"
-                                            android:textColor="@color/default_bg"
-                                            android:textSize="24sp"
-                                            android:textStyle="bold" />
-
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:text="Hektar"
-                                            android:textAlignment="center"
-                                            android:textSize="10sp" />
-                                    </LinearLayout>
-                                </LinearLayout>
-
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="8dp"
-                                android:layout_weight="1"
-                                app:cardCornerRadius="15dp">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="vertical"
-                                    android:padding="8dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@drawable/bg_menu"
-                                        android:padding="4dp"
-                                        android:text="Total Luas Tanam"
-                                        android:textColor="@color/white"
-                                        android:textSize="10sp" />
-
-                                    <TextView
-                                        android:id="@+id/tvTotalLuasTanam"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:text="-"
-                                        android:textColor="@color/default_bg"
-                                        android:textSize="24sp"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:text="Hektar"
-                                        android:textSize="10sp" />
-                                </LinearLayout>
-                            </androidx.cardview.widget.CardView>
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="8dp"
-                                android:layout_weight="1"
-                                app:cardCornerRadius="15dp">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="vertical"
-                                    android:padding="8dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@drawable/bg_menu"
-                                        android:padding="4dp"
-                                        android:text="Total Produksi"
-                                        android:textColor="@color/white"
-                                        android:textSize="10sp" />
-
-                                    <TextView
-                                        android:id="@+id/tvTotalProduksi"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:text="-"
-                                        android:textColor="@color/default_bg"
-                                        android:textSize="24sp"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:text="Ton"
-                                        android:textSize="10sp" />
-                                </LinearLayout>
-                            </androidx.cardview.widget.CardView>
-                        </LinearLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
                 <TextView
                     android:id="@+id/textView49"
                     android:layout_width="match_parent"
@@ -612,6 +193,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -682,6 +264,1228 @@
 
                     </LinearLayout>
                 </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:cardBackgroundColor="@color/default_bg"
+                    app:cardCornerRadius="15dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="4dp">
+
+                            <ImageView
+                                android:id="@+id/imageView34"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="4dp"
+                                app:srcCompat="@drawable/baseline_info_24"
+                                tools:ignore="UseAppTint" />
+
+                            <TextView
+                                android:id="@+id/textView30"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Rangkuman Data"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/divider10"
+                            android:layout_width="match_parent"
+                            android:layout_height="3dp"
+                            android:background="?android:attr/listDivider"
+                            android:backgroundTint="@color/white" />
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            app:cardCornerRadius="15dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_menu"
+                                    android:padding="4dp"
+                                    android:text="Pemilik Lahan"
+                                    android:textColor="@color/white"
+                                    android:textSize="10sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTotalOwner"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="-"
+                                    android:textColor="@color/default_bg"
+                                    android:textSize="24sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Orang"
+                                    android:textSize="10sp" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            app:cardCornerRadius="15dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_menu"
+                                    android:padding="4dp"
+                                    android:text="Lahan"
+                                    android:textColor="@color/white"
+                                    android:textSize="10sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="TOTAL"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahLahan"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Titik"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasLahan"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="MONOKULTUR"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahLahanMonokultur"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Titik"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasLahanMonokultur"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="TUMPANG SARI"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahLahanTumpangsari"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Titik"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:id="@+id/divider9"
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasLahanTumpangsari"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="PBPH"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahLahanPbph"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Titik"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasLahanPbph"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="PERHUTANAN SOSIAL"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahLahanPerhutananSosial"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Titik"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasLahanPerhutananSosial"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            app:cardCornerRadius="15dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_menu"
+                                    android:padding="4dp"
+                                    android:text="Realisasi Tanam"
+                                    android:textColor="@color/white"
+                                    android:textSize="10sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="TOTAL"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahTanam"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Tanaman"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasTanam"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="MONOKULTUR"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahTanamMonokultur"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Tanaman"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasTanamMonokultur"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="TUMPANG SARI"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahTanamTumpangsari"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Tanaman"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasTanamTumpangsari"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="PBPH"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahTanamPbph"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Tanaman"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasTanamPbph"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="PERHUTANAN SOSIAL"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahTanamPerhutananSosial"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Tanaman"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalLuasTanamPerhutananSosial"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hektar"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            app:cardCornerRadius="15dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_menu"
+                                    android:padding="4dp"
+                                    android:text="Realisasi Panen"
+                                    android:textColor="@color/white"
+                                    android:textSize="10sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="TOTAL"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahPanen"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Giat"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalHasilPanen"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="TON"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="MONOKULTUR"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahPanenMonokultur"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Giat"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalHasilPanenMonokultur"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="TON"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="TUMPANG SARI"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahPanenTumpangsari"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Giat"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalHasilPanenTumpangsari"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="TON"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="PBPH"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahPanenPbph"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Giat"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalHasilPanenPbph"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="TON"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginVertical="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="PERHUTANAN SOSIAL"
+                                        android:textColor="@color/default_bg"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalJumlahPanenPerhutananSosial"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Giat"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="2dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginHorizontal="4dp"
+                                        android:background="?android:attr/listDivider" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvTotalHasilPanenPerhutananSosial"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/default_bg"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="TON"
+                                            android:textAlignment="center"
+                                            android:textSize="10sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

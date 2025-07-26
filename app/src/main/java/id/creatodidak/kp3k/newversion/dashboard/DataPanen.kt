@@ -20,13 +20,22 @@ import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.database.AppDatabase
 import id.creatodidak.kp3k.database.Dao.LahanDao
 import id.creatodidak.kp3k.database.DatabaseInstance
+import id.creatodidak.kp3k.database.Entity.PanenEntity
+import id.creatodidak.kp3k.database.Entity.TanamanEntity
 import id.creatodidak.kp3k.database.syncDataFromServer
 import id.creatodidak.kp3k.helper.RoleHelper
+import id.creatodidak.kp3k.helper.TypeLahan
+import id.creatodidak.kp3k.helper.angkaIndonesia
+import id.creatodidak.kp3k.helper.calculateStat
+import id.creatodidak.kp3k.helper.convertToHektar
+import id.creatodidak.kp3k.helper.convertToTon
 import id.creatodidak.kp3k.helper.enableDragAndSnap
+import id.creatodidak.kp3k.helper.getAlamatBerdasarkanRole
 import id.creatodidak.kp3k.helper.getMyLevel
 import id.creatodidak.kp3k.helper.getMyNrp
 import id.creatodidak.kp3k.helper.getMyRole
 import id.creatodidak.kp3k.helper.isCanCRUD
+import id.creatodidak.kp3k.helper.mapToNewPanenList
 import id.creatodidak.kp3k.helper.showError
 import id.creatodidak.kp3k.newversion.DataPanen.AddPanen
 import id.creatodidak.kp3k.newversion.DataPanen.DraftPanen
@@ -66,6 +75,33 @@ class DataPanen : AppCompatActivity() {
     private lateinit var lyRejected: LinearLayout
     private lateinit var tvRejected: TextView
     private lateinit var fabAddDataPanen: FloatingActionButton
+
+    lateinit var tvTotalJumlahPanen: TextView
+    lateinit var tvTotalLuasPanen: TextView
+    lateinit var tvTotalTargetPanen: TextView
+    lateinit var tvPersenCapaianPanen: TextView
+
+    lateinit var tvTotalJumlahPanenMonokultur: TextView
+    lateinit var tvTotalLuasPanenMonokultur: TextView
+    lateinit var tvTotalTargetPanenMonokultur: TextView
+    lateinit var tvPersenCapaianPanenMonokultur: TextView
+
+    lateinit var tvTotalJumlahPanenTumpangsari: TextView
+    lateinit var tvTotalLuasPanenTumpangsari: TextView
+    lateinit var tvTotalTargetPanenTumpangsari: TextView
+    lateinit var tvPersenCapaianPanenTumpangsari: TextView
+
+    lateinit var tvTotalJumlahPanenPbph: TextView
+    lateinit var tvTotalLuasPanenPbph: TextView
+    lateinit var tvTotalTargetPanenPbph: TextView
+    lateinit var tvPersenCapaianPanenPbph: TextView
+
+    lateinit var tvTotalJumlahPanenPerhutananSosial: TextView
+    lateinit var tvTotalLuasPanenPerhutananSosial: TextView
+    lateinit var tvTotalTargetPanenPerhutananSosial: TextView
+    lateinit var tvPersenCapaianPanenPerhutananSosial: TextView
+    lateinit var tvAlamatKomoditas: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -100,6 +136,36 @@ class DataPanen : AppCompatActivity() {
         svDataRealisasiPanen = findViewById(R.id.svDataRealisasiPanen)
         swlDataRealisasiPanen = findViewById(R.id.swlDataRealisasiPanen)
         svDataRealisasiPanen.visibility = View.GONE
+        tvTotalJumlahPanen = findViewById(R.id.tvTotalJumlahPanen)
+        tvTotalLuasPanen = findViewById(R.id.tvTotalLuasPanen)
+        tvTotalTargetPanen = findViewById(R.id.tvTotalTargetPanen)
+        tvPersenCapaianPanen = findViewById(R.id.tvPersenCapaianPanen)
+
+        tvTotalJumlahPanenMonokultur = findViewById(R.id.tvTotalJumlahPanenMonokultur)
+        tvTotalLuasPanenMonokultur = findViewById(R.id.tvTotalLuasPanenMonokultur)
+        tvTotalTargetPanenMonokultur = findViewById(R.id.tvTotalTargetPanenMonokultur)
+        tvPersenCapaianPanenMonokultur = findViewById(R.id.tvPersenCapaianPanenMonokultur)
+
+        tvTotalJumlahPanenTumpangsari = findViewById(R.id.tvTotalJumlahPanenTumpangsari)
+        tvTotalLuasPanenTumpangsari = findViewById(R.id.tvTotalLuasPanenTumpangsari)
+        tvTotalTargetPanenTumpangsari = findViewById(R.id.tvTotalTargetPanenTumpangsari)
+        tvPersenCapaianPanenTumpangsari = findViewById(R.id.tvPersenCapaianPanenTumpangsari)
+
+        tvTotalJumlahPanenPbph = findViewById(R.id.tvTotalJumlahPanenPbph)
+        tvTotalLuasPanenPbph = findViewById(R.id.tvTotalLuasPanenPbph)
+        tvTotalTargetPanenPbph = findViewById(R.id.tvTotalTargetPanenPbph)
+        tvPersenCapaianPanenPbph = findViewById(R.id.tvPersenCapaianPanenPbph)
+
+        tvTotalJumlahPanenPerhutananSosial = findViewById(R.id.tvTotalJumlahPanenPerhutananSosial)
+        tvTotalLuasPanenPerhutananSosial = findViewById(R.id.tvTotalLuasPanenPerhutananSosial)
+        tvTotalTargetPanenPerhutananSosial = findViewById(R.id.tvTotalTargetPanenPerhutananSosial)
+        tvPersenCapaianPanenPerhutananSosial = findViewById(R.id.tvPersenCapaianPanenPerhutananSosial)
+
+        tvAlamatKomoditas = findViewById(R.id.tvAlamatKomoditas)
+        getAlamatBerdasarkanRole(db, sh) { alamat ->
+            tvAlamatKomoditas.text = alamat // atau log, atau simpan ke variabel, dll
+        }
+
 
         tvKeteranganKomoditas.text = "pada Komoditas ${komoditas.capitalize(Locale.ROOT)}"
 
@@ -301,6 +367,9 @@ class DataPanen : AppCompatActivity() {
                 tvDraft.text = "Terdapat ${panenDraft.size} Data Panen yang belum dikirim ke server, silahkan klik peringatan ini untuk membuka list data!"
             }
 
+            lifecycleScope.launch {
+                updateDataCard(panens.filter { it.status == "VERIFIED" })
+            }
         } catch (e: Exception) {
             Log.e("loadDataOffline", "Gagal memuat data offline", e)
         }finally {
@@ -314,6 +383,43 @@ class DataPanen : AppCompatActivity() {
             }
         }
     }
+
+    private suspend fun updateDataCard(list: List<PanenEntity>?) {
+        val newList = mapToNewPanenList(list, db)
+
+        val total = calculateStat(newList)
+        val mono = calculateStat(newList.filter { it.lahan?.type == TypeLahan.MONOKULTUR })
+        val tumpang = calculateStat(newList.filter { it.lahan?.type == TypeLahan.TUMPANGSARI })
+        val pbph = calculateStat(newList.filter { it.lahan?.type == TypeLahan.PBPH })
+        val sosial = calculateStat(newList.filter { it.lahan?.type == TypeLahan.PERHUTANANSOSIAL })
+
+        // Set TextView
+        tvTotalJumlahPanen.text = total.jumlah
+        tvTotalLuasPanen.text = total.luas
+        tvTotalTargetPanen.text = total.target
+        tvPersenCapaianPanen.text = total.capaian
+
+        tvTotalJumlahPanenMonokultur.text = mono.jumlah
+        tvTotalLuasPanenMonokultur.text = mono.luas
+        tvTotalTargetPanenMonokultur.text = mono.target
+        tvPersenCapaianPanenMonokultur.text = mono.capaian
+
+        tvTotalJumlahPanenTumpangsari.text = tumpang.jumlah
+        tvTotalLuasPanenTumpangsari.text = tumpang.luas
+        tvTotalTargetPanenTumpangsari.text = tumpang.target
+        tvPersenCapaianPanenTumpangsari.text = tumpang.capaian
+
+        tvTotalJumlahPanenPbph.text = pbph.jumlah
+        tvTotalLuasPanenPbph.text = pbph.luas
+        tvTotalTargetPanenPbph.text = pbph.target
+        tvPersenCapaianPanenPbph.text = pbph.capaian
+
+        tvTotalJumlahPanenPerhutananSosial.text = sosial.jumlah
+        tvTotalLuasPanenPerhutananSosial.text = sosial.luas
+        tvTotalTargetPanenPerhutananSosial.text = sosial.target
+        tvPersenCapaianPanenPerhutananSosial.text = sosial.capaian
+    }
+
 
     override fun onResume() {
         super.onResume()

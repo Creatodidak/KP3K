@@ -1,6 +1,7 @@
 package id.creatodidak.kp3k.newversion.VideoCall
 
 import android.content.Context
+import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -25,6 +26,7 @@ import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.helper.askUser
 import id.creatodidak.kp3k.helper.getMyNrp
 import id.creatodidak.kp3k.network.SocketManager
+import id.creatodidak.kp3k.service.MyFirebaseMessagingService
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
@@ -61,6 +63,11 @@ class ClientVideoCall : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_client_video_call)
+
+        MyFirebaseMessagingService.staticNotify.cancelIncomingCallNotification(this)
+        MyFirebaseMessagingService.isCallAnswered = true
+        MyFirebaseMessagingService.CallSoundManager.stopSound()
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -77,12 +84,12 @@ class ClientVideoCall : AppCompatActivity() {
                     WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
                     WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
         )
-        
+
         room = intent.getStringExtra("room")!!
         token = intent.getStringExtra("token")!!
         caller = intent.getStringExtra("caller")!!
         callernrp = intent.getStringExtra("callernrp")!!
-        
+
         lyClient = findViewById(R.id.lyClient)
         lyClientEnded = findViewById(R.id.lyClientEnded)
         videoClient = findViewById(R.id.videoClient)
@@ -101,9 +108,23 @@ class ClientVideoCall : AppCompatActivity() {
             mRtcEngine?.switchCamera()
         }
 
+        val fromNotify = intent.getStringExtra("from_notify")
+        if (fromNotify == "yes") {
+            Log.d("tes_log", "send-- to socket")
+
+            val callernrp = intent.getStringExtra("callernrp") ?: return
+
+            val data = JSONObject().apply {
+                put("from", getMyNrp(this@ClientVideoCall))
+                put("from", callernrp)
+            }
+            SocketManager.getSocket().emit("accept-call", data)
+        }
+
+
         startPingLoop()
         initializeVideoCall()
-        
+
         socket.on("call-ended"){
             runOnUiThread {
                 isEnded = true
@@ -278,6 +299,25 @@ class ClientVideoCall : AppCompatActivity() {
     private fun stopPingLoop() {
         pingHandler.removeCallbacks(pingRunnable)
     }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent) // very important: update the intent attached to the activity
+
+        val fromNotify = intent?.getStringExtra("from_notify")
+        if (fromNotify == "yes") {
+            Log.d("tes_log", "send-- to socket")
+
+            val callernrp = intent.getStringExtra("callernrp") ?: return
+
+            val data = JSONObject().apply {
+                put("from", getMyNrp(this@ClientVideoCall))
+                put("from", callernrp)
+            }
+            SocketManager.getSocket().emit("accept-call", data)
+        }
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()

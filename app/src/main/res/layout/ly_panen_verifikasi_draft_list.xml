@@ -306,7 +306,8 @@
                     android:layout_height="wrap_content"
                     android:text="KIRIM DATA KE SERVER"
                     app:icon="@drawable/baseline_send_24"
-                    app:iconGravity="textEnd" />
+                    app:iconGravity="textEnd"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <Button
                     android:id="@+id/btHapusDraft"

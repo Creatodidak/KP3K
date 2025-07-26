@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.NestedScrollView
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,6 +32,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.adapter.NewAdapter.ListLahanAdapter
+import id.creatodidak.kp3k.api.newModel.ByEntity.DataLahanWithTanamanAndOwner
 import id.creatodidak.kp3k.database.AppDatabase
 import id.creatodidak.kp3k.database.Dao.LahanDao
 import id.creatodidak.kp3k.database.Dao.OwnerDao
@@ -48,8 +51,10 @@ import id.creatodidak.kp3k.helper.Loading
 import id.creatodidak.kp3k.helper.RoleHelper
 import id.creatodidak.kp3k.helper.TypeLahan
 import id.creatodidak.kp3k.helper.TypeOwner
+import id.creatodidak.kp3k.helper.angkaIndonesia
 import id.creatodidak.kp3k.helper.askUser
 import id.creatodidak.kp3k.helper.convertToHektar
+import id.creatodidak.kp3k.helper.enableDragAndSnap
 import id.creatodidak.kp3k.helper.getMyLevel
 import id.creatodidak.kp3k.helper.getMyRole
 import id.creatodidak.kp3k.helper.getMySatkerId
@@ -63,6 +68,7 @@ import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 import java.util.Date
+import kotlin.collections.map
 
 class ShowDataLahanByCategory : AppCompatActivity() {
     data class NewLahanEntity(
@@ -111,6 +117,38 @@ class ShowDataLahanByCategory : AppCompatActivity() {
     private lateinit var tvTotalData: TextView
     private lateinit var fabAddData: FloatingActionButton
     private lateinit var fabDownloadData: FloatingActionButton
+    private lateinit var lyFilterBy: LinearLayout
+    private lateinit var spFilterBy: Spinner
+    private lateinit var lyFab: LinearLayout
+    private lateinit var allCard: LinearLayout
+    private lateinit var allCardCategory: LinearLayout
+    // Total Lahan
+    private lateinit var tvTotalJumlahLahan: TextView
+    private lateinit var tvTotalLuasLahan: TextView
+    private lateinit var tvTotalJumlahLahanTertanamPersen: TextView
+    private lateinit var tvTotalLuasLahanTertanamHektar: TextView
+
+    // Monokultur
+    private lateinit var tvTotalJumlahLahanMonokultur: TextView
+    private lateinit var tvTotalLuasLahanMonokultur: TextView
+    private lateinit var tvTotalJumlahLahanTertanamPersenMonokultur: TextView
+    private lateinit var tvTotalLuasLahanTertanamHektarMonokultur: TextView
+
+    // Tumpangsari
+    private lateinit var tvTotalJumlahLahanTumpangsari: TextView
+    private lateinit var tvTotalLuasLahanTumpangsari: TextView
+    private lateinit var tvTotalJumlahLahanTertanamPersenTumpangsari: TextView
+    private lateinit var tvTotalLuasLahanTertanamHektarTumpangsari: TextView
+
+    private lateinit var tvTotalJumlahLahanPerhutananSosial: TextView
+    private lateinit var tvTotalLuasLahanPerhutananSosial: TextView
+    private lateinit var tvTotalJumlahLahanTertanamPersenPerhutananSosial: TextView
+    private lateinit var tvTotalLuasLahanTertanamHektarPerhutananSosial: TextView
+
+    private lateinit var tvTotalJumlahLahanPbph: TextView
+    private lateinit var tvTotalLuasLahanPbph: TextView
+    private lateinit var tvTotalJumlahLahanTertanamPersenPbph: TextView
+    private lateinit var tvTotalLuasLahanTertanamHektarPbph: TextView
 
     private var defProv = mutableListOf<ProvinsiEntity>()
     private var defKab = mutableListOf<KabupatenEntity>()
@@ -163,6 +201,45 @@ class ShowDataLahanByCategory : AppCompatActivity() {
         tvTotalData = findViewById(R.id.tvTotalData)
         fabAddData = findViewById(R.id.fabAddData)
         fabDownloadData = findViewById(R.id.fabDownloadData)
+        lyFilterBy = findViewById(R.id.lyFilterBy)
+        spFilterBy = findViewById(R.id.spFilterBy)
+        tvTotalJumlahLahan = findViewById(R.id.tvTotalJumlahLahan)
+        tvTotalLuasLahan = findViewById(R.id.tvTotalLuasLahan)
+        tvTotalJumlahLahanTertanamPersen = findViewById(R.id.tvTotalJumlahLahanTertanamPersen)
+        tvTotalLuasLahanTertanamHektar = findViewById(R.id.tvTotalLuasLahanTertanamHektar)
+
+        tvTotalJumlahLahanMonokultur = findViewById(R.id.tvTotalJumlahLahanMonokultur)
+        tvTotalLuasLahanMonokultur = findViewById(R.id.tvTotalLuasLahanMonokultur)
+        tvTotalJumlahLahanTertanamPersenMonokultur = findViewById(R.id.tvTotalJumlahLahanTertanamPersenMonokultur)
+        tvTotalLuasLahanTertanamHektarMonokultur = findViewById(R.id.tvTotalLuasLahanTertanamHektarMonokultur)
+
+        tvTotalJumlahLahanTumpangsari = findViewById(R.id.tvTotalJumlahLahanTumpangsari)
+        tvTotalLuasLahanTumpangsari = findViewById(R.id.tvTotalLuasLahanTumpangsari)
+        tvTotalJumlahLahanTertanamPersenTumpangsari = findViewById(R.id.tvTotalJumlahLahanTertanamPersenTumpangsari)
+        tvTotalLuasLahanTertanamHektarTumpangsari = findViewById(R.id.tvTotalLuasLahanTertanamHektarTumpangsari)
+
+        tvTotalJumlahLahanPerhutananSosial = findViewById(R.id.tvTotalJumlahLahanPerhutananSosial)
+        tvTotalLuasLahanPerhutananSosial = findViewById(R.id.tvTotalLuasLahanPerhutananSosial)
+        tvTotalJumlahLahanTertanamPersenPerhutananSosial = findViewById(R.id.tvTotalJumlahLahanTertanamPersenPerhutananSosial)
+        tvTotalLuasLahanTertanamHektarPerhutananSosial = findViewById(R.id.tvTotalLuasLahanTertanamHektarPerhutananSosial)
+
+        tvTotalJumlahLahanPbph = findViewById(R.id.tvTotalJumlahLahanPbph)
+        tvTotalLuasLahanPbph = findViewById(R.id.tvTotalLuasLahanPbph)
+        tvTotalJumlahLahanTertanamPersenPbph = findViewById(R.id.tvTotalJumlahLahanTertanamPersenPbph)
+        tvTotalLuasLahanTertanamHektarPbph = findViewById(R.id.tvTotalLuasLahanTertanamHektarPbph)
+
+        allCard = findViewById(R.id.allCard)
+        allCardCategory = findViewById(R.id.allCardCategory)
+        allCard.visibility = View.GONE
+
+        lyFab = findViewById(R.id.lyFab)
+        lyFab.enableDragAndSnap()
+
+        val jenisLahanList = listOf("SEMUA", "MONOKULTUR", "TUMPANGSARI", "PBPH", "PERHUTANAN SOSIAL")
+        val adapter = ArrayAdapter(this@ShowDataLahanByCategory, android.R.layout.simple_spinner_item, jenisLahanList)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spFilterBy.adapter = adapter
+        lyFilterBy.visibility = View.GONE
 
         provAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, defProv)
         provAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -187,6 +264,7 @@ class ShowDataLahanByCategory : AppCompatActivity() {
                 id: Long
             ) {
                 if (position > 0) {
+                    lyFilterBy.visibility = View.VISIBLE
                     lifecycleScope.launch {
                         when (kategori) {
                             "provinsi" -> {
@@ -226,6 +304,9 @@ class ShowDataLahanByCategory : AppCompatActivity() {
                             }
                         }
                     }
+                }else{
+                    lyFilterBy.visibility = View.GONE
+                    spFilterBy.setSelection(0)
                 }
             }
 
@@ -233,6 +314,61 @@ class ShowDataLahanByCategory : AppCompatActivity() {
                 TODO("Not yet implemented")
             }
 
+        }
+
+        spFilterBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when(position){
+                    0 -> {
+                        filteredListLahan.clear()
+                        lahanAdapter.notifyDataSetChanged()
+                        filteredListLahan.addAll(listLahan)
+                        lahanAdapter.notifyDataSetChanged()
+                        tvTotalData.text = "Total Data: ${filteredListLahan.size} Lahan"
+                    }
+                    1 -> {
+                        lyFilterBy.visibility = View.VISIBLE
+                        filteredListLahan.clear()
+                        lahanAdapter.notifyDataSetChanged()
+                        filteredListLahan.addAll(listLahan.filter { it.type == TypeLahan.MONOKULTUR })
+                        lahanAdapter.notifyDataSetChanged()
+                        tvTotalData.text = "Total Data: ${filteredListLahan.size} Lahan"
+                    }
+                    2 -> {
+                        lyFilterBy.visibility = View.VISIBLE
+                        filteredListLahan.clear()
+                        lahanAdapter.notifyDataSetChanged()
+                        filteredListLahan.addAll(listLahan.filter { it.type == TypeLahan.TUMPANGSARI })
+                        lahanAdapter.notifyDataSetChanged()
+                        tvTotalData.text = "Total Data: ${filteredListLahan.size} Lahan"
+                    }
+                    3 -> {
+                        lyFilterBy.visibility = View.VISIBLE
+                        filteredListLahan.clear()
+                        lahanAdapter.notifyDataSetChanged()
+                        filteredListLahan.addAll(listLahan.filter { it.type == TypeLahan.PBPH })
+                        lahanAdapter.notifyDataSetChanged()
+                        tvTotalData.text = "Total Data: ${filteredListLahan.size} Lahan"
+                    }
+                    4 -> {
+                        lyFilterBy.visibility = View.VISIBLE
+                        filteredListLahan.clear()
+                        lahanAdapter.notifyDataSetChanged()
+                        filteredListLahan.addAll(listLahan.filter { it.type == TypeLahan.PERHUTANANSOSIAL })
+                        lahanAdapter.notifyDataSetChanged()
+                        tvTotalData.text = "Total Data: ${filteredListLahan.size} Lahan"
+                    }
+                }
+                lifecycleScope.launch { updateDataCard(filteredListLahan) }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
         }
 
         lahanAdapter = ListLahanAdapter(
@@ -259,20 +395,39 @@ class ShowDataLahanByCategory : AppCompatActivity() {
         rvData.layoutManager = LinearLayoutManager(this)
         etSearch.addTextChangedListener { editable ->
             val keyword = editable.toString().trim().lowercase()
+            val keys = spFilterBy.selectedItem.toString()
             filteredListLahan.clear()
 
             if (keyword.isEmpty()) {
-                filteredListLahan.addAll(listLahan)
+                if(keys == "SEMUA"){
+                    filteredListLahan.addAll(listLahan)
+                }else{
+                    filteredListLahan.addAll(
+                        listLahan.filter { it.type == TypeLahan.valueOf(keys) }
+                    )
+                }
             } else {
-                filteredListLahan.addAll(
-                    listLahan.filter {
-                        it.showCaseName.lowercase().contains(keyword) ||
-                                it.owner_name.lowercase().contains(keyword) ||
-                                it.kabupaten.lowercase().contains(keyword) ||
-                                it.kecamatan.lowercase().contains(keyword) ||
-                                it.desa.lowercase().contains(keyword)
-                    }
-                )
+                if(keys == "SEMUA"){
+                    filteredListLahan.addAll(
+                        listLahan.filter {
+                            it.showCaseName.lowercase().contains(keyword) ||
+                                    it.owner_name.lowercase().contains(keyword) ||
+                                    it.kabupaten.lowercase().contains(keyword) ||
+                                    it.kecamatan.lowercase().contains(keyword) ||
+                                    it.desa.lowercase().contains(keyword)
+                        }
+                    )
+                }else{
+                    filteredListLahan.addAll(
+                        listLahan.filter { it.type == TypeLahan.valueOf(keys) }.filter {
+                            it.showCaseName.lowercase().contains(keyword) ||
+                                    it.owner_name.lowercase().contains(keyword) ||
+                                    it.kabupaten.lowercase().contains(keyword) ||
+                                    it.kecamatan.lowercase().contains(keyword) ||
+                                    it.desa.lowercase().contains(keyword)
+                        }
+                    )
+                }
             }
 
             lahanAdapter.notifyDataSetChanged()
@@ -675,6 +830,124 @@ class ShowDataLahanByCategory : AppCompatActivity() {
             tvTotalData.text = "Belum Ada Data Terkait!"
             rvData.visibility = View.GONE
             etSearchLayout.visibility = View.GONE
+        }
+        updateDataCard(data)
+    }
+
+    private suspend fun updateDataCard(d: List<NewLahanEntity>) {
+        if(d.isEmpty()){
+            allCard.visibility = View.GONE
+        }else{
+            allCard.visibility = View.VISIBLE
+            if(spFilterBy.selectedItemPosition > 0){
+                allCardCategory.visibility = View.GONE
+            }else{
+                allCardCategory.visibility = View.VISIBLE
+            }
+            val data = d.map {
+                DataLahanWithTanamanAndOwner(
+                    id = it.id,
+                    type = it.type,
+                    komoditas = it.komoditas,
+                    owner_id = it.owner_id,
+                    provinsi_id = it.provinsi_id,
+                    kabupaten_id = it.kabupaten_id,
+                    kecamatan_id = it.kecamatan_id,
+                    desa_id = it.desa_id,
+                    luas = it.luas,
+                    latitude = it.latitude,
+                    longitude = it.longitude,
+                    status = it.status,
+                    alasan = it.alasan,
+                    createAt = it.createAt,
+                    updateAt = it.updateAt,
+                    submitter = it.submitter,
+                    owner = dbOwner.getOwnerById(it.owner_id),
+                    realisasitanam = dbTanaman.getTanamanByLahanId(komoditas, it.id)
+                )
+            }
+            val totalLuasLahan = data.sumOf { it.luas.toDouble() }
+            val totalLuasLahanMonokultur = data
+                .filter { it.type  == TypeLahan.MONOKULTUR }
+                .sumOf { it.luas.toDoubleOrNull() ?: 0.0 }
+            val totalLuasLahanTumpangsari = data
+                .filter { it.type  == TypeLahan.TUMPANGSARI }
+                .sumOf { it.luas.toDoubleOrNull() ?: 0.0 }
+            val totalLuasLahanPerhutananSosial = data
+                .filter { it.type  == TypeLahan.PERHUTANANSOSIAL }
+                .sumOf { it.luas.toDoubleOrNull() ?: 0.0 }
+            val totalLuasLahanPbph = data
+                .filter { it.type  == TypeLahan.PBPH }
+                .sumOf { it.luas.toDoubleOrNull() ?: 0.0 }
+
+            val totalLuasTertanam = data.sumOf { item ->
+                item.realisasitanam?.sumOf { it.luastanam.toDoubleOrNull() ?: 0.0 } ?: 0.0
+            }
+            val totalLuasTertanamMonokultur = data
+                .filter { it.type  == TypeLahan.MONOKULTUR }
+                .sumOf { item ->
+                    item.realisasitanam?.sumOf { it.luastanam.toDoubleOrNull() ?: 0.0 } ?: 0.0
+                }
+            val totalLuasTertanamTumpangsari = data
+                .filter { it.type  == TypeLahan.TUMPANGSARI }
+                .sumOf { item ->
+                    item.realisasitanam?.sumOf { it.luastanam.toDoubleOrNull() ?: 0.0 } ?: 0.0
+                }
+            val totalLuasTertanamPerhutananSosial = data
+                .filter { it.type  == TypeLahan.PERHUTANANSOSIAL }
+                .sumOf { item ->
+                    item.realisasitanam?.sumOf { it.luastanam.toDoubleOrNull() ?: 0.0 } ?: 0.0
+                }
+            val totalLuasTertanamPbph = data
+                .filter { it.type  == TypeLahan.PBPH }
+                .sumOf { item ->
+                    item.realisasitanam?.sumOf { it.luastanam.toDoubleOrNull() ?: 0.0 } ?: 0.0
+                }
+            val persenLuasTertanam = if (totalLuasLahan > 0) {
+                angkaIndonesia(totalLuasTertanam / totalLuasLahan * 100)
+            } else {
+                0
+            }
+            val persenLuasTertanamMonokultur = if (totalLuasLahanMonokultur > 0) {
+                angkaIndonesia(totalLuasTertanamMonokultur / totalLuasLahanMonokultur * 100)
+            } else {
+                0
+            }
+            val persenLuasTertanamTumpangsari = if (totalLuasLahanTumpangsari > 0) {
+                angkaIndonesia(totalLuasTertanamTumpangsari / totalLuasLahanTumpangsari * 100)
+            } else {
+                0
+            }
+            val persenLuasTertanamPerhutananSosial = if (totalLuasLahanPerhutananSosial > 0) {
+                angkaIndonesia(totalLuasTertanamPerhutananSosial / totalLuasLahanPerhutananSosial * 100)
+            } else {
+                0
+            }
+            val persenLuasTertanamPbph = if (totalLuasLahanPbph > 0) {
+                angkaIndonesia(totalLuasTertanamPbph / totalLuasLahanPbph * 100)
+            } else {
+                0
+            }
+            tvTotalJumlahLahan.text = data.size.toString()
+            tvTotalLuasLahan.text = angkaIndonesia(convertToHektar(totalLuasLahan))
+            tvTotalJumlahLahanTertanamPersen.text = "$persenLuasTertanam%"
+            tvTotalLuasLahanTertanamHektar.text = angkaIndonesia(convertToHektar(totalLuasTertanam))
+            tvTotalJumlahLahanMonokultur.text = data.filter { it.type  == TypeLahan.MONOKULTUR }.size.toString()
+            tvTotalLuasLahanMonokultur.text = angkaIndonesia(convertToHektar(totalLuasLahanMonokultur))
+            tvTotalJumlahLahanTertanamPersenMonokultur.text = "$persenLuasTertanamMonokultur%"
+            tvTotalLuasLahanTertanamHektarMonokultur.text = angkaIndonesia(convertToHektar(totalLuasTertanamMonokultur))
+            tvTotalJumlahLahanTumpangsari.text = data.filter { it.type  == TypeLahan.TUMPANGSARI }.size.toString()
+            tvTotalLuasLahanTumpangsari.text = angkaIndonesia(convertToHektar(totalLuasLahanTumpangsari))
+            tvTotalJumlahLahanTertanamPersenTumpangsari.text = "$persenLuasTertanamTumpangsari%"
+            tvTotalLuasLahanTertanamHektarTumpangsari.text = angkaIndonesia(convertToHektar(totalLuasTertanamTumpangsari))
+            tvTotalJumlahLahanPerhutananSosial.text = data.filter { it.type  == TypeLahan.PERHUTANANSOSIAL }.size.toString()
+            tvTotalLuasLahanPerhutananSosial.text = angkaIndonesia(convertToHektar(totalLuasLahanPerhutananSosial))
+            tvTotalJumlahLahanTertanamPersenPerhutananSosial.text = "$persenLuasTertanamPerhutananSosial%"
+            tvTotalLuasLahanTertanamHektarPerhutananSosial.text = angkaIndonesia(convertToHektar(totalLuasTertanamPerhutananSosial))
+            tvTotalJumlahLahanPbph.text = data.filter { it.type  == TypeLahan.PBPH }.size.toString()
+            tvTotalLuasLahanPbph.text = angkaIndonesia(convertToHektar(totalLuasLahanPbph))
+            tvTotalJumlahLahanTertanamPersenPbph.text = "$persenLuasTertanamPbph%"
+            tvTotalLuasLahanTertanamHektarPbph.text = angkaIndonesia(convertToHektar(totalLuasTertanamPbph))
         }
     }
 

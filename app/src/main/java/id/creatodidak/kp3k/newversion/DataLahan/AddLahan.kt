@@ -88,7 +88,7 @@ class AddLahan : AppCompatActivity(), OnMapReadyCallback {
     lateinit var tvConvertHektar: TextView
 
     private val listOwner = mutableListOf<OwnerEntity>()
-    private val listType = listOf("PILIH TYPE LAHAN", "MONOKULTUR", "TUMPANGSARI")
+    private val listType = listOf("PILIH TYPE LAHAN", "MONOKULTUR", "TUMPANGSARI", "PBPH", "PERHUTANANSOSIAL")
     private lateinit var ownerAdapter : ArrayAdapter<OwnerEntity>
     private lateinit var typeAdapter : ArrayAdapter<String>
     private var isKoordinatValid : Boolean = false

@@ -114,7 +114,7 @@ class DataLahanDetails : AppCompatActivity(), OnMapReadyCallback {
         btEdit = findViewById(R.id.btEdit)
         tvLahanKe = findViewById(R.id.tvLahanKe)
 
-        if(getMyRole(this) in listOf("ADMINPOLSEK", "BPKP")){
+        if(getMyRole(this) in listOf("ADMINPOLRES", "ADMINPOLSEK", "BPKP")){
             btDelete.visibility = View.VISIBLE
             btEdit.visibility = View.VISIBLE
         }else{

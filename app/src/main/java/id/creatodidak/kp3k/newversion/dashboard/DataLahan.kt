@@ -27,6 +27,7 @@ import id.creatodidak.kp3k.database.Dao.WilayahDao
 import id.creatodidak.kp3k.database.DatabaseInstance
 import id.creatodidak.kp3k.database.syncDataFromServer
 import id.creatodidak.kp3k.helper.RoleHelper
+import id.creatodidak.kp3k.helper.TypeLahan
 import id.creatodidak.kp3k.helper.angkaIndonesia
 import id.creatodidak.kp3k.helper.convertToHektar
 import id.creatodidak.kp3k.helper.getMyLevel
@@ -75,6 +76,16 @@ class DataLahan : AppCompatActivity() {
     private lateinit var tvTotalLuasLahanTumpangsari: TextView
     private lateinit var tvTotalJumlahLahanTertanamPersenTumpangsari: TextView
     private lateinit var tvTotalLuasLahanTertanamHektarTumpangsari: TextView
+
+    private lateinit var tvTotalJumlahLahanPerhutananSosial: TextView
+    private lateinit var tvTotalLuasLahanPerhutananSosial: TextView
+    private lateinit var tvTotalJumlahLahanTertanamPersenPerhutananSosial: TextView
+    private lateinit var tvTotalLuasLahanTertanamHektarPerhutananSosial: TextView
+
+    private lateinit var tvTotalJumlahLahanPbph: TextView
+    private lateinit var tvTotalLuasLahanPbph: TextView
+    private lateinit var tvTotalJumlahLahanTertanamPersenPbph: TextView
+    private lateinit var tvTotalLuasLahanTertanamHektarPbph: TextView
 
     // CardViews untuk navigasi berdasarkan wilayah
     private lateinit var cvDataLahanByProvinsi: CardView
@@ -141,6 +152,16 @@ class DataLahan : AppCompatActivity() {
         tvTotalLuasLahanTumpangsari = findViewById(R.id.tvTotalLuasLahanTumpangsari)
         tvTotalJumlahLahanTertanamPersenTumpangsari = findViewById(R.id.tvTotalJumlahLahanTertanamPersenTumpangsari)
         tvTotalLuasLahanTertanamHektarTumpangsari = findViewById(R.id.tvTotalLuasLahanTertanamHektarTumpangsari)
+
+        tvTotalJumlahLahanPerhutananSosial = findViewById(R.id.tvTotalJumlahLahanPerhutananSosial)
+        tvTotalLuasLahanPerhutananSosial = findViewById(R.id.tvTotalLuasLahanPerhutananSosial)
+        tvTotalJumlahLahanTertanamPersenPerhutananSosial = findViewById(R.id.tvTotalJumlahLahanTertanamPersenPerhutananSosial)
+        tvTotalLuasLahanTertanamHektarPerhutananSosial = findViewById(R.id.tvTotalLuasLahanTertanamHektarPerhutananSosial)
+
+        tvTotalJumlahLahanPbph = findViewById(R.id.tvTotalJumlahLahanPbph)
+        tvTotalLuasLahanPbph = findViewById(R.id.tvTotalLuasLahanPbph)
+        tvTotalJumlahLahanTertanamPersenPbph = findViewById(R.id.tvTotalJumlahLahanTertanamPersenPbph)
+        tvTotalLuasLahanTertanamHektarPbph = findViewById(R.id.tvTotalLuasLahanTertanamHektarPbph)
 
         cvDataLahanByProvinsi = findViewById(R.id.cvDataLahanByProvinsi)
         cvDataLahanByKabupaten = findViewById(R.id.cvDataLahanByKabupaten)
@@ -392,21 +413,38 @@ class DataLahan : AppCompatActivity() {
 
         val totalLuasLahan = data.sumOf { it.luas.toDouble() }
         val totalLuasLahanMonokultur = data
-            .filter { it.type.equals("MONOKULTUR") }
+            .filter { it.type  == TypeLahan.MONOKULTUR }
             .sumOf { it.luas.toDoubleOrNull() ?: 0.0 }
         val totalLuasLahanTumpangsari = data
-            .filter { it.type.equals("TUMPANGSARI") }
+            .filter { it.type  == TypeLahan.TUMPANGSARI }
             .sumOf { it.luas.toDoubleOrNull() ?: 0.0 }
+        val totalLuasLahanPerhutananSosial = data
+            .filter { it.type  == TypeLahan.PERHUTANANSOSIAL }
+            .sumOf { it.luas.toDoubleOrNull() ?: 0.0 }
+        val totalLuasLahanPbph = data
+            .filter { it.type  == TypeLahan.PBPH }
+            .sumOf { it.luas.toDoubleOrNull() ?: 0.0 }
+        
         val totalLuasTertanam = data.sumOf { item ->
             item.realisasitanam?.sumOf { it.luastanam.toDoubleOrNull() ?: 0.0 } ?: 0.0
         }
         val totalLuasTertanamMonokultur = data
-            .filter { it.type.equals("MONOKULTUR") }
+            .filter { it.type  == TypeLahan.MONOKULTUR }
             .sumOf { item ->
                 item.realisasitanam?.sumOf { it.luastanam.toDoubleOrNull() ?: 0.0 } ?: 0.0
             }
         val totalLuasTertanamTumpangsari = data
-            .filter { it.type.equals("TUMPANGSARI") }
+            .filter { it.type  == TypeLahan.TUMPANGSARI }
+            .sumOf { item ->
+                item.realisasitanam?.sumOf { it.luastanam.toDoubleOrNull() ?: 0.0 } ?: 0.0
+            }
+        val totalLuasTertanamPerhutananSosial = data
+            .filter { it.type  == TypeLahan.PERHUTANANSOSIAL }
+            .sumOf { item ->
+                item.realisasitanam?.sumOf { it.luastanam.toDoubleOrNull() ?: 0.0 } ?: 0.0
+            }
+        val totalLuasTertanamPbph = data
+            .filter { it.type  == TypeLahan.PBPH }
             .sumOf { item ->
                 item.realisasitanam?.sumOf { it.luastanam.toDoubleOrNull() ?: 0.0 } ?: 0.0
             }
@@ -425,19 +463,36 @@ class DataLahan : AppCompatActivity() {
         } else {
             0
         }
-
+        val persenLuasTertanamPerhutananSosial = if (totalLuasLahanPerhutananSosial > 0) {
+            angkaIndonesia(totalLuasTertanamPerhutananSosial / totalLuasLahanPerhutananSosial * 100)
+        } else {
+            0
+        }
+        val persenLuasTertanamPbph = if (totalLuasLahanPbph > 0) {
+            angkaIndonesia(totalLuasTertanamPbph / totalLuasLahanPbph * 100)
+        } else {
+            0
+        }
         tvTotalJumlahLahan.text = data.size.toString()
         tvTotalLuasLahan.text = angkaIndonesia(convertToHektar(totalLuasLahan))
         tvTotalJumlahLahanTertanamPersen.text = "$persenLuasTertanam%"
         tvTotalLuasLahanTertanamHektar.text = angkaIndonesia(convertToHektar(totalLuasTertanam))
-        tvTotalJumlahLahanMonokultur.text = data.filter { it.type.equals("MONOKULTUR") }.size.toString()
-        tvTotalLuasLahanMonokultur.text = angkaIndonesia(totalLuasLahanMonokultur)
+        tvTotalJumlahLahanMonokultur.text = data.filter { it.type  == TypeLahan.MONOKULTUR }.size.toString()
+        tvTotalLuasLahanMonokultur.text = angkaIndonesia(convertToHektar(totalLuasLahanMonokultur))
         tvTotalJumlahLahanTertanamPersenMonokultur.text = "$persenLuasTertanamMonokultur%"
         tvTotalLuasLahanTertanamHektarMonokultur.text = angkaIndonesia(convertToHektar(totalLuasTertanamMonokultur))
-        tvTotalJumlahLahanTumpangsari.text = data.filter { it.type.equals("TUMPANGSARI") }.size.toString()
-        tvTotalLuasLahanTumpangsari.text = angkaIndonesia(totalLuasLahanTumpangsari)
+        tvTotalJumlahLahanTumpangsari.text = data.filter { it.type  == TypeLahan.TUMPANGSARI }.size.toString()
+        tvTotalLuasLahanTumpangsari.text = angkaIndonesia(convertToHektar(totalLuasLahanTumpangsari))
         tvTotalJumlahLahanTertanamPersenTumpangsari.text = "$persenLuasTertanamTumpangsari%"
         tvTotalLuasLahanTertanamHektarTumpangsari.text = angkaIndonesia(convertToHektar(totalLuasTertanamTumpangsari))
+        tvTotalJumlahLahanPerhutananSosial.text = data.filter { it.type  == TypeLahan.PERHUTANANSOSIAL }.size.toString()
+        tvTotalLuasLahanPerhutananSosial.text = angkaIndonesia(convertToHektar(totalLuasLahanPerhutananSosial))
+        tvTotalJumlahLahanTertanamPersenPerhutananSosial.text = "$persenLuasTertanamPerhutananSosial%"
+        tvTotalLuasLahanTertanamHektarPerhutananSosial.text = angkaIndonesia(convertToHektar(totalLuasTertanamPerhutananSosial))
+        tvTotalJumlahLahanPbph.text = data.filter { it.type  == TypeLahan.PBPH }.size.toString()
+        tvTotalLuasLahanPbph.text = angkaIndonesia(convertToHektar(totalLuasLahanPbph))
+        tvTotalJumlahLahanTertanamPersenPbph.text = "$persenLuasTertanamPbph%"
+        tvTotalLuasLahanTertanamHektarPbph.text = angkaIndonesia(convertToHektar(totalLuasTertanamPbph))
         svDataLahan.visibility = View.VISIBLE
         swlDataLahan.isRefreshing = false
         fabAddDataLahan.visibility = View.GONE

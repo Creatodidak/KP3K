@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
@@ -24,22 +22,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
-import id.creatodidak.kp3k.BuildConfig.AI_URL
 import id.creatodidak.kp3k.R
 import id.creatodidak.kp3k.api.Client
 import id.creatodidak.kp3k.api.MediaEndpoint
 import id.creatodidak.kp3k.api.PanenEndpoint
 import id.creatodidak.kp3k.api.RequestClass.InsertDataPanen
-import id.creatodidak.kp3k.api.RequestClass.InsertDataTanam
 import id.creatodidak.kp3k.api.RequestClass.ProgressRequestBody
-import id.creatodidak.kp3k.api.TanamanEndpoint
-import id.creatodidak.kp3k.api.model.ChatMessage
 import id.creatodidak.kp3k.api.newModel.DokumentasiUI
-import id.creatodidak.kp3k.api.newModel.MasaTanam
 import id.creatodidak.kp3k.database.AppDatabase
 import id.creatodidak.kp3k.database.DatabaseInstance
 import id.creatodidak.kp3k.database.Entity.MediaDraftEntity
@@ -47,8 +39,6 @@ import id.creatodidak.kp3k.database.Entity.MediaEntity
 import id.creatodidak.kp3k.database.Entity.OwnerEntity
 import id.creatodidak.kp3k.database.Entity.PanenDraftEntity
 import id.creatodidak.kp3k.database.Entity.PanenEntity
-import id.creatodidak.kp3k.database.Entity.TanamanDraftEntity
-import id.creatodidak.kp3k.database.Entity.TanamanEntity
 import id.creatodidak.kp3k.helper.CameraActivity
 import id.creatodidak.kp3k.helper.DatePickerMode
 import id.creatodidak.kp3k.helper.IsGapki
@@ -66,7 +56,6 @@ import id.creatodidak.kp3k.helper.convertToHektar
 import id.creatodidak.kp3k.helper.convertToServerFormat
 import id.creatodidak.kp3k.helper.convertToTon
 import id.creatodidak.kp3k.helper.formatTanggalKeIndonesia
-import id.creatodidak.kp3k.helper.generateMasaTanamList
 import id.creatodidak.kp3k.helper.getMyKabId
 import id.creatodidak.kp3k.helper.getMyLevel
 import id.creatodidak.kp3k.helper.getMyNrp
@@ -80,23 +69,13 @@ import id.creatodidak.kp3k.helper.toIsoString
 import id.creatodidak.kp3k.newversion.DataLahan.ShowDataLahanByCategory.NewLahanEntity
 import id.creatodidak.kp3k.newversion.DataTanaman.ShowDataTanamanByCategory
 import kotlinx.coroutines.launch
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.Response
-import org.json.JSONArray
-import org.json.JSONObject
 import java.io.File
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 class AddPanen : AppCompatActivity() {
     private lateinit var db : AppDatabase
@@ -537,7 +516,7 @@ class AddPanen : AppCompatActivity() {
 
     private fun getAnalisa(data: PanenDraftEntity){
         try {
-            val req = "Analisa singkat panen ${komoditas} varietas ${selectedTanaman!!.varietas}. Tanam: ${formatTanggalKeIndonesia(selectedTanaman!!.tanggaltanam.toIsoString())}, ${angkaIndonesia(convertToHektar(selectedTanaman!!.luastanam.toDouble()))}Ha. Target: ${angkaIndonesia(convertToTon(selectedTanaman!!.prediksipanen.toDouble()))}t. Panen: ${formatTanggalKeIndonesia(data.tanggalpanen.toIsoString())}, ${angkaIndonesia(convertToHektar(data.luaspanen.toDouble()))}Ha, ${angkaIndonesia(convertToTon(data.jumlahpanen.toDouble()))}t."
+            val req = "Analisa singkat panen ${komoditas} varietas ${selectedTanaman!!.varietas}. Tanam: ${formatTanggalKeIndonesia(selectedTanaman!!.tanggaltanam.toIsoString())}, ${angkaIndonesia(convertToHektar(selectedTanaman!!.luastanam.toDouble()))}Ha. Target: ${angkaIndonesia(convertToTon(selectedTanaman!!.prediksipanen.toDouble()))}t. Panen: ${formatTanggalKeIndonesia(data.tanggalpanen.toIsoString())}, ${angkaIndonesia(convertToHektar(data.luaspanen.toDouble()))}Ha, ${angkaIndonesia(convertToTon(data.jumlahpanen.toDouble()))}t. Keterangan: ${data.keterangan}"
 
 
             LoadAI.show(this, req) { analisa, status ->

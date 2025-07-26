@@ -24,6 +24,7 @@ data class PerkembanganEntity(
     val keterangangangguanlainnya: String?,
     val keterangan: String?,
     val rekomendasi: String?,
+    val submitter: String?,
     val foto1: String = "/media/default.jpg",
     val foto2: String = "/media/default.jpg",
     val foto3: String = "/media/default.jpg",

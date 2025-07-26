@@ -139,6 +139,26 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
     private lateinit var tvDataFilter: TextView
     private lateinit var rvDataTanaman: RecyclerView
     private lateinit var tvTotalData: TextView
+    private lateinit var tvMasaTanam: TextView
+
+    private lateinit var tvTotalJumlahTanaman: TextView
+    private lateinit var tvTotalLuasTanaman: TextView
+
+    private lateinit var tvTotalJumlahTanamanMonokultur: TextView
+    private lateinit var tvTotalLuasTanamanMonokultur: TextView
+
+    private lateinit var tvTotalJumlahTanamanTumpangsari: TextView
+    private lateinit var tvTotalLuasTanamanTumpangsari: TextView
+
+    private lateinit var tvTotalJumlahTanamanPbph: TextView
+    private lateinit var tvTotalLuasTanamanPbph: TextView
+
+    private lateinit var tvTotalJumlahTanamanPerhutananSosial: TextView
+    private lateinit var tvTotalLuasTanamanPerhutananSosial: TextView
+
+    private lateinit var allCard: LinearLayout
+    private lateinit var allCardCategory: LinearLayout
+
 
     private lateinit var fabAddData: FloatingActionButton
     private lateinit var fabDownloadData: FloatingActionButton
@@ -165,7 +185,7 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
     private lateinit var tanamanAdapter: TanamanAdapter
     private var defId : Int? = null
 
-    private val filterDataBy = listOf("TAMPILKAN SEMUA", "TANGGAL TANAM", "BULAN TANAM", "TAHUN TANAM", "KUARTAL TANAM", "MASA TANAM", "RENTANG TANGGAL")
+    private val filterDataBy = listOf("TAMPILKAN SEMUA", "TANGGAL TANAM", "BULAN TANAM", "TAHUN TANAM", "KUARTAL TANAM", "MASA TANAM", "RENTANG TANGGAL", "JENIS LAHAN")
     private lateinit var filterDataByAdapter: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -190,6 +210,7 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
         tvKeteranganKomoditas = findViewById(R.id.tvKeteranganKomoditas)
         tvKeteranganKomoditas.text = "pada Komoditas ${komoditas.capitalize()} berdasarkan ${kategori.capitalize()}"
         tvTotalData = findViewById(R.id.tvTotalData)
+        tvMasaTanam = findViewById(R.id.tvMasaTanam)
 
         swipeRefreshLayout = findViewById(R.id.swlShowDataTanaman)
         scrollView = findViewById(R.id.svShowDataTanaman)
@@ -224,6 +245,31 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
         lahanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         filterDataByAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, filterDataBy)
         filterDataByAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        if(isCanCRUD(this)){
+            fabAddData.visibility = View.VISIBLE
+        }else{
+            fabAddData.visibility = View.GONE
+        }
+        allCard = findViewById(R.id.allCard)
+        allCardCategory = findViewById(R.id.allCardCategory)
+
+        tvTotalJumlahTanaman = findViewById(R.id.tvTotalJumlahTanaman)
+        tvTotalLuasTanaman = findViewById(R.id.tvTotalLuasTanaman)
+
+        tvTotalJumlahTanamanMonokultur = findViewById(R.id.tvTotalJumlahTanamanMonokultur)
+        tvTotalLuasTanamanMonokultur = findViewById(R.id.tvTotalLuasTanamanMonokultur)
+
+        tvTotalJumlahTanamanTumpangsari = findViewById(R.id.tvTotalJumlahTanamanTumpangsari)
+        tvTotalLuasTanamanTumpangsari = findViewById(R.id.tvTotalLuasTanamanTumpangsari)
+
+        tvTotalJumlahTanamanPbph = findViewById(R.id.tvTotalJumlahTanamanPbph)
+        tvTotalLuasTanamanPbph = findViewById(R.id.tvTotalLuasTanamanPbph)
+
+        tvTotalJumlahTanamanPerhutananSosial = findViewById(R.id.tvTotalJumlahTanamanPerhutananSosial)
+        tvTotalLuasTanamanPerhutananSosial = findViewById(R.id.tvTotalLuasTanamanPerhutananSosial)
+        allCard.visibility = View.GONE
+        fabDownloadData.visibility = View.GONE
 
         lyFab.enableDragAndSnap()
         tanamanAdapter = TanamanAdapter(filteredListTanaman, onRincianClick = { data ->
@@ -318,6 +364,12 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
                 tanamanAdapter.notifyDataSetChanged()
                 tvTotalData.text = "Menunggu data..."
 
+                if(position > 0){
+                    allCardCategory.visibility = View.GONE
+                }else{
+                    allCardCategory.visibility = View.VISIBLE
+                }
+
                 when(position){
                     0 -> {
                         Toast.makeText(this@ShowDataTanamanByCategory, "Menampilkan semua data!", Toast.LENGTH_SHORT).show()
@@ -327,6 +379,7 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
                         filteredListTanaman.addAll(listTanaman)
                         tanamanAdapter.notifyDataSetChanged()
                         tvTotalData.text = "${filteredListTanaman.size} Data Ditemukan"
+                        updateDataCard(filteredListTanaman)
                     }
                     1 -> {
                         Toast.makeText(this@ShowDataTanamanByCategory, "Pilih Tanggal!", Toast.LENGTH_SHORT).show()
@@ -351,6 +404,7 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
                                 filteredListTanaman.addAll(newFilteredData)
                                 tanamanAdapter.notifyDataSetChanged()
                                 tvTotalData.text = "${filteredListTanaman.size} Data Ditemukan"
+                                updateDataCard(filteredListTanaman)
                             }
                         }
                     }
@@ -371,6 +425,7 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
                                 filteredListTanaman.addAll(newFilteredData)
                                 tanamanAdapter.notifyDataSetChanged()
                                 tvTotalData.text = "${filteredListTanaman.size} Data Ditemukan"
+                                updateDataCard(filteredListTanaman)
                             }
                         }
                     }
@@ -391,6 +446,7 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
                                 filteredListTanaman.addAll(newFilteredData)
                                 tanamanAdapter.notifyDataSetChanged()
                                 tvTotalData.text = "${filteredListTanaman.size} Data Ditemukan"
+                                updateDataCard(filteredListTanaman)
                             }
                         }
                     }
@@ -430,7 +486,7 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
                         datePickers.visibility = View.GONE
                         lyMasaTanam.visibility = View.VISIBLE
                         spMasaTanam.visibility = View.VISIBLE
-
+                        tvMasaTanam.text = "Pilih Masa Tanam"
                         val masaTanamList = mutableListOf<MasaTanam>()
                         masaTanamList.add(MasaTanam(0, "0", "PILIH MASA TANAM"))
                         masaTanamList.addAll(generateMasaTanamList())
@@ -450,6 +506,7 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
                                     filteredListTanaman.addAll(newFilteredData)
                                     tanamanAdapter.notifyDataSetChanged()
                                     tvTotalData.text = "${filteredListTanaman.size} Data Ditemukan"
+                                    updateDataCard(filteredListTanaman)
                                 }
                             }
 
@@ -504,6 +561,78 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
                             }
                         }
                     }
+                    7 -> {
+                        Toast.makeText(this@ShowDataTanamanByCategory, "Pilih Jenis Lahan!", Toast.LENGTH_SHORT).show()
+                        datePickers.visibility = View.GONE
+                        lyMasaTanam.visibility = View.VISIBLE
+                        spMasaTanam.visibility = View.VISIBLE
+                        tvMasaTanam.text = "Pilih Jenis Lahan"
+                        val jenisLahanList = listOf("PILIH JENIS LAHAN", "MONOKULTUR", "TUMPANGSARI", "PBPH", "PERHUTANAN SOSIAL")
+                        val adapter = ArrayAdapter(this@ShowDataTanamanByCategory, android.R.layout.simple_spinner_item, jenisLahanList)
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        spMasaTanam.adapter = adapter
+
+                        spMasaTanam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                when(position){
+                                    0 -> {
+                                        filteredListTanaman.clear()
+                                        tanamanAdapter.notifyDataSetChanged()
+                                        tvTotalData.text = "${filteredListTanaman.size} Data Ditemukan"
+                                        updateDataCard(filteredListTanaman)
+                                    }
+                                    1 -> {
+                                        filteredListTanaman.clear()
+                                        tanamanAdapter.notifyDataSetChanged()
+                                        val newFilteredData = listTanaman.filter { it.typeLahan == TypeLahan.MONOKULTUR }
+                                        filteredListTanaman.addAll(newFilteredData)
+                                        tanamanAdapter.notifyDataSetChanged()
+                                        tvTotalData.text = "${filteredListTanaman.size} Data Ditemukan"
+                                        updateDataCard(filteredListTanaman)
+                                    }
+                                    2 -> {
+                                        filteredListTanaman.clear()
+                                        tanamanAdapter.notifyDataSetChanged()
+                                        val newFilteredData = listTanaman.filter { it.typeLahan == TypeLahan.TUMPANGSARI }
+                                        filteredListTanaman.addAll(newFilteredData)
+                                        tanamanAdapter.notifyDataSetChanged()
+                                        tvTotalData.text = "${filteredListTanaman.size} Data Ditemukan"
+                                        updateDataCard(filteredListTanaman)
+                                    }
+                                    3 -> {
+                                        filteredListTanaman.clear()
+                                        tanamanAdapter.notifyDataSetChanged()
+                                        val newFilteredData = listTanaman.filter { it.typeLahan == TypeLahan.PBPH }
+                                        filteredListTanaman.addAll(newFilteredData)
+                                        tanamanAdapter.notifyDataSetChanged()
+                                        tvTotalData.text = "${filteredListTanaman.size} Data Ditemukan"
+                                        updateDataCard(filteredListTanaman)
+                                    }
+                                    4 -> {
+                                        filteredListTanaman.clear()
+                                        tanamanAdapter.notifyDataSetChanged()
+                                        val newFilteredData = listTanaman.filter { it.typeLahan == TypeLahan.PERHUTANANSOSIAL }
+                                        filteredListTanaman.addAll(newFilteredData)
+                                        tanamanAdapter.notifyDataSetChanged()
+                                        tvTotalData.text = "${filteredListTanaman.size} Data Ditemukan"
+                                        updateDataCard(filteredListTanaman)
+                                    }
+                                }
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                TODO("Not yet implemented")
+                            }
+
+                        }
+
+                    }
+
                 }
             }
 
@@ -533,6 +662,37 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
                     loadFilter()
                 }
             }
+        }
+    }
+
+    private fun updateDataCard(list: List<NewTanamanEntity>){
+        if(list.isEmpty()){
+            allCard.visibility = View.GONE
+        }else{
+            allCard.visibility = View.VISIBLE
+
+            val totalTanaman = list.size
+            val totalLuasTanaman = angkaIndonesia(convertToHektar(list.sumOf { it.luastanam.toDouble() }))
+            val totalTanamanMonokultur = list.filter { it.typeLahan == TypeLahan.MONOKULTUR }.size
+            val totalLuasTanamanMonokultur = angkaIndonesia(convertToHektar(list.filter { it.typeLahan == TypeLahan.MONOKULTUR }.sumOf { it.luastanam.toDouble() }))
+            val totalTanamanTumpangsari = list.filter { it.typeLahan == TypeLahan.TUMPANGSARI }.size
+            val totalLuasTanamanTumpangsari = angkaIndonesia(convertToHektar(list.filter { it.typeLahan == TypeLahan.TUMPANGSARI }.sumOf { it.luastanam.toDouble() }))
+            val totalTanamanPbph = list.filter { it.typeLahan == TypeLahan.PBPH }.size
+            val totalLuasTanamanPbph = angkaIndonesia(convertToHektar(list.filter { it.typeLahan == TypeLahan.PBPH }.sumOf { it.luastanam.toDouble() }))
+            val totalTanamanPerhutananSosial = list.filter { it.typeLahan == TypeLahan.PERHUTANANSOSIAL }.size
+            val totalLuasTanamanPerhutananSosial = angkaIndonesia(convertToHektar(list.filter { it.typeLahan == TypeLahan.PERHUTANANSOSIAL }.sumOf { it.luastanam.toDouble() }))
+
+
+            tvTotalJumlahTanaman.text = totalTanaman.toString()
+            tvTotalLuasTanaman.text = totalLuasTanaman
+            tvTotalJumlahTanamanMonokultur.text = totalTanamanMonokultur.toString()
+            tvTotalLuasTanamanMonokultur.text = totalLuasTanamanMonokultur
+            tvTotalJumlahTanamanTumpangsari.text = totalTanamanTumpangsari.toString()
+            tvTotalLuasTanamanTumpangsari.text = totalLuasTanamanTumpangsari
+            tvTotalJumlahTanamanPbph.text = totalTanamanPbph.toString()
+            tvTotalLuasTanamanPbph.text = totalLuasTanamanPbph
+            tvTotalJumlahTanamanPerhutananSosial.text = totalTanamanPerhutananSosial.toString()
+            tvTotalLuasTanamanPerhutananSosial.text = totalLuasTanamanPerhutananSosial
         }
     }
 
@@ -1016,6 +1176,8 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
                 rvDataTanaman.visibility = View.GONE
                 fabDownloadData.visibility = View.GONE
             }
+            updateDataCard(dataTanaman)
+
         }catch (e: Exception){
             e.printStackTrace()
             showError(this, "Error", e.message.toString())
@@ -1182,6 +1344,7 @@ class ShowDataTanamanByCategory : AppCompatActivity() {
         filteredListTanaman.addAll(newFilteredData)
         tanamanAdapter.notifyDataSetChanged()
         tvTotalData.text = "${filteredListTanaman.size} Data Ditemukan"
+        updateDataCard(filteredListTanaman)
     }
 
     private fun generateMasaTanamList(): List<MasaTanam> {

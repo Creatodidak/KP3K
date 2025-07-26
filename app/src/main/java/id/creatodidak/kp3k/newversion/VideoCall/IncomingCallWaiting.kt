@@ -35,8 +35,13 @@ class IncomingCallWaiting : AppCompatActivity() {
     private val socket = SocketManager.getSocket()
     private val handler = Handler(Looper.getMainLooper())
 
+    companion object {
+        var instance: IncomingCallWaiting? = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        instance = this
         enableEdgeToEdge()
         setContentView(R.layout.activity_incoming_call_waiting)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -67,6 +72,7 @@ class IncomingCallWaiting : AppCompatActivity() {
         socket.on("incoming-call") { args ->
             val obj = args[0] as JSONObject
             Log.d("DATA_SOCKET", obj.toString())
+            Log.d("tes_log", "socket incomingcall "+obj.toString())
 
             val validUntilStr = obj.optString("validUntil", null)
             if (validUntilStr != null) {
@@ -115,6 +121,7 @@ class IncomingCallWaiting : AppCompatActivity() {
         }
 
         ivAcceptIncoming.setOnClickListener {
+            MyFirebaseMessagingService.staticNotify.cancelIncomingCallNotification(this)
             MyFirebaseMessagingService.isCallAnswered = true
             MyFirebaseMessagingService.CallSoundManager.stopSound()
             val data = JSONObject().apply {
@@ -133,6 +140,7 @@ class IncomingCallWaiting : AppCompatActivity() {
         }
 
         ivDeclineIncoming.setOnClickListener {
+            MyFirebaseMessagingService.staticNotify.cancelIncomingCallNotification(this)
             MyFirebaseMessagingService.isCallAnswered = true
             MyFirebaseMessagingService.CallSoundManager.stopSound()
             val data = JSONObject().apply {
@@ -147,6 +155,8 @@ class IncomingCallWaiting : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        instance = null
         handler.removeCallbacksAndMessages(null)
     }
+
 }

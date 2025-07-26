@@ -53,8 +53,30 @@ class DashboardKomoditas : AppCompatActivity() {
     private lateinit var tvTotalJumlahLahanMonokultur: TextView
     private lateinit var tvTotalLuasLahanTumpangsari: TextView
     private lateinit var tvTotalJumlahLahanTumpangsari: TextView
+    private lateinit var tvTotalLuasLahanPerhutananSosial: TextView
+    private lateinit var tvTotalJumlahLahanPerhutananSosial: TextView
+    private lateinit var tvTotalLuasLahanPbph: TextView
+    private lateinit var tvTotalJumlahLahanPbph: TextView
     private lateinit var tvTotalLuasTanam : TextView
-    private lateinit var tvTotalProduksi : TextView
+    private lateinit var tvTotalJumlahTanam : TextView
+    private lateinit var tvTotalLuasTanamMonokultur: TextView
+    private lateinit var tvTotalJumlahTanamMonokultur: TextView
+    private lateinit var tvTotalLuasTanamTumpangsari: TextView
+    private lateinit var tvTotalJumlahTanamTumpangsari: TextView
+    private lateinit var tvTotalLuasTanamPerhutananSosial: TextView
+    private lateinit var tvTotalJumlahTanamPerhutananSosial: TextView
+    private lateinit var tvTotalLuasTanamPbph: TextView
+    private lateinit var tvTotalJumlahTanamPbph: TextView
+    private lateinit var tvTotalJumlahPanen: TextView
+    private lateinit var tvTotalHasilPanen: TextView
+    private lateinit var tvTotalJumlahPanenMonokultur: TextView
+    private lateinit var tvTotalHasilPanenMonokultur: TextView
+    private lateinit var tvTotalJumlahPanenTumpangsari: TextView
+    private lateinit var tvTotalHasilPanenTumpangsari: TextView
+    private lateinit var tvTotalJumlahPanenPbph: TextView
+    private lateinit var tvTotalHasilPanenPbph: TextView
+    private lateinit var tvTotalJumlahPanenPerhutananSosial: TextView
+    private lateinit var tvTotalHasilPanenPerhutananSosial: TextView
     private lateinit var tvTotalOwner : TextView
     private lateinit var ivPemilikLahan : ImageView
     private lateinit var ivLahan : ImageView
@@ -92,8 +114,33 @@ class DashboardKomoditas : AppCompatActivity() {
         tvTotalJumlahLahanMonokultur = findViewById(R.id.tvTotalJumlahLahanMonokultur)
         tvTotalLuasLahanTumpangsari = findViewById(R.id.tvTotalLuasLahanTumpangsari)
         tvTotalJumlahLahanTumpangsari = findViewById(R.id.tvTotalJumlahLahanTumpangsari)
+        tvTotalLuasLahanPerhutananSosial = findViewById(R.id.tvTotalLuasLahanPerhutananSosial)
+        tvTotalJumlahLahanPerhutananSosial = findViewById(R.id.tvTotalJumlahLahanPerhutananSosial)
+        tvTotalLuasLahanPbph = findViewById(R.id.tvTotalLuasLahanPbph)
+        tvTotalJumlahLahanPbph = findViewById(R.id.tvTotalJumlahLahanPbph)
+
         tvTotalLuasTanam = findViewById(R.id.tvTotalLuasTanam)
-        tvTotalProduksi = findViewById(R.id.tvTotalProduksi)
+        tvTotalJumlahTanam = findViewById(R.id.tvTotalJumlahTanam)
+        tvTotalLuasTanamMonokultur = findViewById(R.id.tvTotalLuasTanamMonokultur)
+        tvTotalJumlahTanamMonokultur = findViewById(R.id.tvTotalJumlahTanamMonokultur)
+        tvTotalLuasTanamTumpangsari = findViewById(R.id.tvTotalLuasTanamTumpangsari)
+        tvTotalJumlahTanamTumpangsari = findViewById(R.id.tvTotalJumlahTanamTumpangsari)
+        tvTotalLuasTanamPerhutananSosial = findViewById(R.id.tvTotalLuasTanamPerhutananSosial)
+        tvTotalJumlahTanamPerhutananSosial = findViewById(R.id.tvTotalJumlahTanamPerhutananSosial)
+        tvTotalLuasTanamPbph = findViewById(R.id.tvTotalLuasTanamPbph)
+        tvTotalJumlahTanamPbph = findViewById(R.id.tvTotalJumlahTanamPbph)
+
+        tvTotalJumlahPanen = findViewById(R.id.tvTotalJumlahPanen)
+        tvTotalHasilPanen = findViewById(R.id.tvTotalHasilPanen)
+        tvTotalJumlahPanenMonokultur = findViewById(R.id.tvTotalJumlahPanenMonokultur)
+        tvTotalHasilPanenMonokultur = findViewById(R.id.tvTotalHasilPanenMonokultur)
+        tvTotalJumlahPanenTumpangsari = findViewById(R.id.tvTotalJumlahPanenTumpangsari)
+        tvTotalHasilPanenTumpangsari = findViewById(R.id.tvTotalHasilPanenTumpangsari)
+        tvTotalJumlahPanenPbph = findViewById(R.id.tvTotalJumlahPanenPbph)
+        tvTotalHasilPanenPbph = findViewById(R.id.tvTotalHasilPanenPbph)
+        tvTotalJumlahPanenPerhutananSosial = findViewById(R.id.tvTotalJumlahPanenPerhutananSosial)
+        tvTotalHasilPanenPerhutananSosial = findViewById(R.id.tvTotalHasilPanenPerhutananSosial)
+
         tvTotalOwner = findViewById(R.id.tvTotalOwner)
         ivPemilikLahan = findViewById(R.id.ivPemilikLahan)
         ivLahan = findViewById(R.id.ivLahan)
@@ -135,6 +182,12 @@ class DashboardKomoditas : AppCompatActivity() {
 
         ivPanen.setOnClickListener {
             val i = Intent(this@DashboardKomoditas, DataPanen::class.java)
+            i.putExtra("komoditas", komoditas)
+            startActivity(i)
+        }
+
+        ivPerkembangan.setOnClickListener {
+            val i = Intent(this@DashboardKomoditas, DataPerkembangan::class.java)
             i.putExtra("komoditas", komoditas)
             startActivity(i)
         }
@@ -207,38 +260,141 @@ class DashboardKomoditas : AppCompatActivity() {
             }
             var tLahanMonokultur = 0
             var tLahanTumpangsari = 0
+            var tLahanPbph = 0
+            var tLahanPerhutananSosial = 0
             var tLuasLahanMonokultur = 0.0
             var tLuasLahanTumpangsari = 0.0
-            var tLuasTanam = 0.0
-            var tProduksi = 0.0
+            var tLuasLahanPbph = 0.0
+            var tLuasLahanPerhutananSosial = 0.0
 
             dataLahan.forEach {
-                if (it.type == TypeLahan.MONOKULTUR){
-                    tLahanMonokultur++
-                    tLuasLahanMonokultur += (it.luas).toDouble()
-                }else{
-                    tLahanTumpangsari++
-                    tLuasLahanTumpangsari += (it.luas).toDouble()
+                when(it.type.name){
+                    TypeLahan.MONOKULTUR.name -> {
+                        tLahanMonokultur++
+                        tLuasLahanMonokultur += (it.luas).toDouble()
+                    }
+                    TypeLahan.TUMPANGSARI.name -> {
+                        tLahanTumpangsari++
+                        tLuasLahanTumpangsari += (it.luas).toDouble()
+                    }
+                    TypeLahan.PBPH.name -> {
+                        tLahanPbph++
+                        tLuasLahanPbph += (it.luas).toDouble()
+                    }
+                    TypeLahan.PERHUTANANSOSIAL.name -> {
+                        tLahanPerhutananSosial++
+                        tLuasLahanPerhutananSosial += (it.luas).toDouble()
+                    }
                 }
-            }
-
-            dataTanaman.forEach {
-                tLuasTanam += (it.luastanam).toDouble()
-            }
-
-            dataPanen.forEach {
-                tProduksi += (it.jumlahpanen).toDouble()
             }
 
             tvTotalJumlahLahan.text = dataLahan.size.toString()
             tvTotalJumlahLahanMonokultur.text = tLahanMonokultur.toString()
             tvTotalJumlahLahanTumpangsari.text = tLahanTumpangsari.toString()
+            tvTotalJumlahLahanPbph.text = tLahanPbph.toString()
+            tvTotalJumlahLahanPerhutananSosial.text = tLahanPerhutananSosial.toString()
             tvTotalLuasLahan.text = angkaIndonesia(convertToHektar(totalLuas))
             tvTotalLuasLahanMonokultur.text = angkaIndonesia(convertToHektar(tLuasLahanMonokultur))
             tvTotalLuasLahanTumpangsari.text = angkaIndonesia(convertToHektar(tLuasLahanTumpangsari))
-            tvTotalOwner.text = dataOwner.size.toString()
+            tvTotalLuasLahanPbph.text = angkaIndonesia(convertToHektar(tLuasLahanPbph))
+            tvTotalLuasLahanPerhutananSosial.text = angkaIndonesia(convertToHektar(tLuasLahanPerhutananSosial))
+
+            var tTanam = 0
+            var tTanamMonokultur = 0
+            var tTanamTumpangsari = 0
+            var tTanamPbph = 0
+            var tTanamPerhutananSosial = 0
+            var tLuasTanam = 0.0
+            var tLuasTanamMonokultur = 0.0
+            var tLuasTanamTumpangsari = 0.0
+            var tLuasTanamPbph = 0.0
+            var tLuasTanamPerhutananSosial = 0.0
+
+            dataTanaman.forEach { t ->
+                tTanam++
+                tLuasTanam += (t.luastanam).toDouble()
+                val lahan = dataLahan.find { it.id == t.lahan_id }
+                when(lahan?.type?.name){
+                    TypeLahan.MONOKULTUR.name -> {
+                        tTanamMonokultur++
+                        tLuasTanamMonokultur += (t.luastanam).toDouble()
+                    }
+                    TypeLahan.TUMPANGSARI.name -> {
+                        tTanamTumpangsari++
+                        tLuasTanamTumpangsari += (t.luastanam).toDouble()
+                    }
+                    TypeLahan.PBPH.name -> {
+                        tTanamPbph++
+                        tLuasTanamPbph += (t.luastanam).toDouble()
+                    }
+                    TypeLahan.PERHUTANANSOSIAL.name -> {
+                        tTanamPerhutananSosial++
+                        tLuasTanamPerhutananSosial += (t.luastanam).toDouble()
+                    }
+                }
+            }
+
+            tvTotalJumlahTanam.text = tTanam.toString()
+            tvTotalJumlahTanamMonokultur.text = tTanamMonokultur.toString()
+            tvTotalJumlahTanamTumpangsari.text = tTanamTumpangsari.toString()
+            tvTotalJumlahTanamPbph.text = tTanamPbph.toString()
+            tvTotalJumlahTanamPerhutananSosial.text = tTanamPerhutananSosial.toString()
             tvTotalLuasTanam.text = angkaIndonesia(convertToHektar(tLuasTanam))
-            tvTotalProduksi.text = angkaIndonesia(convertToTon(tProduksi))
+            tvTotalLuasTanamMonokultur.text = angkaIndonesia(convertToHektar(tLuasTanamMonokultur))
+            tvTotalLuasTanamTumpangsari.text = angkaIndonesia(convertToHektar(tLuasTanamTumpangsari))
+            tvTotalLuasTanamPbph.text = angkaIndonesia(convertToHektar(tLuasTanamPbph))
+            tvTotalLuasTanamPerhutananSosial.text = angkaIndonesia(convertToHektar(tLuasTanamPerhutananSosial))
+
+            var tPanen = 0
+            var tPanenMonokultur = 0
+            var tPanenTumpangsari = 0
+            var tPanenPbph = 0
+            var tPanenPerhutananSosial = 0
+            var tHasilPanen = 0.0
+            var tHasilPanenMonokultur = 0.0
+            var tHasilPanenTumpangsari = 0.0
+            var tHasilPanenPbph = 0.0
+            var tHasilPanenPerhutananSosial = 0.0
+
+            dataPanen.forEach { t ->
+                tPanen++
+                tHasilPanen += (t.jumlahpanen).toDouble()
+                val tanaman = dataTanaman.find { it.id == t.tanaman_id }
+                val lahan = dataLahan.find { it.id == tanaman?.lahan_id }
+                when(lahan?.type?.name){
+                    TypeLahan.MONOKULTUR.name -> {
+                        tPanenMonokultur++
+                        tHasilPanenMonokultur += (t.jumlahpanen).toDouble()
+                    }
+                    TypeLahan.TUMPANGSARI.name -> {
+                        tPanenTumpangsari++
+                        tHasilPanenTumpangsari += (t.jumlahpanen).toDouble()
+                    }
+                    TypeLahan.PBPH.name -> {
+                        tPanenPbph++
+                        tHasilPanenPbph += (t.jumlahpanen).toDouble()
+                    }
+                    TypeLahan.PERHUTANANSOSIAL.name -> {
+                        tPanenPerhutananSosial++
+                        tHasilPanenPerhutananSosial += (t.jumlahpanen).toDouble()
+                    }
+                }
+            }
+
+            tvTotalJumlahPanen.text = tPanen.toString()
+            tvTotalJumlahPanenMonokultur.text = tPanenMonokultur.toString()
+            tvTotalJumlahPanenTumpangsari.text = tPanenTumpangsari.toString()
+            tvTotalJumlahPanenPbph.text = tPanenPbph.toString()
+            tvTotalJumlahPanenPerhutananSosial.text = tPanenPerhutananSosial.toString()
+            tvTotalHasilPanen.text = angkaIndonesia(convertToTon(tHasilPanen))
+            tvTotalHasilPanenMonokultur.text = angkaIndonesia(convertToTon(tHasilPanenMonokultur))
+            tvTotalHasilPanenTumpangsari.text = angkaIndonesia(convertToTon(tHasilPanenTumpangsari))
+            tvTotalHasilPanenPbph.text = angkaIndonesia(convertToTon(tHasilPanenPbph))
+            tvTotalHasilPanenPerhutananSosial.text = angkaIndonesia(convertToTon(tHasilPanenPerhutananSosial))
+
+            tvTotalOwner.text = dataOwner.size.toString()
+
+
             nsvDashboardKomoditas.visibility = View.VISIBLE
         }
     }

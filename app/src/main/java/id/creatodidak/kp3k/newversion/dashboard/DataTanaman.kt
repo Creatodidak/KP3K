@@ -29,7 +29,11 @@ import id.creatodidak.kp3k.database.DatabaseInstance
 import id.creatodidak.kp3k.database.Entity.TanamanEntity
 import id.creatodidak.kp3k.database.syncDataFromServer
 import id.creatodidak.kp3k.helper.RoleHelper
+import id.creatodidak.kp3k.helper.TypeLahan
+import id.creatodidak.kp3k.helper.angkaIndonesia
+import id.creatodidak.kp3k.helper.convertToHektar
 import id.creatodidak.kp3k.helper.enableDragAndSnap
+import id.creatodidak.kp3k.helper.getAlamatBerdasarkanRole
 import id.creatodidak.kp3k.helper.getMyLevel
 import id.creatodidak.kp3k.helper.getMyRole
 import id.creatodidak.kp3k.helper.isCanCRUD
@@ -38,6 +42,7 @@ import id.creatodidak.kp3k.newversion.DataTanaman.AddTanaman
 import id.creatodidak.kp3k.newversion.DataTanaman.DraftTanaman
 import id.creatodidak.kp3k.newversion.DataTanaman.RejectedTanaman
 import id.creatodidak.kp3k.newversion.DataTanaman.ShowDataTanamanByCategory
+import id.creatodidak.kp3k.newversion.DataTanaman.ShowDataTanamanByCategory.NewTanamanEntity
 import id.creatodidak.kp3k.newversion.DataTanaman.VerifikasiTanaman
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -55,6 +60,7 @@ class DataTanaman : AppCompatActivity() {
     private lateinit var dbWilayah : WilayahDao
     private lateinit var sh : SharedPreferences
     private lateinit var komoditas : String
+    private lateinit var tvAlamatKomoditas: TextView
 
     private lateinit var tvKeteranganKomoditas: TextView
     private lateinit var cvByProvinsi: CardView
@@ -75,6 +81,21 @@ class DataTanaman : AppCompatActivity() {
     private lateinit var lyRejected: LinearLayout
     private lateinit var tvRejected: TextView
     private lateinit var fabAddDataTanaman: FloatingActionButton
+
+    private lateinit var tvTotalJumlahTanaman: TextView
+    private lateinit var tvTotalLuasTanaman: TextView
+
+    private lateinit var tvTotalJumlahTanamanMonokultur: TextView
+    private lateinit var tvTotalLuasTanamanMonokultur: TextView
+
+    private lateinit var tvTotalJumlahTanamanTumpangsari: TextView
+    private lateinit var tvTotalLuasTanamanTumpangsari: TextView
+
+    private lateinit var tvTotalJumlahTanamanPbph: TextView
+    private lateinit var tvTotalLuasTanamanPbph: TextView
+
+    private lateinit var tvTotalJumlahTanamanPerhutananSosial: TextView
+    private lateinit var tvTotalLuasTanamanPerhutananSosial: TextView
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,8 +135,28 @@ class DataTanaman : AppCompatActivity() {
         svDataRealisasiTanam = findViewById(R.id.svDataRealisasiTanam)
         swlDataRealisasiTanam = findViewById(R.id.swlDataRealisasiTanam)
         svDataRealisasiTanam.visibility = View.GONE
+        tvAlamatKomoditas = findViewById(R.id.tvAlamatKomoditas)
+
+        tvTotalJumlahTanaman = findViewById(R.id.tvTotalJumlahTanaman)
+        tvTotalLuasTanaman = findViewById(R.id.tvTotalLuasTanaman)
+
+        tvTotalJumlahTanamanMonokultur = findViewById(R.id.tvTotalJumlahTanamanMonokultur)
+        tvTotalLuasTanamanMonokultur = findViewById(R.id.tvTotalLuasTanamanMonokultur)
+
+        tvTotalJumlahTanamanTumpangsari = findViewById(R.id.tvTotalJumlahTanamanTumpangsari)
+        tvTotalLuasTanamanTumpangsari = findViewById(R.id.tvTotalLuasTanamanTumpangsari)
+
+        tvTotalJumlahTanamanPbph = findViewById(R.id.tvTotalJumlahTanamanPbph)
+        tvTotalLuasTanamanPbph = findViewById(R.id.tvTotalLuasTanamanPbph)
+
+        tvTotalJumlahTanamanPerhutananSosial = findViewById(R.id.tvTotalJumlahTanamanPerhutananSosial)
+        tvTotalLuasTanamanPerhutananSosial = findViewById(R.id.tvTotalLuasTanamanPerhutananSosial)
         
         tvKeteranganKomoditas.text = "pada Komoditas ${komoditas.capitalize(Locale.ROOT)}"
+
+        getAlamatBerdasarkanRole(db, sh) { alamat ->
+            tvAlamatKomoditas.text = alamat // atau log, atau simpan ke variabel, dll
+        }
 
         cvByProvinsi.visibility = View.GONE
         cvByKabupaten.visibility = View.GONE
@@ -306,6 +347,10 @@ class DataTanaman : AppCompatActivity() {
                 tvDraft.text = "Terdapat ${tanamanOffline.size} Data Realisasi Tanam yang belum dikirim ke server, silahkan klik peringatan ini untuk membuka list data!"
             }
 
+            lifecycleScope.launch {
+                updateDataCard(tanamanOnline?.filter { it.status == "VERIFIED" })
+            }
+
         } catch (e: Exception) {
             Log.e("loadDataOffline", "Gagal memuat data offline", e)
         }finally {
@@ -320,6 +365,75 @@ class DataTanaman : AppCompatActivity() {
         }
     }
 
+    private suspend fun updateDataCard(list: List<TanamanEntity>?){
+        val newList = mutableListOf<NewTanamanEntity>()
+
+        if(!list.isNullOrEmpty()){
+            val groupedByMasaTanam = list.groupBy { it.masatanam }.toSortedMap()
+            groupedByMasaTanam.forEach { (masaTanamKe, tanamanList) ->
+                tanamanList.forEachIndexed { index, it ->
+                    val lahan = db.lahanDao().getLahanById(it.lahan_id)
+                    val dataPanen = db.panenDao().getPanenByTanamanId(it.id)
+                    val jumlahPanen = if (dataPanen.isNullOrEmpty()) 0.0 else dataPanen.sumOf {
+                        it.jumlahpanen.toDoubleOrNull() ?: 0.0
+                    }
+                    newList.add(
+                        NewTanamanEntity(
+                            it.id,
+                            0,
+                            "TANAMAN KE-${it.tanamanke} MASA TANAM KE-$masaTanamKe",
+                            "",
+                            lahan.type,
+                            "0",
+                            jumlahPanen.toString(),
+                            it.masatanam,
+                            it.luastanam,
+                            it.tanggaltanam,
+                            it.prediksipanen,
+                            it.rencanatanggalpanen,
+                            it.komoditas,
+                            it.varietas,
+                            it.sumber,
+                            it.keteranganSumber,
+                            it.foto1,
+                            it.foto2,
+                            it.foto3,
+                            it.foto4,
+                            it.status,
+                            it.alasan,
+                            it.createAt,
+                            it.updateAt,
+                            it.submitter,
+                            it.tanamanke
+                        )
+                    )
+                }
+            }
+        }
+
+        val totalTanaman = newList.size
+        val totalLuasTanaman = angkaIndonesia(convertToHektar(newList.sumOf { it.luastanam.toDouble() }))
+        val totalTanamanMonokultur = newList.filter { it.typeLahan == TypeLahan.MONOKULTUR }.size
+        val totalLuasTanamanMonokultur = angkaIndonesia(convertToHektar(newList.filter { it.typeLahan == TypeLahan.MONOKULTUR }.sumOf { it.luastanam.toDouble() }))
+        val totalTanamanTumpangsari = newList.filter { it.typeLahan == TypeLahan.TUMPANGSARI }.size
+        val totalLuasTanamanTumpangsari = angkaIndonesia(convertToHektar(newList.filter { it.typeLahan == TypeLahan.TUMPANGSARI }.sumOf { it.luastanam.toDouble() }))
+        val totalTanamanPbph = newList.filter { it.typeLahan == TypeLahan.PBPH }.size
+        val totalLuasTanamanPbph = angkaIndonesia(convertToHektar(newList.filter { it.typeLahan == TypeLahan.PBPH }.sumOf { it.luastanam.toDouble() }))
+        val totalTanamanPerhutananSosial = newList.filter { it.typeLahan == TypeLahan.PERHUTANANSOSIAL }.size
+        val totalLuasTanamanPerhutananSosial = angkaIndonesia(convertToHektar(newList.filter { it.typeLahan == TypeLahan.PERHUTANANSOSIAL }.sumOf { it.luastanam.toDouble() }))
+
+
+        tvTotalJumlahTanaman.text = totalTanaman.toString()
+        tvTotalLuasTanaman.text = totalLuasTanaman
+        tvTotalJumlahTanamanMonokultur.text = totalTanamanMonokultur.toString()
+        tvTotalLuasTanamanMonokultur.text = totalLuasTanamanMonokultur
+        tvTotalJumlahTanamanTumpangsari.text = totalTanamanTumpangsari.toString()
+        tvTotalLuasTanamanTumpangsari.text = totalLuasTanamanTumpangsari
+        tvTotalJumlahTanamanPbph.text = totalTanamanPbph.toString()
+        tvTotalLuasTanamanPbph.text = totalLuasTanamanPbph
+        tvTotalJumlahTanamanPerhutananSosial.text = totalTanamanPerhutananSosial.toString()
+        tvTotalLuasTanamanPerhutananSosial.text = totalLuasTanamanPerhutananSosial
+    }
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
